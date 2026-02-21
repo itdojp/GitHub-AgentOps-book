@@ -10,6 +10,12 @@ title: "第5章：Rules 設計（allow / prompt / forbidden）"
 - 許可する操作/承認が必要な操作/禁止する操作の線引き
 - 例外時の承認フロー（誰が/どこで/何を残す）
 
+## Companion 資産（参照先）
+
+Companion repo（予定）: `itdojp/GitHub-AgentOps-companion`
+
+- `rules/command-policy.md`
+
 ## 章末チェックリスト（ドラフト）
 
 - [ ] allow/prompt/forbidden の運用ポリシーが文書化されている

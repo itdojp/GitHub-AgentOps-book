@@ -5,6 +5,13 @@
 - 役割特化エージェント（doc/test/dep 等）の定義
 - MCP のツール公開範囲（公開最小化、Secrets 境界、監査）
 
+## Companion 資産（参照先）
+
+Companion repo（予定）: `itdojp/GitHub-AgentOps-companion`
+
+- カスタムエージェント雛形: `custom-agents/*/.agent.md`
+- MCP 公開範囲設計例: `custom-agents/MCP_SCOPE_EXAMPLE.md`
+
 ## 章末チェックリスト（ドラフト）
 
 - [ ] “1体作って運用できる” 雛形がある
