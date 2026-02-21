@@ -1,0 +1,37 @@
+# Navigation configuration
+introduction:
+  - title: "はじめに"
+    path: "/introduction/"
+
+chapters:
+  - title: "第1章：責任分界（人間 / エージェント / CI）"
+    path: "/chapters/chapter01/"
+  - title: "第2章：Agent-ready repo 要件（テンプレ / 品質ゲート / 権限境界）"
+    path: "/chapters/chapter02/"
+  - title: "第3章：AGENTS.md 設計"
+    path: "/chapters/chapter03/"
+  - title: "第4章：Skills 設計"
+    path: "/chapters/chapter04/"
+  - title: "第5章：Rules 設計（allow / prompt / forbidden）"
+    path: "/chapters/chapter05/"
+  - title: "第6章：GitHub Agents 運用（Issue→PR→反復→マージ）"
+    path: "/chapters/chapter06/"
+  - title: "第7章：カスタムエージェント（.agent.md）と MCP（公開範囲）"
+    path: "/chapters/chapter07/"
+  - title: "第8章：コスト設計（premium requests / Actions minutes）"
+    path: "/chapters/chapter08/"
+  - title: "第9章：Codex GitHub Action で継続的 AI"
+    path: "/chapters/chapter09/"
+  - title: "第10章：セキュリティ設計（Secrets / 権限 / ログ / 供給網）"
+    path: "/chapters/chapter10/"
+  - title: "第11章：メトリクス設計（Lead time / Review time / 差し戻し率）"
+    path: "/chapters/chapter11/"
+
+appendices:
+  - title: "付録A：テンプレ集（AGENTS.md / Issue / PR / .agent.md / Skills）"
+    path: "/appendices/appendix-a/"
+  - title: "付録B：プレイブック集（タスク別運用手順）"
+    path: "/appendices/appendix-b/"
+  - title: "付録C：トラブルシュート（失敗パターンと対処）"
+    path: "/appendices/appendix-c/"
+

@@ -1,0 +1,63 @@
+{
+  "book": {
+    "title": "GitHub AgentOps 実践ガイド（Codex中心）",
+    "subtitle": "AIエージェント駆動開発のための運用設計",
+    "description": "Issue→Agent→PR→反復→マージの運用を、AGENTS.md / Skills / Rules / CI で標準化するための実践ガイド。",
+    "author": {
+      "name": "ITDO Inc.",
+      "github": "itdojp"
+    },
+    "version": "0.1.0",
+    "language": "ja",
+    "license": "CC-BY-NC-SA-4.0"
+  },
+  "contentSections": [
+    {
+      "name": "introduction",
+      "directory": "introduction",
+      "enabled": true,
+      "order": 1,
+      "title": "はじめに"
+    },
+    {
+      "name": "chapters",
+      "directory": "chapters",
+      "enabled": true,
+      "order": 2,
+      "title": "章"
+    },
+    {
+      "name": "appendices",
+      "directory": "appendices",
+      "enabled": true,
+      "order": 3,
+      "title": "付録"
+    },
+    {
+      "name": "afterword",
+      "directory": "afterword",
+      "enabled": false,
+      "order": 4,
+      "title": "あとがき"
+    }
+  ],
+  "excludePatterns": [
+    "draft.md",
+    "*.tmp",
+    ".DS_Store",
+    "Thumbs.db"
+  ],
+  "contentExcludePatterns": [
+    "<!-- PRIVATE:",
+    "<!-- TODO:",
+    "<!-- DRAFT:"
+  ],
+  "build": {
+    "outputDirectory": "docs",
+    "enableV3DesignSystem": true,
+    "enableNavigation": true,
+    "enableSyntaxHighlighting": true,
+    "enableAutoNavigation": false
+  }
+}
+

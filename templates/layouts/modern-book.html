@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'ja' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title | escape }} - {{ site.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
+    <meta name="description" content="{{ page.description | default: site.description | escape }}">
+    <meta name="author" content="{{ site.author.name | escape }}">
+    
+    <style>
+        :root {
+            --color-primary: #007bff;
+            --color-primary-hover: #0056b3;
+            --color-text-primary: #333;
+            --color-text-secondary: #6c757d;
+            --color-bg-primary: #fff;
+            --color-bg-secondary: #f8f9fa;
+            --color-bg-tertiary: #e9ecef;
+            --color-border: #e9ecef;
+            --color-shadow: rgba(0,0,0,0.1);
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-12: 48px;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --line-height-normal: 1.6;
+            --transition-fast: 0.2s ease;
+            --transition-base: 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: var(--line-height-normal);
+            color: var(--color-text-primary);
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-bg-secondary);
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .book-layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+
+        .book-sidebar {
+            width: 280px;
+            background-color: var(--color-bg-primary);
+            border-right: 1px solid var(--color-border);
+            padding: var(--space-4);
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .book-main {
+            margin-left: 280px;
+            flex: 1;
+            padding: var(--space-8);
+            max-width: 900px;
+        }
+
+        .sidebar-title {
+            font-size: var(--font-size-lg);
+            font-weight: bold;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-3);
+        }
+
+        .sidebar-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .nav-section {
+            margin-bottom: var(--space-6);
+        }
+
+        .nav-section-title {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-3);
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-link {
+            display: block;
+            padding: var(--space-2) var(--space-3);
+            color: var(--color-text-primary);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
+        }
+
+        .nav-link:hover {
+            background-color: var(--color-bg-tertiary);
+            color: var(--color-primary);
+        }
+
+        .nav-link.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .container {
+            background-color: var(--color-bg-primary);
+            padding: var(--space-8);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--color-shadow);
+            margin-bottom: var(--space-6);
+        }
+
+        h1 {
+            color: var(--color-text-primary);
+            border-bottom: 3px solid var(--color-primary);
+            padding-bottom: var(--space-3);
+            margin-top: 0;
+        }
+
+        h2 {
+            color: var(--color-text-primary);
+            margin-top: var(--space-6);
+        }
+
+        h3 {
+            color: var(--color-text-primary);
+            margin-top: var(--space-6);
+        }
+
+        pre {
+            background-color: var(--color-bg-secondary);
+            padding: var(--space-4);
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid var(--color-border);
+        }
+
+        code {
+            background-color: var(--color-bg-secondary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--color-primary);
+            padding-left: var(--space-4);
+            margin-left: 0;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: var(--space-8) 0;
+            padding: var(--space-4);
+            background-color: var(--color-bg-secondary);
+            border-radius: 6px;
+        }
+
+        .page-nav-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--color-primary);
+            padding: var(--space-2) var(--space-4);
+            border-radius: 4px;
+            transition: all var(--transition-fast);
+        }
+
+        .page-nav-link:hover {
+            background-color: var(--color-bg-primary);
+        }
+
+        .footer {
+            margin-top: var(--space-8);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            text-align: center;
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            top: var(--space-4);
+            left: var(--space-4);
+            z-index: 1001;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: var(--space-3);
+            cursor: pointer;
+            box-shadow: 0 2px 8px var(--color-shadow);
+        }
+
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .mobile-nav-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background-color: var(--color-bg-primary);
+            z-index: 1000;
+            transition: left var(--transition-base);
+            overflow-y: auto;
+            padding: 80px var(--space-4) var(--space-4);
+        }
+
+        .mobile-nav-menu.open {
+            left: 0;
+        }
+
+        .mobile-nav-close {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .book-sidebar {
+                display: none;
+            }
+
+            .book-main {
+                margin-left: 0;
+                padding: 15px;
+                padding-top: 80px;
+                max-width: 100%;
+                width: 100%;
+                overflow-x: hidden;
+            }
+
+            .container {
+                padding: 15px;
+                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                line-height: 1.3;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+                line-height: 1.3;
+                margin-top: 2rem;
+            }
+            
+            h3 {
+                font-size: 1.2rem;
+                line-height: 1.3;
+                margin-top: 1.5rem;
+            }
+            
+            /* コードブロックのモバイル最適化 */
+            pre {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 12px;
+                font-size: 0.85rem;
+                line-height: 1.4;
+                white-space: pre;
+                word-wrap: normal;
+            }
+            
+            code {
+                font-size: 0.85rem;
+                word-break: break-word;
+                white-space: pre-wrap;
+            }
+            
+            pre code {
+                white-space: pre;
+                word-break: normal;
+            }
+            
+            /* テーブルのモバイル対応 */
+            table {
+                width: 100%;
+                overflow-x: auto;
+                display: block;
+                white-space: nowrap;
+            }
+            
+            table tbody {
+                display: table;
+                width: 100%;
+            }
+            
+            /* リストの調整 */
+            ul, ol {
+                padding-left: 1.2rem;
+            }
+            
+            li {
+                margin-bottom: 0.3rem;
+            }
+            
+            /* 画像の最適化 */
+            img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 1rem auto;
+            }
+            
+            /* 長いURLやテキストの折り返し */
+            p {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+            
+            /* フォントサイズの調整 */
+            body {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .book-main {
+                padding: var(--space-3);
+                padding-top: 80px;
+            }
+
+            .container {
+                padding: var(--space-3);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Navigation Toggle -->
+    <button class="mobile-nav-toggle" id="mobile-nav-toggle">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav-menu" id="mobile-nav-menu">
+        <button class="mobile-nav-close" id="mobile-nav-close">&times;</button>
+        <div class="sidebar-title" style="margin-bottom: 20px;">
+            <a href="{{ site.baseurl }}/">{{ site.title }}</a>
+        </div>
+        {% include sidebar-nav.html %}
+    </div>
+
+    <div class="book-layout">
+        <!-- Desktop Sidebar Navigation -->
+        <aside class="book-sidebar">
+            <div class="sidebar-title">
+                <a href="{{ site.baseurl }}/">{{ site.title }}</a>
+            </div>
+            {% include sidebar-nav.html %}
+        </aside>
+
+        <!-- Main Content -->
+        <main class="book-main">
+            <div class="container">
+                {{ content }}
+                
+                {% if page.url != '/' %}
+                <nav class="page-navigation">
+                    {% include page-navigation.html %}
+                </nav>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile navigation functionality
+        const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+        const mobileNavMenu = document.getElementById('mobile-nav-menu');
+        const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+        const mobileNavClose = document.getElementById('mobile-nav-close');
+
+        function openMobileNav() {
+            mobileNavMenu.classList.add('open');
+            mobileNavOverlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileNav() {
+            mobileNavMenu.classList.remove('open');
+            mobileNavOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        if (mobileNavToggle) {
+            mobileNavToggle.addEventListener('click', openMobileNav);
+        }
+        if (mobileNavClose) {
+            mobileNavClose.addEventListener('click', closeMobileNav);
+        }
+        if (mobileNavOverlay) {
+            mobileNavOverlay.addEventListener('click', closeMobileNav);
+        }
+
+        // Close mobile nav when clicking on a link
+        const mobileNavLinks = document.querySelectorAll('#mobile-nav-menu .nav-link');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', closeMobileNav);
+        });
+    </script>
+</body>
+</html>

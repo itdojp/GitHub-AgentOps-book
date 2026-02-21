@@ -1,0 +1,29 @@
+{
+  "name": "github-agentops-book",
+  "version": "0.1.0",
+  "description": "GitHub AgentOps 実践ガイド（Codex中心）",
+  "author": "ITDO Inc.",
+  "license": "CC-BY-NC-SA-4.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itdojp/GitHub-AgentOps-book.git"
+  },
+  "engines": {
+    "node": "20 || >=22"
+  },
+  "scripts": {
+    "build": "node scripts/build-simple.js",
+    "preview": "npm run build && npx http-server docs -p 8080 --silent",
+    "lint": "markdownlint 'src/**/*.md' 'index.md' 'README.md' 'BOOK-PROPOSAL.md' 'CONTRIBUTING.md' 'AGENTS.md' --ignore node_modules",
+    "check-links": "node scripts/check-links.js",
+    "build:validate": "npm run build && npm run check-links",
+    "test": "npm run lint && npm run build:validate"
+  },
+  "dependencies": {
+    "glob": "^10.3.10"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "markdownlint-cli": "^0.47.0"
+  }
+}

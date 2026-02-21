@@ -1,0 +1,94 @@
+<!-- Simple Breadcrumb Navigation -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol class="breadcrumb-list">
+        <!-- Home -->
+        <li class="breadcrumb-item">
+            <a href="{{ '/' | relative_url }}" class="breadcrumb-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="breadcrumb-home-icon" aria-hidden="true">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                </svg>
+                ホーム
+            </a>
+        </li>
+        
+        <!-- Current Page Title -->
+        {% if page.url != '/' and page.title %}
+        <li class="breadcrumb-item">
+            <span class="breadcrumb-separator" aria-hidden="true">›</span>
+            <span class="breadcrumb-current" aria-current="page">{{ page.title }}</span>
+        </li>
+        {% endif %}
+    </ol>
+</nav>
+
+<style>
+/* Simple Breadcrumb Styles */
+.breadcrumb {
+    margin-bottom: var(--space-4, 1rem);
+    padding: var(--space-2, 0.5rem) 0;
+    border-bottom: 1px solid var(--color-border, #e1e4e8);
+}
+
+.breadcrumb-list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--font-size-sm, 0.875rem);
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-link {
+    display: flex;
+    align-items: center;
+    color: var(--color-text-secondary, #586069);
+    text-decoration: none;
+    padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
+    border-radius: var(--radius-sm, 0.25rem);
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+    color: var(--color-primary, #0366d6);
+    background-color: var(--color-bg-secondary, #f6f8fa);
+}
+
+.breadcrumb-home-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: var(--space-1, 0.25rem);
+}
+
+.breadcrumb-separator {
+    margin: 0 var(--space-2, 0.5rem);
+    color: var(--color-text-muted, #959da5);
+    user-select: none;
+}
+
+.breadcrumb-current {
+    color: var(--color-text-primary, #24292e);
+    font-weight: 500;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .breadcrumb {
+        font-size: var(--font-size-xs, 0.75rem);
+        padding: var(--space-1, 0.25rem) 0;
+    }
+    
+    .breadcrumb-current {
+        max-width: 200px;
+    }
+}
+</style>
