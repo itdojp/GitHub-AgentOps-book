@@ -2,9 +2,9 @@
 
 本文で参照するテンプレート類の一覧と用途を整理します。
 
-## Companion repo（予定）
+## Companion repo
 
-`itdojp/GitHub-AgentOps-companion`
+- リポジトリ: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
 
 ## テンプレ一覧（初期）
 

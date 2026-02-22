@@ -12,7 +12,7 @@ title: "第3章：AGENTS.md 設計"
 
 ## Companion 資産（参照先）
 
-Companion repo（予定）: `itdojp/GitHub-AgentOps-companion`
+Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
 
 - エージェント指示: `AGENTS.md`
 

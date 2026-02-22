@@ -12,7 +12,7 @@ title: "第5章：Rules 設計（allow / prompt / forbidden）"
 
 ## Companion 資産（参照先）
 
-Companion repo（予定）: `itdojp/GitHub-AgentOps-companion`
+Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
 
 - `rules/command-policy.md`
 

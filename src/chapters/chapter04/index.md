@@ -7,7 +7,7 @@
 
 ## Companion 資産（参照先）
 
-Companion repo（予定）: `itdojp/GitHub-AgentOps-companion`
+Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
 
 - `skills/dependency-update/SKILL.md`
 - `skills/add-tests/SKILL.md`

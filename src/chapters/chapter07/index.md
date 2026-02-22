@@ -7,7 +7,7 @@
 
 ## Companion 資産（参照先）
 
-Companion repo（予定）: `itdojp/GitHub-AgentOps-companion`
+Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
 
 - カスタムエージェント雛形: `custom-agents/*/.agent.md`
 - MCP 公開範囲設計例: `custom-agents/MCP_SCOPE_EXAMPLE.md`
