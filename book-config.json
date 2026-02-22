@@ -58,6 +58,9 @@
     "enableNavigation": true,
     "enableSyntaxHighlighting": true,
     "enableAutoNavigation": false
+  },
+  "shared": {
+    "version": "3.2.2",
+    "lastSync": "2026-02-22T13:26:30+09:00"
   }
 }
-

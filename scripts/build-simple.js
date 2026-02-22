@@ -516,6 +516,7 @@ exclude:
     const navigationData = {
       introduction: [],
       chapters: [],
+      additional: [],
       appendices: [],
       afterword: []
     };
@@ -727,7 +728,7 @@ exclude:
     await fs.mkdir(jsDir, { recursive: true });
     
     // Copy CSS files
-    const cssFiles = ['main.css', 'syntax-highlighting.css'];
+    const cssFiles = ['main.css', 'mobile-responsive.css', 'syntax-highlighting.css'];
     for (const cssFile of cssFiles) {
       try {
         const cssPath = path.join(templatesDir, 'styles', cssFile);
@@ -739,7 +740,7 @@ exclude:
     this.log('CSSファイルをコピーしました');
     
     // Copy JavaScript files
-    const jsFiles = ['theme.js', 'sidebar.js', 'search.js', 'code-copy.js', 'main.js'];
+    const jsFiles = ['code-copy-lightweight.js', 'theme.js', 'search.js'];
     for (const jsFile of jsFiles) {
       try {
         const jsPath = path.join(templatesDir, 'js', jsFile);
@@ -766,7 +767,7 @@ exclude:
     const includesDir = path.join(publicDir, '_includes');
     await fs.mkdir(includesDir, { recursive: true });
     
-    const includeFiles = ['sidebar-nav.html', 'breadcrumb.html', 'page-navigation.html'];
+    const includeFiles = ['sidebar-nav.html', 'page-navigation.html'];
     for (const includeFile of includeFiles) {
       try {
         const includePath = path.join(templatesDir, 'includes', includeFile);
