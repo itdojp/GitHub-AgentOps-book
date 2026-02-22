@@ -1,8 +1,10 @@
 {
   "book": {
-    "title": "GitHub AgentOps 実践ガイド（Codex中心）",
+    "title": "GitHub AgentOps 実践ガイド",
     "subtitle": "AIエージェント駆動開発のための運用設計",
-    "description": "Issue→Agent→PR→反復→マージの運用を、AGENTS.md / Skills / Rules / CI で標準化するための実践ガイド。",
+    "titleEn": "GitHub AgentOps Practical Guide",
+    "subtitleEn": "Ops Design for AI Agent-Driven Development",
+    "description": "Issue→Agent→PR→反復→マージの運用を、AGENTS.md / Skills / Rules / CI で標準化するための実践ガイド。例: Codex / GitHub Agents / Copilot coding agent（主要例は Codex）。",
     "author": {
       "name": "ITDO Inc.",
       "github": "itdojp"
