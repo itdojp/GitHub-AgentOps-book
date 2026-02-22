@@ -136,37 +136,10 @@ class SimpleBuild {
 
   async createPublicDirectory() {
     const publicDir = path.join(process.cwd(), 'docs');
-    const indexPath = path.join(publicDir, 'index.md');
-    let indexBackup = null;
     
-    try {
-      await fs.access(publicDir);
-      
-      // Backup index.md if it exists and has substantial content
-      try {
-        const indexContent = await fs.readFile(indexPath, 'utf-8');
-        if (indexContent.length > 200) {
-          indexBackup = indexContent;
-          this.log('index.mdをバックアップしました');
-        }
-      } catch {
-        // index.md doesn't exist, continue
-      }
-      
-      // Clean existing directory
-      await fs.rm(publicDir, { recursive: true, force: true });
-    } catch {
-      // Directory doesn't exist, which is fine
-    }
+    await fs.rm(publicDir, { recursive: true, force: true });
     
     await fs.mkdir(publicDir, { recursive: true });
-    
-    // Restore index.md if we had a backup
-    if (indexBackup) {
-      await fs.writeFile(indexPath, indexBackup, 'utf-8');
-      this.log('index.mdを復元しました');
-    }
-    
     this.log('公開ディレクトリを準備しました');
     return publicDir;
   }
@@ -322,24 +295,13 @@ title: "${title}"
 
   async generateIndex(publicDir) {
     const indexPath = path.join(publicDir, 'index.md');
-    
-    // Check if index.md already exists with substantial content
-    try {
-      const existingContent = await fs.readFile(indexPath, 'utf-8');
-      if (existingContent.length > 200) {
-        this.log('既存のindex.mdを保持します');
-        return;
-      }
-    } catch {
-      // File doesn't exist, generate new one
-    }
-    
-    // Try to use custom index.md from project root first
+
+    // Use custom index.md from project root (source of truth)
     const customIndexPath = path.join(process.cwd(), 'index.md');
     try {
       await fs.access(customIndexPath);
       await fs.copyFile(customIndexPath, indexPath);
-      this.log('カスタムindex.mdをコピーしました');
+      this.log('index.mdをコピーしました');
       return;
     } catch {
       // No custom index.md, generate from template

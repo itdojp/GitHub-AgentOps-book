@@ -1,6 +1,11 @@
-# GitHub AgentOps 実践ガイド（Codex中心）
+# GitHub AgentOps 実践ガイド
 
-本リポジトリは、GitHub 上で AI エージェント（Codex 等）を運用するための「運用設計（Ops）」を、テンプレートと手順として体系化する書籍プロジェクトです。
+AIエージェント駆動開発のための運用設計
+
+- English Title: GitHub AgentOps Practical Guide
+- English Subtitle: Ops Design for AI Agent-Driven Development
+
+本リポジトリは、GitHub 上で AI エージェント（例: Codex / GitHub Agents / Copilot coding agent。主要例は Codex）を運用するための「運用設計（Ops）」を、テンプレートと手順として体系化する書籍プロジェクトです。
 
 ## クイックスタート
 

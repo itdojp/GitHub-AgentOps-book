@@ -2,17 +2,12 @@
 
 ## 1. タイトル / サブタイトル
 
-### 仮タイトル案
+### 決定
 
-- AIエージェント駆動開発のための GitHub AgentOps 実践ガイド（Codex中心）
-- GitHub AgentOps Practical Guide for Agentic Development (Codex-first)
-
-### 決定案
-
-暫定決定案（Issue #3 で確認する）:
-
-- タイトル: GitHub AgentOps 実践ガイド（Codex中心）
-- サブタイトル: AIエージェント駆動開発のための運用設計
+- 日本語タイトル: GitHub AgentOps 実践ガイド
+- 日本語副題: AIエージェント駆動開発のための運用設計
+- English Title: GitHub AgentOps Practical Guide
+- English Subtitle: Ops Design for AI Agent-Driven Development
 
 ## 2. 想定読者
 
@@ -31,7 +26,7 @@
 
 - GitHub 上のエージェント運用を「運用設計（Ops）」として体系化する
   - Issue → Agent → PR → コメント反復 → マージ
-- Codex 中心で「リポジトリにコミットできる統制」を実装可能にする
+- 例: Codex / GitHub Agents / Copilot coding agent（主要例は Codex）を前提に、「リポジトリにコミットできる統制」を実装可能にする
   - `AGENTS.md`（指示の資産化）
   - Skills（`SKILL.md` を中心とした手順再利用）
   - Rules（allow / prompt / forbidden 等の実行境界）
@@ -94,7 +89,7 @@
 
 ## 11. 公開形態 / ライセンス（提案）
 
-暫定決定案（Issue #3 で確認する）。現時点の方針は以下。
+現時点の方針は以下。
 
 - 公開形態: Web（GitHub Pages）を v1.0 の前提とする（Folder: `/docs`）。電子書籍（EPUB/PDF）は v1.0 では任意。
 - ライセンス: 本文は `CC-BY-NC-SA-4.0`、サンプル/テンプレは `MIT` の分離を前提とする。
