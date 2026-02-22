@@ -390,7 +390,7 @@ Built with [Book Publishing Template v3.0](https://github.com/itdojp/book-publis
       await fs.copyFile(configPath, destPath);
       this.log('Jekyll設定をコピーしました');
     } catch {
-      // Generate v3.0 Jekyll config with custom layout
+      // Generate Jekyll config (GitHub Pages / book-formatter conventions)
       // Extract repository info from package.json or git if available
       let repoName = '';
       let userName = '';
@@ -436,14 +436,23 @@ Built with [Book Publishing Template v3.0](https://github.com/itdojp/book-publis
       const defaultConfig = `title: "${this.config.book?.title || 'My Book'}"
 description: "${this.config.book?.description || 'Book description'}"
 author: "${this.config.book?.author?.name || 'Author'}"
+version: "${this.config.book?.version || ''}"
+lang: "${this.config.book?.language || 'ja'}"
+
+# GitHub Pages設定
 baseurl: "${baseurl}"
 url: "${url}"
 
-# v3.0 Design System Configuration
+# Jekyll設定
 markdown: kramdown
 highlighter: rouge
 
-# Use custom book layout as default
+# Kramdown設定
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Defaults: use custom book layout as default
 defaults:
   - scope:
       path: ""
@@ -451,12 +460,14 @@ defaults:
     values:
       layout: "book"
 
-# plugins:
-#   - jekyll-feed
+plugins:
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
 
 # Repository information for edit links
-repository:
-  github: "${githubRepo}"
+repository: "${githubRepo}"
+
+permalink: pretty
 
 exclude:
   - node_modules/

@@ -1,32 +1,38 @@
 title: "GitHub AgentOps 実践ガイド（Codex中心）"
 description: "Issue→Agent→PR→反復→マージの運用を、AGENTS.md / Skills / Rules / CI で標準化するための実践ガイド。"
-author:
-  name: "ITDO Inc."
-  github: "itdojp"
+author: "ITDO Inc."
+version: "0.1.0"
+lang: "ja"
+
+# GitHub Pages設定
 baseurl: "/GitHub-AgentOps-book"
 url: "https://itdojp.github.io"
 
-repository:
-  github: https://github.com/itdojp/GitHub-AgentOps-book
-
-lang: ja
-theme: minima
-plugins:
-  - jekyll-feed
-
+# Jekyll設定
 markdown: kramdown
 highlighter: rouge
-permalink: pretty
+
+# Kramdown設定
 kramdown:
   input: GFM
   syntax_highlighter: rouge
 
+# Defaults: use custom book layout as default
 defaults:
   - scope:
       path: ""
       type: "pages"
     values:
       layout: "book"
+
+plugins:
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
+
+# Repository information for edit links
+repository: "itdojp/GitHub-AgentOps-book"
+
+permalink: pretty
 
 exclude:
   - node_modules/
@@ -37,4 +43,3 @@ exclude:
   - README.md
   - "*.tmp"
   - Gemfile*
-

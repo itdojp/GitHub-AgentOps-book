@@ -34,13 +34,10 @@ npm test
 - ビルド（`docs/` 生成）
 - `docs/` に対する内部リンク検証
 
-## GitHub Pages（暫定）
+## オンライン版
 
-Settings > Pages で以下を設定します。
-
-- Source: Deploy from a branch
-- Branch: `main`
-- Folder: `/docs`
+- GitHub Pages: https://itdojp.github.io/GitHub-AgentOps-book/
+- 公開設定（他書籍と同様）: Settings > Pages > Source: Deploy from a branch / Branch: `main` / Folder: `/docs`
 
 ## リリース（v1.0 準備）
 
