@@ -1,0 +1,63 @@
+name: "Quarterly Review / 四半期棚卸し"
+description: "Agents/MCP/課金/リンク切れ/サンプル動作を四半期で棚卸しする"
+title: "[QUARTERLY] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        目的: 「導入できる」状態を維持するため、四半期ごとに仕様変更・リンク切れ・サンプルの整合性を点検する。
+
+  - type: input
+    id: period
+    attributes:
+      label: Period / 対象期間（必須）
+      description: 例: 2026-Q1
+      placeholder: "YYYY-Qn"
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope / 対象（必須）
+      description: 棚卸し対象（書籍本文/Companion/ワークフロー等）を列挙する。
+      placeholder: |
+        - Book: chapters 1-11 / appendices
+        - Companion: templates / skills / rules / custom-agents / workflows
+    validations:
+      required: true
+
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Checklist / 点検項目（必須）
+      description: 実施した点検項目をチェックリストで残す（一次情報リンクの更新含む）。
+      placeholder: |
+        - [ ] `npm test` が PASS する
+        - [ ] Companion の固定パス参照が壊れていない
+        - [ ] Codex Action / Agents / MCP の仕様変更を一次情報で確認し、必要な差分をIssue化した
+        - [ ] 課金（premium requests / Actions minutes 等）の用語/説明が陳腐化していない
+        - [ ] サンプルワークフローの導入手順（Secrets/権限/実行範囲）が現行仕様と一致している
+        - [ ] 主要リンク切れがない（外部リンク含む）
+    validations:
+      required: true
+
+  - type: textarea
+    id: findings
+    attributes:
+      label: Findings / 所見（必須）
+      description: 変更点、リスク、対応方針を要約する。
+    validations:
+      required: true
+
+  - type: textarea
+    id: followups
+    attributes:
+      label: Follow-ups / 後続Issue（任意）
+      description: 作成した後続Issue（URL/番号）を貼る。
+      placeholder: |
+        - #xx ...
+        - #yy ...
+    validations:
+      required: false
+

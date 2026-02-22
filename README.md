@@ -42,6 +42,18 @@ Settings > Pages で以下を設定します。
 - Branch: `main`
 - Folder: `/docs`
 
+## リリース（v1.0 準備）
+
+- 変更履歴: `CHANGELOG.md`
+- 検証記録: `CHECKLIST.md`
+
+タグ/リリースノート（GitHub Release）は Issue #17 で確定します。
+
+## 更新ポリシー（四半期棚卸し）
+
+- 四半期ごとに、Agents/MCP/課金/リンク切れ/サンプル整合を点検します。
+- Issue テンプレ: `.github/ISSUE_TEMPLATE/quarterly-review.yml`
+
 ## 進捗管理
 
 - Epic: #1
