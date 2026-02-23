@@ -1,4 +1,4 @@
-# BOOK-PROPOSAL（v0.1）
+# BOOK-PROPOSAL（v1.0）
 
 ## 1. タイトル / サブタイトル
 
@@ -87,9 +87,10 @@
 - Reopen 率 / 差し戻し率の低下
 - 重要インシデント（Secrets 事故、権限逸脱）の抑止
 
-## 11. 公開形態 / ライセンス（提案）
+## 11. 公開形態 / ライセンス（決定）
 
-現時点の方針は以下。
+決定事項は以下。
 
 - 公開形態: Web（GitHub Pages）を v1.0 の前提とする（Folder: `/docs`）。電子書籍（EPUB/PDF）は v1.0 では任意。
-- ライセンス: 本文は `CC-BY-NC-SA-4.0`、サンプル/テンプレは `MIT` の分離を前提とする。
+- ライセンス（書籍本文）: `CC-BY-NC-SA-4.0`（商用は別契約。詳細は `LICENSE.md`）
+- ライセンス（サンプル/テンプレ）: Companion repo（`itdojp/GitHub-AgentOps-companion`）に集約し、`MIT` とする

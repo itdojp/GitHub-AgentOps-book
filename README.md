@@ -61,3 +61,9 @@ npm test
 - Epic: #1
 - 実行計画（ロードマップ）: #18
 - 企画書: `BOOK-PROPOSAL.md`
+
+## ライセンス
+
+CC BY-NC-SA 4.0（商用は別契約）
+
+- 詳細: `LICENSE.md`
