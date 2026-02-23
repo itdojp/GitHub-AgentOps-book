@@ -11,6 +11,13 @@ title: "はじめに"
 
 本書は、例として Codex / GitHub Agents / Copilot coding agent を扱います（主要例は Codex）。
 
+## Companion repo（導入資産）
+
+テンプレートやサンプルワークフローなど、導入に必要な「コピペできる資産」は Companion repo に集約します。
+
+- Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
+- 役割分担: 本書 = 理解 / Companion = 導入（テンプレ・サンプル）
+
 ## 想定読者
 
 - 開発リーダー / テックリード（標準化・統制・レビュー設計）
