@@ -13,6 +13,12 @@ AIエージェント駆動開発のための運用設計
 
 本書は、GitHub 上で AI エージェントを運用するための「運用設計（Ops）」を、実装可能なテンプレートと手順に落とすための実践ガイドです。
 
+## Companion（導入資産）
+
+テンプレートやサンプルワークフローなど、導入に必要な「コピペできる資産」は Companion repo に集約します。
+
+- Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
+
 ## 目次
 
 - [はじめに](introduction/)
