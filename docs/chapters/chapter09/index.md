@@ -61,6 +61,7 @@ permissions:
 
 jobs:
   run_codex:
+    runs-on: ubuntu-latest
     if: ${{ !github.event.pull_request.draft }}
     steps:
       - name: Guard (require OPENAI_API_KEY)
@@ -125,6 +126,7 @@ permissions:
 
 jobs:
   run_codex:
+    runs-on: ubuntu-latest
     steps:
       - name: Determine diff range
         id: range
