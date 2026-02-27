@@ -39,6 +39,52 @@ GitHub Actions では `permissions:` により `GITHUB_TOKEN` の権限を絞れ
 - PR コメント投稿のみが必要：`issues: write`（必要に応じて `pull-requests: read`）
 - コード変更が必要：PR 作成/更新の権限を付与し、承認フローと合わせて運用
 
+### 最小権限テンプレ（workflow read + job write）
+
+基本は workflow レベルで read を固定し、**書き込みが必要なジョブだけ**に write を付与します。
+
+```yaml
+name: Example
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  comment_only:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: read
+    steps:
+      - run: echo "post a comment"
+```
+
+### イベント選択の指針（`pull_request` / `workflow_dispatch` / `pull_request_target`）
+
+- `pull_request`（推奨：基本）
+  - fork PR では Secrets が渡らない前提で設計する
+  - コメント生成など「読み取り系」へ寄せると安全に導入できる
+- `workflow_dispatch`（推奨：Secrets/外部操作が必要な場合）
+  - 手動実行 + 入力（`base_ref`/`head_ref` 等）で「承認してから走らせる」導線を作る
+- `pull_request_target`（原則非推奨：安易な採用は禁止）
+  - Secrets を扱える一方、設計を誤ると外部から悪用され得る
+  - 使う場合は「何をチェックアウトし、何にSecretsを渡すか」を固定し、監査可能にする
+
+### Secrets 境界（承認境界の作り方）
+
+- Secrets を使う処理（デプロイ/外部API呼び出し等）は、Environment 保護（required reviewers）や手動実行に寄せる
+- fork PR は「非信頼入力」として扱い、Secrets/外部操作が必要な処理は分離する
+- 可能なら「長期Secretsを避ける（OIDC等）」へ寄せる（詳細は workflow-book を参照）
+  - https://itdojp.github.io/github-workflow-book/chapters/chapter13/ （13.8）
+
+### 供給網（サプライチェーン）: Actions の固定方針
+
+- 少なくともメジャーバージョン固定（例：`actions/checkout@v4`）
+- 可能なら SHA pin（例：`uses: owner/action@<sha>`）を検討し、更新は PR レビュー対象とする
+- 更新時は「理由/影響/検証/ロールバック」をセットで残す
+
 ## ログ/監査（証跡の残し方）
 
 最低限、次を残します。
@@ -49,7 +95,8 @@ GitHub Actions では `permissions:` により `GITHUB_TOKEN` の権限を絞れ
 
 ## 供給網（サプライチェーン）設計
 
-- Actions はバージョン固定（少なくともメジャー固定）し、変更はレビュー対象にする
+Actions の固定方針は上記を前提とし、ここでは運用面を補足します。
+
 - 依存更新は Skill/テンプレに沿って「理由/影響/検証/ロールバック」を揃える
 - lockfile を前提に再現性を担保し、不要な差分（フォーマット一括変更等）を避ける
 
