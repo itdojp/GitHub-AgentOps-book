@@ -35,9 +35,9 @@ Companion のサンプルは、次を前提にしています。
 - 実行範囲は絞る（例：非 Draft、手動実行、`concurrency` で多重実行を抑止）
 - プロンプトインジェクションを前提に「信頼しない」指示を書く
 
-## 最小実装：PR要約 + リスク抽出（コメント生成）
+## 最小実装：PR 要約 + リスク抽出（コメント生成）
 
-最初の導入は「自動修正」ではなく **コメント生成（読み取り）** が安全です。Companion の `codex-pr-review.yml` は、PRごとに要約/リスク/推奨テストを生成し、PRコメントを upsert（更新）します。
+最初の導入は「自動修正」ではなく **コメント生成（読み取り）** が安全です。Companion の `codex-pr-review.yml` は、PR ごとに要約/リスク/推奨テストを生成し、PR コメントを upsert（更新）します。
 
 - 全文： https://github.com/itdojp/GitHub-AgentOps-companion/blob/main/.github/workflows/codex-pr-review.yml
 
