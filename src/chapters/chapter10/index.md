@@ -65,18 +65,18 @@ jobs:
   - 手動実行 + 入力（`base_ref`/`head_ref` 等）で「承認してから走らせる」導線を作る
 - `pull_request_target`（原則非推奨：安易な採用は禁止）
   - Secrets を扱える一方、設計を誤ると外部から悪用され得る
-  - 使う場合は「何をチェックアウトし、何にSecretsを渡すか」を固定し、監査可能にする
+  - 使う場合は「何をチェックアウトし、何に Secrets を渡すか」を固定し、監査可能にする
 
 ### Secrets 境界（承認境界の作り方）
 
-- Secrets を使う処理（デプロイ/外部API呼び出し等）は、Environment 保護（required reviewers）や手動実行に寄せる
+- Secrets を使う処理（デプロイ/外部 API 呼び出し等）は、Environment 保護（required reviewers）や手動実行に寄せる
 - fork PR は「非信頼入力」として扱い、Secrets/外部操作が必要な処理は分離する
-- 可能なら「長期Secretsを避ける（OIDC等）」へ寄せる（詳細は workflow-book を参照）
+- 可能なら「長期 Secrets を避ける（OIDC等）」へ寄せる（詳細は workflow-book を参照）
   - https://itdojp.github.io/github-workflow-book/chapters/chapter13/ （13.8）
 
 ### 供給網（サプライチェーン）: Actions の固定方針
 
-- 少なくともメジャーバージョン固定（例：`actions/checkout@v4`）
+- 少なくともメジャーバージョン固定（例：`actions/checkout@v5`）
 - 可能なら SHA pin（例：`uses: owner/action@<sha>`）を検討し、更新は PR レビュー対象とする
 - 更新時は「理由/影響/検証/ロールバック」をセットで残す
 

@@ -55,8 +55,8 @@ title: "付録C：トラブルシュート（失敗パターンと対処）"
 追加のチェックポイント：
 
 - `Resource not accessible by integration` は `GITHUB_TOKEN` 権限不足の典型（`permissions:` と既定権限を確認）
-- PRコメント投稿は `issues: write` が必要になる（PRは issue として扱われる）
-- PR本文の更新やラベル付与など「書き込み系」は job 単位で権限を付与し、実行条件（イベント/承認）とセットで運用する
+- PR コメント投稿は `issues: write` が必要になる（PR は issue として扱われる）
+- PR 本文の更新やラベル付与など「書き込み系」は job 単位で権限を付与し、実行条件（イベント/承認）とセットで運用する
 
 ```yaml
 permissions:
