@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Checkout book
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Checkout book-formatter (pinned)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: itdojp/book-formatter
           ref: da2a49e7d2dcd9e1fa885e910c458130fe8d73a4
