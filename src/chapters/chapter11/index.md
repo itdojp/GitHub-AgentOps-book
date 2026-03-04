@@ -2,7 +2,7 @@
 
 ## この章で扱うこと
 
-- 計測対象（Lead time, Review time, Reopen率 等）
+- 計測対象（Lead time / Review time / Reopen 率 等）
 - 計測→改善サイクルを運用手順として定義する
 
 ## メトリクス設計の目的

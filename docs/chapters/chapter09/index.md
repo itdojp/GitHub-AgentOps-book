@@ -39,7 +39,7 @@ Companion のサンプルは、次を前提にしています。
 
 最初の導入は「自動修正」ではなく **コメント生成（読み取り）** が安全です。Companion の `codex-pr-review.yml` は、PR ごとに要約/リスク/推奨テストを生成し、PR コメントを upsert（更新）します。
 
-- 全文： https://github.com/itdojp/GitHub-AgentOps-companion/blob/main/.github/workflows/codex-pr-review.yml
+- 全文：<https://github.com/itdojp/GitHub-AgentOps-companion/blob/main/.github/workflows/codex-pr-review.yml>
 
 抜粋（重要部分のみ）：
 
@@ -104,7 +104,7 @@ jobs:
 
 リリース前に「変更点サマリ/影響範囲/チェックリスト」を作る用途は、**手動実行（`workflow_dispatch`）** に寄せるのが安全です。
 
-- 全文： https://github.com/itdojp/GitHub-AgentOps-companion/blob/main/.github/workflows/codex-release-prep.yml
+- 全文：<https://github.com/itdojp/GitHub-AgentOps-companion/blob/main/.github/workflows/codex-release-prep.yml>
 
 抜粋（重要部分のみ）：
 

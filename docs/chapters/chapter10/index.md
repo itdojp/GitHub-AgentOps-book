@@ -76,8 +76,8 @@ jobs:
 
 - Secrets を使う処理（デプロイ/外部 API 呼び出し等）は、Environment 保護（required reviewers）や手動実行に寄せる
 - fork PR は「非信頼入力」として扱い、Secrets/外部操作が必要な処理は分離する
-- 可能なら「長期 Secrets を避ける（OIDC等）」へ寄せる（詳細は workflow-book を参照）
-  - https://itdojp.github.io/github-workflow-book/chapters/chapter13/ （13.8）
+- 可能なら「長期 Secrets を避ける（OIDC 等）」へ寄せる（詳細は workflow-book を参照）
+  - <https://itdojp.github.io/github-workflow-book/chapters/chapter13/>（13.8）
 
 ### 供給網（サプライチェーン）: Actions の固定方針
 
