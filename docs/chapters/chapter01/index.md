@@ -74,6 +74,8 @@ Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/Git
 
 ## 章末チェックリスト（ドラフト）
 
+注記: 本チェックリストは最小構成です。組織の運用ポリシー（権限、監査、リリース手順）に合わせて拡張してください。
+
 - [ ] Issue が「実行仕様（受入基準・制約・検証）」を満たしている
 - [ ] エージェントに任せる範囲と、人間承認が必要な範囲が定義されている
 - [ ] CI で担保する品質ゲート（lint/test/link-check 等）が定義されている
