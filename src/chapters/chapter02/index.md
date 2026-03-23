@@ -100,3 +100,15 @@ Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/Git
 - [ ] Issue/PR テンプレが整備され、受入基準が明文化されている
 - [ ] ブランチ保護/Required checks/Required reviewers の方針が決まっている
 - [ ] Secrets/権限/監査ログの運用方針が決まっている
+
+## まとめ
+
+- Agent-ready repo の最低条件は、テンプレ・品質ゲート・権限境界・監査の4点です。
+- CI は「失敗したら原因を切り分けて再試行できる」状態を作るための運用装置です。
+- Companion と workflow-book を併用すると、導入の二重管理を避けながら標準化できます。
+
+## 次に読む
+
+- 指示の標準化へ進む: [第3章：AGENTS.md 設計](../chapter03/)
+- CI の実装例を補う: [GitHubワークフロー実践ガイド（第13章）](https://itdojp.github.io/github-workflow-book/chapters/chapter13/)
+- 運用導入のテンプレを見る: [付録A：テンプレ集](../../appendices/appendix-a/)
