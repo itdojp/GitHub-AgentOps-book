@@ -79,3 +79,15 @@ Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/Git
 - [ ] Issue が「実行仕様（受入基準・制約・検証）」を満たしている
 - [ ] エージェントに任せる範囲と、人間承認が必要な範囲が定義されている
 - [ ] CI で担保する品質ゲート（lint/test/link-check 等）が定義されている
+
+## まとめ
+
+- Human / Agent / CI の責務を先に分離すると、速度向上と誤変更抑止を両立しやすくなります。
+- Agent は作業主体であり、承認主体ではありません。最終責任は人間が持ちます。
+- CI は品質保証だけでなく、監査可能性の基盤です。
+
+## 次に読む
+
+- 導入条件を具体化する: [第2章：Agent-ready repo 要件（テンプレ / 品質ゲート / 権限境界）](../chapter02/)
+- 運用フローへ進む: [第6章：GitHub Agents 運用（Issue→PR→反復→マージ）](../chapter06/)
+- トラブル例を先に確認する: [付録C：トラブルシュート（失敗パターンと対処）](../../appendices/appendix-c/)
