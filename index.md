@@ -82,3 +82,9 @@ AIエージェント駆動開発のための運用設計
 ## ライセンス
 
 本書は CC BY-NC-SA 4.0 で公開されています。商用利用は別途契約が必要です。
+
+## 利用と更新情報
+
+- リポジトリ: [itdojp/GitHub-AgentOps-book](https://github.com/itdojp/GitHub-AgentOps-book)
+- Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
+- 更新差分を追う場合は、GitHub のコミット履歴と Pull Request を参照してください。
