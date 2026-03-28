@@ -86,5 +86,5 @@ AIエージェント駆動開発のための運用設計
 ## 利用と更新情報
 
 - リポジトリ: [itdojp/GitHub-AgentOps-book](https://github.com/itdojp/GitHub-AgentOps-book)
-- Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
-- 更新差分を追う場合は、GitHub のコミット履歴と Pull Request を参照してください。
+- Companion（導入資産）については、上部の「Companion（導入資産）」セクションを参照してください。
+- 更新差分を追う場合は、GitHub のコミット履歴と PR を参照してください。
