@@ -6,6 +6,16 @@
 
 - リポジトリ: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/GitHub-AgentOps-companion)
 
+## Companion の使い分け早見表
+
+| 導入目的 | まず開く固定パス | 参照章 |
+| --- | --- | --- |
+| 最初の 1 件を Issue から PR まで回したい | `.github/ISSUE_TEMPLATE/agent-task.yml` | 第6章 |
+| エージェントへの基本指示を決めたい | `AGENTS.md` | 第3章 |
+| 反復タスクを再利用可能な手順に切り出したい | `skills/docs-update/SKILL.md` | 第4章 |
+| 実行境界と権限制御を先に固めたい | `rules/command-policy.md` / `CODEOWNERS_GUIDE.md` | 第5章 / 第2章 |
+| PR での要約・確認観点を揃えたい | `.github/PULL_REQUEST_TEMPLATE.md` | 第6章 |
+
 ## テンプレ一覧（初期）
 
 ### AgentOps 運用（Issue→PR→反復）
