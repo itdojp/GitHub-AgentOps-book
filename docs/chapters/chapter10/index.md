@@ -79,9 +79,44 @@ jobs:
 - 可能なら「長期 Secrets を避ける（OIDC 等）」へ寄せる（詳細は workflow-book を参照）
   - <https://itdojp.github.io/github-workflow-book/chapters/chapter13/>（13.8）
 
+## AI/外部サービス投入とログ境界
+
+AgentOps では、Issue、PR、差分、ログ、スタックトレース、評価データが AI/外部サービスへ投入され得ます。
+「Secrets ではないから安全」と扱わず、情報分類と承認境界を先に決めます。
+
+| 対象 | 主なリスク | 最小ゲート |
+| --- | --- | --- |
+| Issue / PR 本文 | 顧客名、障害情報、未公開仕様の混入 | 公開範囲と外部投入可否を確認する |
+| CI ログ / artifact | トークン断片、環境変数、個人情報の混入 | マスク、保存期間、共有先を確認する |
+| リポジトリ差分 | 未公開コード、脆弱性情報、ライセンス制約 | provider の利用条件と投入範囲を確認する |
+| eval データ | 実データ、会話履歴、再識別可能な情報 | 匿名化、サンプリング、削除手順を確認する |
+
+運用上は次を PR body、Issue コメント、または監査メモに残します。
+
+- AI/外部サービスへ投入した範囲（ファイル、ログ、URL、プロンプトの種別）
+- 投入しなかった範囲と理由（Secrets、個人情報、顧客固有情報、未公開障害情報など）
+- マスク/要約/サンプリングの方法
+- provider の retention / training use / logging 条件を確認した日付
+- 漏えい疑い時の初動（隔離、削除依頼、ローテーション、報告/通知判断）
+
+Codex Action や MCP を GitHub Actions 上で使う場合も、API key は repository / environment secrets として扱い、
+ジョブの `permissions:`、イベント、checkout 対象、sandbox / safety strategy をセットで確認します。
+`pull_request_target` は Secrets に触れられるため、非信頼入力をチェックアウトして実行する設計にしないでください。
+
+公式情報の確認先（2026-05-23 Asia/Tokyo 時点）:
+
+- GitHub Docs: GITHUB_TOKEN
+  <https://docs.github.com/en/actions/concepts/security/github_token>
+- GitHub Docs: Managing environments for deployment
+  <https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments>
+- OpenAI Codex Action
+  <https://github.com/openai/codex-action>
+- セキュリティ＆プライバシー基礎リテラシー
+  <https://itdojp.github.io/security-privacy-literacy-book/>
+
 ### 供給網（サプライチェーン）: Actions の固定方針
 
-- 少なくともメジャーバージョン固定（例：`actions/checkout@v5`）
+- 少なくともメジャーバージョン固定（例：`actions/checkout@v6`）
 - 可能なら SHA pin（例：`uses: owner/action@<sha>`）を検討し、更新は PR レビュー対象とする
 - 更新時は「理由/影響/検証/ロールバック」をセットで残す
 
@@ -113,8 +148,10 @@ Actions の固定方針は上記を前提とし、ここでは運用面を補足
 - [ ] Secrets と権限の境界が運用可能な形で定義されている（最小権限、参照範囲、承認境界）
 - [ ] 監査ログ/証跡の保持方針が定義されている（Issue/PR/CI の証跡）
 - [ ] 供給網リスクの扱い（Actions/依存更新の変更管理）が定義されている
+- [ ] AI/外部サービス投入の可否、マスク、保存期間、削除手順が定義されている
 
 ## 運用チェックリスト（ドラフト）
 
 - [ ] Secrets の棚卸し/ローテーション/漏えい時対応が運用手順になっている
 - [ ] Rules（allow/prompt/forbidden）が実態と乖離していない（例外をルールへ還元できている）
+- [ ] Codex Action / MCP / 外部 API 利用時の `permissions:`、イベント、Secrets 境界を確認している
