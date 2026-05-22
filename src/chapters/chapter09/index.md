@@ -73,7 +73,7 @@ jobs:
 
       - name: Checkout PR merge ref
         if: ${{ steps.guard.outputs.has_key == 'true' }}
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
 

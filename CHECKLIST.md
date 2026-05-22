@@ -81,3 +81,25 @@
 - [x] Book 各章/付録に Companion リポジトリ（固定パス）参照が存在する
 - [x] link-check が PASS する
 
+## 2026-05-23 追加レビュー
+
+親ロードマップ `itdojp/it-engineer-knowledge-architecture#153` / Phase 2 管理 Issue #155 の観点で、
+GitHub AgentOps の運用ゲートを再確認した。
+
+### 追加確認項目
+
+- [x] PR 完了ゲート、review 本文/inline comment/suggestion 対応、未解決 review thread 0 を本文で扱う
+- [x] AI/外部サービス投入、Secrets、ログ、provider 条件確認、漏えい疑い時の初動を本文で扱う
+- [x] review 完了率、post-merge 失敗率、eval 再実行率など AgentOps 固有の指標を本文で扱う
+- [x] 公式情報の確認先を本文に残す
+
+### 確認した公式情報
+
+- GitHub Copilot coding agent / Copilot code review
+- GitHub Actions `GITHUB_TOKEN` / environments
+- OpenAI Codex Action
+
+### 残課題の扱い
+
+- Companion 側テンプレートや workflow の変更が必要な場合は、Book の本文変更とは別 Issue / PR に分離する。
+- モデル名、料金、preview 機能などの時点依存情報は、四半期棚卸しで再確認する。
