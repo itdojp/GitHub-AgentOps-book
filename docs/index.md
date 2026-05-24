@@ -65,7 +65,7 @@ AIエージェント駆動開発のための運用設計
   - [第7章：MCP と tool exposure 設計](chapters/chapter07/)
   - [第8章：コスト・予算・利用ガバナンス](chapters/chapter08/)
 - 第4部：CI/CD 統合とガバナンス
-  - [第9章：Codex GitHub Action で継続的 AI](chapters/chapter09/)
+  - [第9章：継続的 AI の実装パターン](chapters/chapter09/)
   - [第10章：セキュリティ設計（Secrets / 権限 / ログ / 供給網）](chapters/chapter10/)
   - [第11章：メトリクス設計（Lead time / Review time / 差し戻し率）](chapters/chapter11/)
 - 付録

@@ -30,7 +30,7 @@
   - `AGENTS.md`（指示の資産化）
   - Skills（`SKILL.md` を中心とした手順再利用）
   - Policy / control surface（allow / prompt / forbidden 等の執行境界）
-  - Codex GitHub Action（CI 統合）
+  - 継続的 AI の実装パターン（Copilot code review / agents / Codex CLI / Codex Action）
   - GitHub custom agents と MCP / tool exposure 設計
 
 ## 5. 非スコープ（他書へ委譲）
@@ -58,7 +58,7 @@
   7. MCP と tool exposure 設計
   8. コスト・予算・利用ガバナンス
 - 第4部：CI/CD 統合とガバナンス
-  9. Codex GitHub Action で継続的 AI
+  9. 継続的 AI の実装パターン
   10. セキュリティ設計（Secrets、権限、ログ、供給網）
   11. メトリクス設計（Lead time / Review time / Reopen率 / 差し戻し率）
 - 付録
@@ -76,7 +76,7 @@
 
 最低限、四半期ごとに以下を棚卸しし、Issue として追跡する。
 
-- cloud agent / MCP / Codex Action などの仕様変更追従
+- cloud agent / MCP / Copilot code review / Codex CLI / Codex Action などの仕様変更追従
 - 課金体系（premium requests / Actions minutes / usage-based billing）とベストプラクティスの更新
 - リンク切れ / サンプルの動作確認（導入手順の再現性）
 
