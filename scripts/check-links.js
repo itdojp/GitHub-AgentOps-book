@@ -117,11 +117,13 @@ class LinkChecker {
       links.push(url);
     }
     
-    // Match image sources
-    const imgSrcs = content.match(/(?:src|\!\[[^\]]*\]\()([^"')]+)/g) || [];
+    // Match HTML image sources. Markdown images are already covered by the
+    // markdown-link matcher above; keep this regex scoped to actual src=
+    // attributes so prose such as `src/**` is not misclassified as a link.
+    const imgSrcs = content.match(/<img[^>]+\bsrc=["'][^"']+["']/g) || [];
     for (const match of imgSrcs) {
-      const url = match.replace(/^(src=|!\[[^\]]*\]\()/, '').replace(/["']$/, '');
-      links.push(url);
+      const urlMatch = match.match(/\bsrc=["']([^"']+)["']/);
+      if (urlMatch) links.push(urlMatch[1]);
     }
     
     return links

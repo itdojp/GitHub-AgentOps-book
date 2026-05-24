@@ -8,7 +8,7 @@ chapters:
     path: "/chapters/chapter01/"
   - title: "第2章：Agent-ready repo 要件（テンプレ / 品質ゲート / 権限境界）"
     path: "/chapters/chapter02/"
-  - title: "第3章：AGENTS.md 設計"
+  - title: "第3章：Instruction hierarchy と context 設計"
     path: "/chapters/chapter03/"
   - title: "第4章：Skills 設計"
     path: "/chapters/chapter04/"

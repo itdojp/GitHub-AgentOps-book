@@ -109,6 +109,6 @@ Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/Git
 
 ## 次に読む
 
-- 指示の標準化へ進む: [第3章：AGENTS.md 設計](../chapter03/)
+- 指示階層の設計へ進む: [第3章：Instruction hierarchy と context 設計](../chapter03/)
 - CI の実装例を補う: [GitHubワークフロー実践ガイド（第13章）](https://itdojp.github.io/github-workflow-book/chapters/chapter13/)
 - 運用導入のテンプレを見る: [付録A：テンプレ集](../../appendices/appendix-a/)
