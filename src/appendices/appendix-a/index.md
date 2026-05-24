@@ -50,7 +50,7 @@
 
 - allow/prompt/forbidden のポリシー雛形: `rules/command-policy.md`
 
-### 継続的 AI / CI 統合
+### 継続的 AI 実装パターン / CI 統合
 
 - PR 要約 + リスク抽出コメント: `.github/workflows/codex-pr-review.yml`
 - リリース前チェック（手動実行）: `.github/workflows/codex-release-prep.yml`
