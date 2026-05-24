@@ -9,7 +9,7 @@ title: "はじめに"
 
 ## スコープ注記
 
-本書は、例として Codex / GitHub Agents / Copilot coding agent を扱います（主要例は Codex）。
+本書は、例として Copilot cloud agent / third-party agents（OpenAI Codex 等）/ Copilot CLI を扱います。
 
 ## Companion repo（導入資産）
 

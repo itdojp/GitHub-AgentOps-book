@@ -26,7 +26,7 @@
 
 - GitHub 上のエージェント運用を「運用設計（Ops）」として体系化する
   - Issue → Agent → PR → コメント反復 → マージ
-- 例: Codex / GitHub Agents / Copilot coding agent（主要例は Codex）を前提に、「リポジトリにコミットできる統制」を実装可能にする
+- 例: Copilot cloud agent / third-party agents（OpenAI Codex 等）/ Copilot CLI を前提に、「リポジトリにコミットできる統制」を実装可能にする
   - `AGENTS.md`（指示の資産化）
   - Skills（`SKILL.md` を中心とした手順再利用）
   - Policy / control surface（allow / prompt / forbidden 等の執行境界）
