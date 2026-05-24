@@ -89,5 +89,5 @@ Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/Git
 ## 次に読む
 
 - 導入条件を具体化する: [第2章：Agent-ready repo 要件（テンプレ / 品質ゲート / 権限境界）](../chapter02/)
-- 運用フローへ進む: [第6章：GitHub Agents 運用（Issue→PR→反復→マージ）](../chapter06/)
+- 運用フローへ進む: [第6章：GitHub ネイティブな実行フロー](../chapter06/)
 - トラブル例を先に確認する: [付録C：トラブルシュート（失敗パターンと対処）](../../appendices/appendix-c/)

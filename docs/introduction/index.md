@@ -9,7 +9,7 @@ title: "はじめに"
 
 ## スコープ注記
 
-本書は、例として Codex / GitHub Agents / Copilot coding agent を扱います（主要例は Codex）。
+本書は、例として Copilot cloud agent / third-party agents（OpenAI Codex 等）/ Copilot CLI を扱います。
 
 ## Companion repo（導入資産）
 
@@ -28,5 +28,5 @@ title: "はじめに"
 
 1. 第1部で責任分界と前提条件（Agent-ready repo）を整理する
 2. 第2部で「指示階層（Copilot instructions / AGENTS）」「再利用（Skills / custom agents / hooks）」「実行境界（Policy / control surface）」を標準化する
-3. 第3部で GitHub 上の運用フロー（Issue→PR→反復）に落とし込む
+3. 第3部で GitHub ネイティブな実行フローと MCP / tool exposure に落とし込む
 4. 第4部で CI/CD とガバナンス（セキュリティ/メトリクス）に接続する

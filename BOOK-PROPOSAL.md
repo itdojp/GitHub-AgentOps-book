@@ -19,19 +19,19 @@
 
 - Issue が「実行仕様」になっておらず、エージェントの成果が安定しない
 - エージェント生成 PR のレビュー観点 / 責任分界が曖昧で品質事故が起きる
-- MCP / カスタムエージェント / Skills / Rules が点在し、統制設計の型がない
+- MCP / custom agents / Skills / Policy が点在し、統制設計の型がない
 - コスト（premium requests / Actions minutes）とセキュリティ（Secrets / 権限）を一体で設計できない
 
 ## 4. コアスコープ（本書で扱う）
 
 - GitHub 上のエージェント運用を「運用設計（Ops）」として体系化する
   - Issue → Agent → PR → コメント反復 → マージ
-- 例: Codex / GitHub Agents / Copilot coding agent（主要例は Codex）を前提に、「リポジトリにコミットできる統制」を実装可能にする
+- 例: Copilot cloud agent / third-party agents（OpenAI Codex 等）/ Copilot CLI を前提に、「リポジトリにコミットできる統制」を実装可能にする
   - `AGENTS.md`（指示の資産化）
   - Skills（`SKILL.md` を中心とした手順再利用）
   - Policy / control surface（allow / prompt / forbidden 等の執行境界）
   - Codex GitHub Action（CI 統合）
-  - GitHub カスタムエージェント（`.agent.md`）と MCP 公開範囲設計
+  - GitHub custom agents と MCP / tool exposure 設計
 
 ## 5. 非スコープ（他書へ委譲）
 
@@ -54,15 +54,15 @@
   4. 再利用レイヤー（Skills / custom agents / hooks）
   5. Policy と control surface 設計
 - 第3部：GitHub エージェント運用
-  6. GitHub Agents 運用（Issue→PR→反復）
-  7. カスタムエージェント（`.agent.md`）と MCP（ツール公開範囲）
+  6. GitHub ネイティブな実行フロー
+  7. MCP と tool exposure 設計
   8. コスト設計（premium requests / Actions minutes）
 - 第4部：CI/CD 統合とガバナンス
   9. Codex GitHub Action で継続的 AI
   10. セキュリティ設計（Secrets、権限、ログ、供給網）
   11. メトリクス設計（Lead time / Review time / Reopen率 / 差し戻し率）
 - 付録
-  - A: テンプレ集（AGENTS.md / Issue / PR / `.agent.md` / Skills）
+  - A: テンプレ集（AGENTS.md / Issue / PR / custom agents / Skills / MCP）
   - B: プレイブック集（タスク別運用手順）
   - C: トラブルシュート（失敗パターンと対処）
 
@@ -76,7 +76,7 @@
 
 最低限、四半期ごとに以下を棚卸しし、Issue として追跡する。
 
-- Agents / MCP / Codex Action などの仕様変更追従
+- cloud agent / MCP / Codex Action などの仕様変更追従
 - 課金体系（premium requests / Actions minutes）とベストプラクティスの更新
 - リンク切れ / サンプルの動作確認（導入手順の再現性）
 
