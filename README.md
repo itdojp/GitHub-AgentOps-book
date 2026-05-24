@@ -22,6 +22,7 @@ npm run preview
 - `npm run build` は `docs/` に GitHub Pages 用の成果物を生成します。
 - `npm run preview` は `http://localhost:8080` でプレビューします。
 - `npm run check-external-links` は、リリース前や最終整合性確認で外部リンクを検査します。
+- DNS 制限のある環境では `EXTERNAL_LINK_CHECK_SKIP_HOSTS=example.com,example.org npm run check-external-links` のようにホスト単位で除外できます。
 
 ## ディレクトリ構成（抜粋）
 

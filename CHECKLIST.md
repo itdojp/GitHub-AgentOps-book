@@ -46,6 +46,12 @@ npm test
 npm run check-external-links
 ```
 
+ネットワーク制約がある環境では、必要に応じて次のように到達不能ホストを明示的に除外する。
+
+```bash
+EXTERNAL_LINK_CHECK_SKIP_HOSTS=example.com,example.org npm run check-external-links
+```
+
 結果：
 
 - [x] 2026-05-24 時点で、本文・README・企画書・検証記録の外部リンクを検査できる

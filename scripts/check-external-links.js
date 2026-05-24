@@ -23,7 +23,12 @@ const CHECK_TARGETS = [
   'CHECKLIST.md',
 ];
 
-const SKIP_HOSTS = new Set(['localhost', '127.0.0.1', '::1']);
+const DEFAULT_SKIP_HOSTS = ['localhost', '127.0.0.1', '::1'];
+const ENV_SKIP_HOSTS = (process.env.EXTERNAL_LINK_CHECK_SKIP_HOSTS || '')
+  .split(',')
+  .map((host) => host.trim().toLowerCase())
+  .filter(Boolean);
+const SKIP_HOSTS = new Set([...DEFAULT_SKIP_HOSTS, ...ENV_SKIP_HOSTS]);
 const MAX_REDIRECTS = 5;
 const TIMEOUT_MS = 20000;
 
@@ -43,7 +48,7 @@ function normalizeUrl(raw) {
 function shouldSkip(url) {
   try {
     const parsed = new URL(url);
-    return SKIP_HOSTS.has(parsed.hostname);
+    return SKIP_HOSTS.has(parsed.hostname.toLowerCase());
   } catch {
     return true;
   }
@@ -127,6 +132,9 @@ async function main() {
   const links = await collectExternalLinks(files);
 
   console.log(colors.blue(`Checking ${links.size} unique external links from ${files.length} files...`));
+  if (ENV_SKIP_HOSTS.length > 0) {
+    console.log(colors.blue(`Skipping hosts from EXTERNAL_LINK_CHECK_SKIP_HOSTS: ${ENV_SKIP_HOSTS.join(', ')}`));
+  }
 
   const failures = [];
   for (const [url, sources] of links.entries()) {
