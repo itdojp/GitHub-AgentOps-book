@@ -17,7 +17,8 @@
     "lint": "markdownlint 'src/**/*.md' 'index.md' 'README.md' 'BOOK-PROPOSAL.md' 'CONTRIBUTING.md' 'AGENTS.md' --ignore node_modules",
     "check-links": "node scripts/check-links.js",
     "build:validate": "npm run build && npm run check-links",
-    "test": "npm run lint && npm run build:validate"
+    "test": "npm run lint && npm run build:validate",
+    "check-external-links": "node scripts/check-external-links.js"
   },
   "dependencies": {
     "glob": "^10.3.10"

@@ -5,7 +5,9 @@ AIエージェント駆動開発のための運用設計
 - English Title: GitHub AgentOps Practical Guide
 - English Subtitle: Ops Design for AI Agent-Driven Development
 
-本リポジトリは、GitHub 上で AI エージェント（例: Codex / GitHub Agents / Copilot coding agent。主要例は Codex）を運用するための「運用設計（Ops）」を、テンプレートと手順として体系化する書籍プロジェクトです。
+本リポジトリは、GitHub 上で AI エージェントを運用するための「運用設計（Ops）」を、テンプレートと手順として体系化する書籍プロジェクトです。
+
+主要な対象は Copilot cloud agent、Copilot code review、third-party agents（OpenAI Codex 等）、Copilot CLI、Codex CLI / Codex Action です。特定の実行方式だけを正解にせず、責任分界、権限、レビュー、CI、セキュリティ、コスト、メトリクスを組み合わせて扱います。
 
 ## クイックスタート
 
@@ -19,6 +21,8 @@ npm run preview
 
 - `npm run build` は `docs/` に GitHub Pages 用の成果物を生成します。
 - `npm run preview` は `http://localhost:8080` でプレビューします。
+- `npm run check-external-links` は、リリース前や最終整合性確認で外部リンクを検査します。
+- DNS 制限のある環境では `EXTERNAL_LINK_CHECK_SKIP_HOSTS=example.com,example.org npm run check-external-links` のようにホスト単位で除外できます。
 
 ## ディレクトリ構成（抜粋）
 
@@ -44,23 +48,22 @@ npm test
 - GitHub Pages: https://itdojp.github.io/GitHub-AgentOps-book/
 - 公開設定（他書籍と同様）: Settings > Pages > Source: Deploy from a branch / Branch: `main` / Folder: `/docs`
 
-## リリース（v1.0 準備）
+## 検証とリリース準備
 
 - 変更履歴: `CHANGELOG.md`
 - 検証記録: `CHECKLIST.md`
-
-タグ/リリースノート（GitHub Release）は Issue #17 で確定します。
+- 最終整合性では `npm test`、`npm run check-external-links`、GitHub Pages smoke を確認します。
 
 ## 更新ポリシー（四半期棚卸し）
 
-- 四半期ごとに、Agents/MCP/課金/リンク切れ/サンプル整合を点検します。
+- 四半期ごとに、Copilot / cloud agent / custom agents / hooks / MCP / Codex / 課金 / リンク切れ / Companion サンプル整合を点検します。
 - Issue テンプレ: `.github/ISSUE_TEMPLATE/quarterly-review.yml`
 
 ## 進捗管理
 
-- Epic: #1
-- 実行計画（ロードマップ）: #18
 - 企画書: `BOOK-PROPOSAL.md`
+- 検証記録: `CHECKLIST.md`
+- 大規模改稿や四半期棚卸しは GitHub Issues で追跡します。
 
 ## ライセンス
 

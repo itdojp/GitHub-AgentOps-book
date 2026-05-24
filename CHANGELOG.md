@@ -6,6 +6,7 @@
 
 ### Changed
 
+- 最終整合性検証として README / CHECKLIST / 外部リンク検証スクリプトを更新し、Issue #37 の残受入基準を確認可能にした
 - 付録A/B/Cを現行 ecosystem 向けに再構成し、instructions / agents / Skills / hooks / MCP、Copilot review、Actions permissions、MCP/tool exposure、rollout review のテンプレ・プレイブック・トラブルシュートを追加
 - 第11章を「メトリクス・運用レビュー・展開ロードマップ」として再構成し、flow / quality / security / cost / adoption の scorecard、レビュー cadence、maturity matrix を追加
 

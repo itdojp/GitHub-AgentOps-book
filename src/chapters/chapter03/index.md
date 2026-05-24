@@ -176,8 +176,8 @@ Instruction は運用ルールです。
 - GitHub Docs: [Support for different types of custom instructions](https://docs.github.com/en/copilot/reference/custom-instructions-support)
 - GitHub Docs: [About GitHub Copilot coding agent](https://docs.github.com/en/copilot/concepts/coding-agent/coding-agent)
 - GitHub Docs: [About custom agents](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-custom-agents)
-- OpenAI Docs: [Codex cloud](https://platform.openai.com/docs/codex)
-- OpenAI Docs: [Agent internet access](https://platform.openai.com/docs/codex/agent-network)
+- OpenAI Developers: [Codex cloud](https://developers.openai.com/codex/cloud)
+- OpenAI Developers: [Agent internet access](https://developers.openai.com/codex/cloud/internet-access)
 
 ## 章末チェックリスト
 
