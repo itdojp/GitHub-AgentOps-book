@@ -85,9 +85,11 @@ permissions:
 ### 症状
 
 - AI 実行が過剰、Actions が多重起動し、費用/待ち時間が増える
+- premium requests、Actions minutes、artifact / cache storage、外部 API quota のどれが増えたか分からない
 
 ### 対処（最小）
 
+- 第8章の budget / policy / analytics に戻り、quota / budget owner と overage 対応を確認する
 - `concurrency`、`paths`、手動実行（`workflow_dispatch`）で対象を絞る
 - 例外対応（緊急時のみ上限緩和）を承認フローとして固定する
 
