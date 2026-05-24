@@ -38,7 +38,7 @@
 - 対象: 原稿ディレクトリ配下の Markdown（例: `chapters/` / `appendices/`）
 - 非対象: 生成物、公開アセット、外部仕様の断定更新
 
-## 実行ポリシー（Rules）
+## 実行ポリシー（第5章の policy / control surface）
 - allow: 読み取り、lint/link-check
 - prompt: 外部公開の挙動に影響する変更（ナビ/URL/アンカー）、ネットワークを伴う操作（要確認）
 - forbidden: Secrets を扱う操作、破壊的コマンド
