@@ -34,7 +34,7 @@ Policy は、**文書、tool permission、hook、CI、GitHub repository controls
 | 区分 | 意味 | 例 | 必要な証跡 |
 | --- | --- | --- | --- |
 | allow | 低リスク、可逆、監査容易な操作 | read、grep、lint、unit test、docs build | 実行ログ、検証結果 |
-| prompt | 影響が大きく、人間承認が必要な操作 | dependency install、push、release、外部API、MCPのmutating tool | 承認理由、影響範囲、rollback |
+| prompt | 影響が大きく、人間承認が必要な操作 | dependency install、push、release、外部 API、MCP の mutating tool | 承認理由、影響範囲、rollback |
 | forbidden | 原則実行しない操作 | 本番 secret の表示、force push、外部 script 直実行、未承認の破壊的操作 | 拒否理由、代替案 |
 
 分類は固定ではありません。
@@ -48,7 +48,7 @@ Policy は、**文書、tool permission、hook、CI、GitHub repository controls
 | Control surface | 執行できること | 例 | 限界 |
 | --- | --- | --- | --- |
 | Instruction / Skill | 期待する作業手順、非スコープ、証跡 | `npm test` を必須化、PR本文の型 | 実行を機械的には止められない |
-| Copilot CLI tool control | tool / command / MCP tool の許可・拒否 | `--deny-tool='shell(git push)'` | GitHub上のPR mergeやActions policyは別管理 |
+| Copilot CLI tool control | tool / command / MCP tool の許可・拒否 | `--deny-tool='shell(git push)'` | GitHub 上の PR merge や Actions policy は別管理 |
 | Hooks | session / prompt / tool call 前後の検査 | secret scan、禁止コマンド検知、audit log | hook 自体の保守と性能影響がある |
 | CI / required checks | 再現可能な品質ゲート | lint、test、link check、policy check | 人間承認や設計妥当性は直接判断しない |
 | CODEOWNERS | ファイル領域別の review owner | `.github/**`、security docs、infra | 所有者に権限が必要。レビュー品質までは保証しない |
