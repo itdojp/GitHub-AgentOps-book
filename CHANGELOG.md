@@ -11,7 +11,7 @@
 - 書籍本文（第1部〜第4部、全11章 + 章末チェックリスト）
   - 第1部（第1-2章）責任分界 / Agent-ready repo 要件
   - 第2部（第3-5章）Instruction hierarchy / 再利用レイヤー / Policy 設計
-  - 第3部（第6-8章）GitHub ネイティブ実行フロー / MCP と tool exposure / コスト設計
+  - 第3部（第6-8章）GitHub ネイティブ実行フロー / MCP と tool exposure / コスト・予算・利用ガバナンス
   - 第4部（第9-11章）Codex Action / セキュリティ / メトリクス
 - 付録A/B/C（テンプレ集、プレイブック集、トラブルシュート）
 - 検証記録: `CHECKLIST.md`

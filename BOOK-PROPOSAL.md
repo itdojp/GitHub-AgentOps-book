@@ -20,7 +20,7 @@
 - Issue が「実行仕様」になっておらず、エージェントの成果が安定しない
 - エージェント生成 PR のレビュー観点 / 責任分界が曖昧で品質事故が起きる
 - MCP / custom agents / Skills / Policy が点在し、統制設計の型がない
-- コスト（premium requests / Actions minutes）とセキュリティ（Secrets / 権限）を一体で設計できない
+- コスト・予算・利用ガバナンス（premium requests / Actions minutes / analytics）とセキュリティ（Secrets / 権限）を一体で設計できない
 
 ## 4. コアスコープ（本書で扱う）
 
@@ -56,7 +56,7 @@
 - 第3部：GitHub エージェント運用
   6. GitHub ネイティブな実行フロー
   7. MCP と tool exposure 設計
-  8. コスト設計（premium requests / Actions minutes）
+  8. コスト・予算・利用ガバナンス
 - 第4部：CI/CD 統合とガバナンス
   9. Codex GitHub Action で継続的 AI
   10. セキュリティ設計（Secrets、権限、ログ、供給網）
@@ -77,7 +77,7 @@
 最低限、四半期ごとに以下を棚卸しし、Issue として追跡する。
 
 - cloud agent / MCP / Codex Action などの仕様変更追従
-- 課金体系（premium requests / Actions minutes）とベストプラクティスの更新
+- 課金体系（premium requests / Actions minutes / usage-based billing）とベストプラクティスの更新
 - リンク切れ / サンプルの動作確認（導入手順の再現性）
 
 ## 10. 成功指標（例）

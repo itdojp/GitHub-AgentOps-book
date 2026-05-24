@@ -18,7 +18,7 @@ chapters:
     path: "/chapters/chapter06/"
   - title: "第7章：MCP と tool exposure 設計"
     path: "/chapters/chapter07/"
-  - title: "第8章：コスト設計（premium requests / Actions minutes）"
+  - title: "第8章：コスト・予算・利用ガバナンス"
     path: "/chapters/chapter08/"
   - title: "第9章：Codex GitHub Action で継続的 AI"
     path: "/chapters/chapter09/"
