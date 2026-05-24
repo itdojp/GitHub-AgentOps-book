@@ -1,105 +1,116 @@
-# CHECKLIST（v1.0 検証）
+# CHECKLIST（最終整合性検証）
 
 ## 概要
 
-本書は「読めば分かる」ではなく「導入できる」を担保するため、テンプレ/サンプル/CI の整合性を検証し、結果を記録する。
+本書は「読めば分かる」ではなく「導入できる」を担保するため、本文、生成 docs、Companion 参照、
+内部/外部リンク、PR レビュー証跡の整合性を検証し、結果を記録する。
 
 ## 対象
 
 - Book: `itdojp/GitHub-AgentOps-book`
-  - 検証対象コミット: `512a50af2295f583c0e6c3070bcbdfa8780ed1fb`
+  - 本文/生成 docs の検証起点: PR #47 merge 後の `main`（`56cdb61c25fd1b43604ba25a223a7cff98fbc8ca`）
+  - 本最終整合性 PR では、この CHECKLIST、README、CHANGELOG、検証スクリプトを更新し、同じ品質ゲートを再実行する
 - Companion: `itdojp/GitHub-AgentOps-companion`
-  - 検証対象コミット: `b1733c86128b055021c21b5a0b0c013983edf506`
+  - Book からは固定パス候補として参照する
+  - Companion 側の実ファイル追加・移行は、Book 本文変更とは別 Issue / PR で扱う
 
-## 検証環境（例）
+## 検証環境
 
-- 日付: 2026-02-22
-- Node.js: v22.19.0
-- npm: 11.8.0
+- 日付: 2026-05-24（Asia/Tokyo）
+- Node.js: `20 || >=22`（`package.json` の `engines` 前提）
+- npm: ローカル環境の npm
+- GitHub Pages: `main` / `/docs`
 
 ## 検証項目と結果
 
-### 1) Book の品質ゲート（lint/build/link-check）
+### 1) Book の品質ゲート（lint / build / internal link-check）
 
-- [x] コマンド: `npm test`
-- [x] 結果: PASS（markdownlint / build / link-check）
+検証コマンド：
 
-### 2) テンプレ整合（Issue フォーム → PR テンプレ → レビュー観点）
-
-検証観点（最小）：
-
-- Issue が実行仕様（目的/受入基準/制約/検証）として書ける
-- PR が「変更意図/検証結果/リスク/ロールバック」を残せる
-- Rules（allow/prompt/forbidden）と矛盾しない（承認境界が明確）
+```bash
+npm test
+```
 
 結果：
 
-- [x] Issue フォーム（Companion `.github/ISSUE_TEMPLATE/`）が受入基準/制約/検証の記述を促す
-- [x] PR テンプレ（Companion `.github/PULL_REQUEST_TEMPLATE.md`）で検証結果とリスク記録の導線がある
+- [x] Markdown lint が通る
+- [x] `docs/` 生成が通る
+- [x] 内部リンク検証が通る
+- [x] 本最終整合性 PR で 99 internal links valid を確認済み
 
-### 3) Skills の実行可能性（手順資産としての再現性）
+### 2) 外部リンク検証
 
-検証観点（最小）：
+検証コマンド：
 
-- 各 Skill が「入力/出力/手順/チェック/失敗時対応」を持つ
-- prompt（承認必須）に該当する操作が混ざる場合、承認/証跡の扱いが説明される
-
-結果：
-
-- [x] Companion `skills/*/SKILL.md` がテンプレ構造を満たす（dependency-update/add-tests/docs-update/refactor-safe）
-
-### 4) Rules の抑止力（危険操作の抑止と実務性）
-
-検証観点（最小）：
-
-- allow/prompt/forbidden の線引きが明文化され、prompt の承認フローがある
-- Secrets/破壊的操作/監査性の毀損が forbidden/prompt として扱われる
+```bash
+npm run check-external-links
+```
 
 結果：
 
-- [x] Companion `rules/command-policy.md` に allow/prompt/forbidden と承認フローが定義されている
+- [x] 2026-05-24 時点で、本文・README・企画書・検証記録の外部リンクを検査できる
+- [x] 本最終整合性 PR で 65 unique external URLs が HTTP 200 または正常リダイレクトで到達可能であることを確認済み
+- [x] `localhost` などローカルプレビュー用 URL は外部リンク検証から除外する
 
-### 5) Codex Action サンプル（最小構成で動く/手順明記）
+### 3) 本文構成の整合性
 
-注記：
+検証観点：
 
-- GitHub Actions の実行はローカルで再現しないため、ここでは「サンプルの配置」「導入手順の明記」を検証する。
-
-検証観点（最小）：
-
-- ワークフローが存在する（PR コメント/リリース前チェック）
-- Secrets/権限/実行範囲（フォーク PR 等）の注意が明記されている
+- introduction、全11章、付録A/B/C が現在の Issue #37 方針に沿っている
+- 章タイトル、トップページ、BOOK-PROPOSAL、navigation、generated docs が同期している
+- 「Codex Action 単独中心」ではなく、Copilot code review、cloud agent、third-party agents、Codex CLI、Codex Action を実行パターンとして比較している
+- volatile な料金・quota・preview 状態を固定数値として断定していない
 
 結果：
 
-- [x] Companion `.github/workflows/codex-pr-review.yml`（PR 要約 + リスク抽出コメント）
-- [x] Companion `.github/workflows/codex-release-prep.yml`（手動実行のリリース前チェック）
-- [x] Companion `README.md` に `OPENAI_API_KEY`、権限、実行範囲の注意が明記されている
+- [x] 第1章〜第2章: 責任分界と Agent-ready repo 要件を説明している
+- [x] 第3章〜第5章: instruction hierarchy、Skills / custom agents / hooks、policy / control surface を説明している
+- [x] 第6章〜第7章: GitHub ネイティブな実行フローと MCP / tool exposure を説明している
+- [x] 第8章: premium requests、Actions minutes、budgets、analytics を扱っている
+- [x] 第9章: 複数の継続的 AI 実装パターンを比較している
+- [x] 第10章: fork PR、`pull_request_target`、least privilege、OIDC、push protection、artifact attestations、supply chain を扱っている
+- [x] 第11章: flow / quality / security / cost / adoption を横断する運用指標を扱っている
+- [x] 付録A/B/C: 現行 ecosystem 向けのテンプレ、プレイブック、トラブルシュートとして再構成されている
 
-### 6) 参照整合（Book → Companion）
+### 4) PR / review / merge 証跡
 
-- [x] Book 各章/付録に Companion リポジトリ（固定パス）参照が存在する
-- [x] link-check が PASS する
+検証観点：
 
-## 2026-05-23 追加レビュー
+- 各作業単位を適切な粒度の PR に分割している
+- Copilot review の本文、inline comment、suggestion、thread を確認している
+- CI 成功後に merge し、main CI と Pages を確認している
+- Issue #37 の受入基準を evidence comment とともに更新している
 
-親ロードマップ `itdojp/it-engineer-knowledge-architecture#153` / Phase 2 管理 Issue #155 の観点で、
-GitHub AgentOps の運用ゲートを再確認した。
+結果：
 
-### 追加確認項目
+- [x] PR #40〜#47 で章・付録の主要 rewrite slice を分割して実施した
+- [x] Copilot review の inline comment がある PR では、修正・返信・resolve を実施した
+- [x] `pr-review-completeness` で unresolved thread 0 を確認した
+- [x] 各 PR で `docs-forbidden` / `qa` / `test` が成功してから merge した
+- [x] 各 merge 後に `main` CI と GitHub Pages smoke を確認した
 
-- [x] PR 完了ゲート、review 本文/inline comment/suggestion 対応、未解決 review thread 0 を本文で扱う
-- [x] AI/外部サービス投入、Secrets、ログ、provider 条件確認、漏えい疑い時の初動を本文で扱う
-- [x] review 完了率、post-merge 失敗率、eval 再実行率など AgentOps 固有の指標を本文で扱う
-- [x] 公式情報の確認先を本文に残す
+### 5) 残課題の扱い
 
-### 確認した公式情報
+- [x] Companion 側テンプレートや workflow の実ファイル追加・移行は、Book の本文変更とは別 Issue / PR に分離する
+- [x] モデル名、料金、preview 機能などの時点依存情報は、四半期棚卸しで再確認する
+- [x] 最終整合性 PR の本文に、旧構成→新構成、主な更新理由、未解決点を明記する
 
-- GitHub Copilot coding agent / Copilot code review
-- GitHub Actions `GITHUB_TOKEN` / environments
-- OpenAI Codex Action
+## Issue #37 受入基準との対応
 
-### 残課題の扱い
+| 受入基準 | 証跡 |
+| --- | --- |
+| 本文が一冊の実務書として読める | introduction → 第1章〜第11章 → 付録A/B/C の導線と本 CHECKLIST の構成監査 |
+| `src/` 配下の主要ページが一通り改稿されている | introduction、全11章、付録A/B/C の rewrite PR #40〜#47 |
+| 内部リンク・外部リンクが壊れていない | `npm test` と `npm run check-external-links` |
+| `npm test` が通る | CI `test` / local `npm test` |
+| PR 本文に旧構成→新構成、更新理由、未解決点を書く | 最終整合性 PR 本文 |
 
-- Companion 側テンプレートや workflow の変更が必要な場合は、Book の本文変更とは別 Issue / PR に分離する。
-- モデル名、料金、preview 機能などの時点依存情報は、四半期棚卸しで再確認する。
+## 次回棚卸し
+
+四半期棚卸しでは、次を確認する。
+
+- GitHub Copilot / cloud agent / custom agents / hooks / MCP / code review の仕様変更
+- Copilot premium requests、usage-based billing、Actions billing、予算/analytics の仕様変更
+- OpenAI Codex CLI / Codex cloud / Codex Action の公式情報更新
+- Companion repo の固定パス、Issue/PR template、Skills、workflow、MCP/tool exposure 例の整合
+- 内部リンク、外部リンク、GitHub Pages の公開状態
