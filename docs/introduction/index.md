@@ -29,4 +29,4 @@ title: "はじめに"
 1. 第1部で責任分界と前提条件（Agent-ready repo）を整理する
 2. 第2部で「指示階層（Copilot instructions / AGENTS）」「再利用（Skills / custom agents / hooks）」「実行境界（Policy / control surface）」を標準化する
 3. 第3部で GitHub ネイティブな実行フローと MCP / tool exposure に落とし込む
-4. 第4部で CI/CD とガバナンス（セキュリティ/メトリクス）に接続する
+4. 第4部で CI/CD とガバナンス（セキュリティ/メトリクス/展開ロードマップ）に接続する

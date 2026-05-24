@@ -60,7 +60,7 @@
 - 第4部：CI/CD 統合とガバナンス
   9. 継続的 AI の実装パターン
   10. セキュリティ・秘密情報・供給網
-  11. メトリクス設計（Lead time / Review time / Reopen率 / 差し戻し率）
+  11. メトリクス・運用レビュー・展開ロードマップ
 - 付録
   - A: テンプレ集（AGENTS.md / Issue / PR / custom agents / Skills / MCP）
   - B: プレイブック集（タスク別運用手順）
@@ -84,8 +84,8 @@
 
 - Lead time の短縮（Issue→マージまでの時間）
 - Review time の短縮（PR 作成→承認までの時間）
-- Reopen 率 / 差し戻し率の低下
-- 重要インシデント（Secrets 事故、権限逸脱）の抑止
+- Reopen 率 / 差し戻し率 / post-merge failure の低下
+- 重要インシデント（Secrets 事故、権限逸脱）と cost exception の抑止
 
 ## 11. 公開形態 / ライセンス（決定）
 
