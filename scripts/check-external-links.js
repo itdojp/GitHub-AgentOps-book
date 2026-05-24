@@ -31,6 +31,7 @@ const ENV_SKIP_HOSTS = (process.env.EXTERNAL_LINK_CHECK_SKIP_HOSTS || '')
 const SKIP_HOSTS = new Set([...DEFAULT_SKIP_HOSTS, ...ENV_SKIP_HOSTS]);
 const MAX_REDIRECTS = 5;
 const TIMEOUT_MS = 20000;
+const HEAD_FALLBACK_STATUSES = new Set([403, 405, 501]);
 
 const colors = {
   green: (text) => `\x1b[32m${text}\x1b[0m`,
@@ -45,12 +46,15 @@ function normalizeUrl(raw) {
     .replace(/&amp;/g, '&');
 }
 
-function shouldSkip(url) {
+function parseExternalUrl(url) {
   try {
     const parsed = new URL(url);
-    return SKIP_HOSTS.has(parsed.hostname.toLowerCase());
-  } catch {
-    return true;
+    if (SKIP_HOSTS.has(parsed.hostname.toLowerCase())) {
+      return { parsed, skip: true, error: null };
+    }
+    return { parsed, skip: false, error: null };
+  } catch (error) {
+    return { parsed: null, skip: false, error: error.message };
   }
 }
 
@@ -65,6 +69,7 @@ async function collectMarkdownFiles() {
 
 async function collectExternalLinks(files) {
   const links = new Map();
+  const invalidLinks = [];
   const pattern = /https?:\/\/[^\s)<>'"]+/g;
 
   for (const file of files) {
@@ -72,16 +77,24 @@ async function collectExternalLinks(files) {
     const matches = content.match(pattern) || [];
     for (const match of matches) {
       const url = normalizeUrl(match);
-      if (shouldSkip(url)) continue;
+      const parsed = parseExternalUrl(url);
+
+      if (parsed.error) {
+        invalidLinks.push({ url, sources: [file], error: parsed.error });
+        continue;
+      }
+
+      if (parsed.skip) continue;
+
       if (!links.has(url)) links.set(url, new Set());
       links.get(url).add(file);
     }
   }
 
-  return links;
+  return { links, invalidLinks };
 }
 
-function requestUrl(url, redirects = 0) {
+function requestUrl(url, method, redirects = 0) {
   return new Promise((resolve) => {
     const parsed = new URL(url);
     const client = parsed.protocol === 'http:' ? http : https;
@@ -89,7 +102,7 @@ function requestUrl(url, redirects = 0) {
     const req = client.request(
       parsed,
       {
-        method: 'GET',
+        method,
         headers: {
           'User-Agent': 'github-agentops-book-link-check/1.0',
           Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -100,18 +113,23 @@ function requestUrl(url, redirects = 0) {
         const { statusCode, headers } = res;
         res.resume();
 
-        if (
-          statusCode >= 300 &&
-          statusCode < 400 &&
-          headers.location &&
-          redirects < MAX_REDIRECTS
-        ) {
+        if (statusCode >= 300 && statusCode < 400) {
+          if (!headers.location) {
+            resolve({ url, method, statusCode, ok: false, error: 'redirect without location' });
+            return;
+          }
+
+          if (redirects >= MAX_REDIRECTS) {
+            resolve({ url, method, statusCode, ok: false, error: 'too many redirects' });
+            return;
+          }
+
           const nextUrl = new URL(headers.location, url).toString();
-          resolve(requestUrl(nextUrl, redirects + 1));
+          resolve(requestUrl(nextUrl, method, redirects + 1));
           return;
         }
 
-        resolve({ url, statusCode, finalUrl: url, ok: statusCode < 400 });
+        resolve({ url, method, statusCode, ok: statusCode < 400 });
       }
     );
 
@@ -120,27 +138,45 @@ function requestUrl(url, redirects = 0) {
     });
 
     req.on('error', (error) => {
-      resolve({ url, statusCode: null, finalUrl: null, ok: false, error: error.message });
+      resolve({ url, method, statusCode: null, ok: false, error: error.message });
     });
 
     req.end();
   });
 }
 
+async function checkUrl(url) {
+  const head = await requestUrl(url, 'HEAD');
+  if (head.ok) return head;
+
+  if (HEAD_FALLBACK_STATUSES.has(head.statusCode)) {
+    const get = await requestUrl(url, 'GET');
+    return { ...get, headStatusCode: head.statusCode, fallbackFromHead: true };
+  }
+
+  return head;
+}
+
 async function main() {
   const files = await collectMarkdownFiles();
-  const links = await collectExternalLinks(files);
+  const { links, invalidLinks } = await collectExternalLinks(files);
 
   console.log(colors.blue(`Checking ${links.size} unique external links from ${files.length} files...`));
   if (ENV_SKIP_HOSTS.length > 0) {
     console.log(colors.blue(`Skipping hosts from EXTERNAL_LINK_CHECK_SKIP_HOSTS: ${ENV_SKIP_HOSTS.join(', ')}`));
   }
 
-  const failures = [];
+  const failures = invalidLinks.map((invalid) => ({
+    url: invalid.url,
+    sources: invalid.sources,
+    result: { ok: false, error: `invalid URL: ${invalid.error}` },
+  }));
+
   for (const [url, sources] of links.entries()) {
-    const result = await requestUrl(url);
+    const result = await checkUrl(url);
     if (result.ok) {
-      console.log(`${colors.green('OK')} ${result.statusCode} ${url}`);
+      const methodNote = result.fallbackFromHead ? `GET after HEAD ${result.headStatusCode}` : result.method;
+      console.log(`${colors.green('OK')} ${result.statusCode} ${methodNote} ${url}`);
     } else {
       failures.push({ url, sources: [...sources], result });
       const reason = result.error || `HTTP ${result.statusCode}`;
