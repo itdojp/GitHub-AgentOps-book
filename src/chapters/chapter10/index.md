@@ -14,7 +14,7 @@
 - Actions / reusable workflow / dependencies / artifact attestations / SBOM を供給網 control として扱う
 - 第5章の policy / control surface、第7章の MCP / tool exposure、第9章の継続的 AI pattern と接続する
 
-2026-05-24（Asia/Tokyo）時点の GitHub 公式情報では、`pull_request_target` は default branch の文脈で動くため、
+2026-05-24（Asia/Tokyo）時点の GitHub 公式情報では、`pull_request_target` は base branch（PR のターゲットブランチ）の文脈で動くため、
 ラベル付与やコメントには有用ですが、非信頼の PR head を checkout して実行すると write 権限や Secrets への意図しない到達につながるリスクがあります。
 本章では、この前提を商用運用の設計ルールに落とします。
 
@@ -42,7 +42,7 @@ Actions の event は、次のように用途を分けます。
 | event / pattern | 使いどころ | credential 境界 | 禁止すること |
 | --- | --- | --- | --- |
 | `pull_request` | lint / test / build / comment-only review | fork PR では Secrets 不使用を前提にする | deploy、外部 write、機密ログ投入 |
-| `pull_request_target` | label、comment、policy check など base repository 文脈の処理 | default branch の workflow と権限で動く | PR head を checkout して実行すること |
+| `pull_request_target` | label、comment、policy check など base repository 文脈の処理 | base branch（PR のターゲットブランチ）側の workflow 定義と権限で動く | PR head を checkout して実行すること |
 | `workflow_dispatch` | maintainer 承認後の再実行、release prep、外部 API 呼び出し | 入力値と承認者を記録する | 未検証 ref を Secrets 付きで実行すること |
 | `workflow_run` | CI 完了後の二段階処理 | upstream run の結論と head SHA を検証する | 任意 artifact を信頼して実行すること |
 | environment approval | deploy、production secret、外部 write | required reviewer 後に secret 到達 | approval なしの自動実行 |
