@@ -103,11 +103,11 @@ class LinkChecker {
   extractLinks(content, filePath) {
     const links = [];
     
-    // Match markdown links: [text](url)
-    const mdLinks = content.match(/\[([^\]]+)\]\(([^)]+)\)/g) || [];
+    // Match markdown links and images, including empty link text / alt text.
+    const mdLinks = content.match(/!?\[[^\]]*\]\([^)]+\)/g) || [];
     for (const match of mdLinks) {
-      const url = match.match(/\]\(([^)]+)\)/)[1];
-      links.push(url);
+      const urlMatch = match.match(/\]\(([^)]+)\)/);
+      if (urlMatch) links.push(urlMatch[1]);
     }
     
     // Match HTML links: href="url"
@@ -117,11 +117,13 @@ class LinkChecker {
       links.push(url);
     }
     
-    // Match image sources
-    const imgSrcs = content.match(/(?:src|\!\[[^\]]*\]\()([^"')]+)/g) || [];
+    // Match HTML image sources, including quoted and unquoted src= values.
+    // Keep this regex scoped to actual <img> tags so prose such as `src/**` is
+    // not misclassified as a link.
+    const imgSrcs = content.match(/<img\b[^>]*\bsrc=(?:["'][^"']+["']|[^\s>]+)/gi) || [];
     for (const match of imgSrcs) {
-      const url = match.replace(/^(src=|!\[[^\]]*\]\()/, '').replace(/["']$/, '');
-      links.push(url);
+      const urlMatch = match.match(/\bsrc=(?:["']([^"']+)["']|([^\s>]+))/i);
+      if (urlMatch) links.push(urlMatch[1] || urlMatch[2]);
     }
     
     return links

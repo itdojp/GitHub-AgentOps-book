@@ -50,7 +50,7 @@
   1. 責任分界（人間 / エージェント / CI）
   2. Agent-ready repo 要件（テンプレ / 品質ゲート / 権限境界）
 - 第2部：指示と再利用
-  3. AGENTS.md 設計
+  3. Instruction hierarchy と context 設計
   4. Skills 設計
   5. Rules 設計
 - 第3部：GitHub エージェント運用
