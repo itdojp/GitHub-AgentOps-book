@@ -86,7 +86,7 @@
 - Review time の短縮（PR 作成→承認までの時間）
 - Reopen 率 / 差し戻し率 / post-merge failure の低下
 - 重要インシデント（Secrets 事故、権限逸脱）と cost exception の抑止
-- flow / quality / security / cost / adoption を同一 scorecard で月次レビューできる状態
+- flow / quality / security / cost / adoption を同一 scorecard で月次レビューできる状態（template 整備 + pilot team 1 つ以上で 2 か月連続運用）
 
 ## 11. 公開形態 / ライセンス（決定）
 
