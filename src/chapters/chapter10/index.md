@@ -1,152 +1,245 @@
-# 第10章：セキュリティ設計（Secrets / 権限 / ログ / 供給網）
+# 第10章：セキュリティ・秘密情報・供給網
 
 ## この章で扱うこと
 
-- Secrets 管理、権限設計、実行ログ/監査、供給網（サプライチェーン）
-- Policy / control surface（第5章）との整合
+この章では、AgentOps のセキュリティを「Secrets を漏らさない」だけでなく、
+イベント選択、最小権限、OIDC、ログ/成果物、push protection、artifact attestations、供給網まで含む運用設計として扱います。
 
-## 脅威モデル（最小）
+扱う観点は次の通りです。
 
-エージェント運用で想定すべき事故は、概ね次に集約できます。
+- fork PR と `pull_request_target` の信頼境界を明確にする
+- `GITHUB_TOKEN`、job `permissions:`、environment、OIDC を最小権限で設計する
+- Secrets、ログ、artifact、AI/外部サービス投入範囲を review 可能にする
+- push protection、secret scanning、content exclusion を「漏えい前提の防御」として組み込む
+- Actions / reusable workflow / dependencies / artifact attestations / SBOM を供給網 control として扱う
+- 第5章の policy / control surface、第7章の MCP / tool exposure、第9章の継続的 AI pattern と接続する
 
-- **Secrets 漏えい**：ログ/コメント/成果物への混入、外部送信
-- **権限逸脱**：不要な write 権限、環境変更、デプロイ権限の誤付与
-- **プロンプトインジェクション**：PR 本文やコード内の指示に誘導される
-- **供給網リスク**：Actions/依存関係の改ざん、意図しない更新
+2026-05-24（Asia/Tokyo）時点の GitHub 公式情報では、`pull_request_target` は default branch の文脈で動くため、
+ラベル付与やコメントには有用ですが、非信頼の PR head を checkout して実行すると write 権限や Secrets への意図しない到達につながるリスクがあります。
+本章では、この前提を商用運用の設計ルールに落とします。
 
-この章の目的は、上記を「運用できるルール」に落とすことです。
+## 脅威モデル
 
-## Secrets 設計（最小）
+AgentOps では、人間、agent、CI、MCP、外部 API が同じ Issue / PR / workflow 上で連携します。
+したがって、脅威は単一の機能ではなく、境界のまたぎ方で発生します。
 
-- Secrets は **必要最小限** にし、参照できるワークフロー/イベント/環境を制限する
-- 値は **出力しない**（マスクされても、断片や派生情報が漏れる可能性がある）
-- ローテーション（期限/漏えい時）と棚卸し（不要 Secrets の削除）を手順化する
+| 脅威 | 典型例 | 最小対策 |
+| --- | --- | --- |
+| Secrets 漏えい | ログ、PR comment、artifact、AI prompt、MCP tool に token が混入 | push protection、mask、環境分離、rotation runbook |
+| 権限逸脱 | `GITHUB_TOKEN` に不要な write、外部 API token の過大 scope | `permissions:`、environment approval、GitHub App / OIDC |
+| untrusted input 実行 | fork PR の code / script / prompt を Secrets 付き job で実行 | `pull_request` と `pull_request_target` の分離 |
+| prompt injection | Issue / PR / README / dependency docs の指示に agent が誘導される | trusted source 区分、tool allowlist、human gate |
+| 供給網改ざん | Action tag の差し替え、dependency update、build artifact の出所不明 | SHA pin、CODEOWNERS、Dependabot、attestations / SBOM |
+| 監査不能 | agent が何を読んだか、誰が承認したか、何を出力したか不明 | PR body、review log、workflow run、audit log |
 
-フォーク PR など「信頼できない入力」経路に Secrets を渡さない設計を優先します。
+「AI が触るから危険」と抽象化せず、どの入力が非信頼か、どの credential に到達できるか、どの出力が外部へ残るかを分けます。
 
-## 権限設計（最小権限）
+## fork PR と event selection
 
-GitHub Actions では `permissions:` により `GITHUB_TOKEN` の権限を絞れます。
-原則は **read をデフォルト** とし、必要なジョブだけに write を付与します。
+fork PR は、外部 contributor の code、workflow、prompt、test data が入る非信頼入力です。
+Actions の event は、次のように用途を分けます。
 
-例：
+| event / pattern | 使いどころ | credential 境界 | 禁止すること |
+| --- | --- | --- | --- |
+| `pull_request` | lint / test / build / comment-only review | fork PR では Secrets 不使用を前提にする | deploy、外部 write、機密ログ投入 |
+| `pull_request_target` | label、comment、policy check など base repository 文脈の処理 | default branch の workflow と権限で動く | PR head を checkout して実行すること |
+| `workflow_dispatch` | maintainer 承認後の再実行、release prep、外部 API 呼び出し | 入力値と承認者を記録する | 未検証 ref を Secrets 付きで実行すること |
+| `workflow_run` | CI 完了後の二段階処理 | upstream run の結論と head SHA を検証する | 任意 artifact を信頼して実行すること |
+| environment approval | deploy、production secret、外部 write | required reviewer 後に secret 到達 | approval なしの自動実行 |
 
-- PR コメント投稿のみが必要：`issues: write`（必要に応じて `pull-requests: read`）
-- コード変更が必要：PR 作成/更新の権限を付与し、承認フローと合わせて運用
+原則は次です。
 
-### 最小権限テンプレ（workflow read + job write）
+1. 非信頼入力の build / test は `pull_request` で行う
+2. PR comment / label などの base repo write は `pull_request_target` で行ってもよいが、PR head code を実行しない
+3. Secrets や外部 write が必要な作業は `workflow_dispatch`、environment approval、または二段階 workflow に分離する
+4. どの SHA / ref を対象にしたかをログと PR comment に残す
 
-基本は workflow レベルで read を固定し、**書き込みが必要なジョブだけ**に write を付与します。
+`pull_request_target` を使う場合の安全側の設計例は、PR 本文や changed files のメタデータだけを読み、
+ラベル付与や注意コメントに限定することです。危険な設計例は、PR head を checkout し、Secrets を持つ job で script / test / build を実行することです。
+
+## `GITHUB_TOKEN` と least privilege
+
+GitHub Actions では、job ごとに `GITHUB_TOKEN` の権限を調整できます。
+ワークフロー全体では read を既定にし、書き込みが必要な job だけに明示的に write を付与します。
 
 ```yaml
-name: Example
-on:
-  pull_request:
-
-permissions:
-  contents: read
+permissions: read-all
 
 jobs:
-  comment_only:
-    runs-on: ubuntu-latest
+  comment:
     permissions:
-      issues: write
+      contents: read
       pull-requests: read
-    steps:
-      - run: echo "post a comment"
+      issues: write
 ```
 
-### イベント選択の指針（`pull_request` / `workflow_dispatch` / `pull_request_target`）
+設計時の確認項目は次です。
 
-- `pull_request`（推奨：基本）
-  - fork PR では Secrets が渡らない前提で設計する
-  - コメント生成など「読み取り系」へ寄せると安全に導入できる
-- `workflow_dispatch`（推奨：Secrets/外部操作が必要な場合）
-  - 手動実行 + 入力（`base_ref`/`head_ref` 等）で「承認してから走らせる」導線を作る
-- `pull_request_target`（原則非推奨：安易な採用は禁止）
-  - Secrets を扱える一方、設計を誤ると外部から悪用され得る
-  - 使う場合は「何をチェックアウトし、何に Secrets を渡すか」を固定し、監査可能にする
-
-### Secrets 境界（承認境界の作り方）
-
-- Secrets を使う処理（デプロイ/外部 API 呼び出し等）は、Environment 保護（required reviewers）や手動実行に寄せる
-- fork PR は「非信頼入力」として扱い、Secrets/外部操作が必要な処理は分離する
-- 可能なら「長期 Secrets を避ける（OIDC 等）」へ寄せる（詳細は workflow-book を参照）
-  - <https://itdojp.github.io/github-workflow-book/chapters/chapter13/>（13.8）
-
-## AI/外部サービス投入とログ境界
-
-AgentOps では、Issue、PR、差分、ログ、スタックトレース、評価データが AI/外部サービスへ投入され得ます。
-「Secrets ではないから安全」と扱わず、情報分類と承認境界を先に決めます。
-
-| 対象 | 主なリスク | 最小ゲート |
+| 操作 | 最小権限の考え方 | 追加 gate |
 | --- | --- | --- |
-| Issue / PR 本文 | 顧客名、障害情報、未公開仕様の混入 | 公開範囲と外部投入可否を確認する |
-| CI ログ / artifact | トークン断片、環境変数、個人情報の混入 | マスク、保存期間、共有先を確認する |
-| リポジトリ差分 | 未公開コード、脆弱性情報、ライセンス制約 | provider の利用条件と投入範囲を確認する |
-| eval データ | 実データ、会話履歴、再識別可能な情報 | 匿名化、サンプリング、削除手順を確認する |
+| checkout / test | `contents: read` | fork PR で Secrets なし |
+| PR comment | `issues: write` または用途に応じた最小 write | bot comment upsert、noise review |
+| PR review comment | `pull-requests: write` が必要か確認 | Copilot / human review と分離 |
+| artifact attestation | `id-token: write`、`attestations: write` | release / build owner review |
+| package publish | `packages: write` | environment approval、tag / release gate |
+| cloud deploy | OIDC + cloud 側 condition | environment required reviewers |
 
-運用上は次を PR body、Issue コメント、または監査メモに残します。
+権限を増やす PR では、PR body に「なぜ必要か」「どの job だけか」「どの event で動くか」「rollback 方法」を書きます。
+`.github/workflows/**`、`.github/actions/**`、agent / MCP config は CODEOWNERS と required review に接続します。
 
-- AI/外部サービスへ投入した範囲（ファイル、ログ、URL、プロンプトの種別）
-- 投入しなかった範囲と理由（Secrets、個人情報、顧客固有情報、未公開障害情報など）
-- マスク/要約/サンプリングの方法
-- provider の retention / training use / logging 条件を確認した日付
-- 漏えい疑い時の初動（隔離、削除依頼、ローテーション、報告/通知判断）
+## Secrets と OIDC
 
-Codex Action や MCP を GitHub Actions 上で使う場合も、API key は repository / environment secrets として扱い、
-ジョブの `permissions:`、イベント、checkout 対象、sandbox / safety strategy をセットで確認します。
-`pull_request_target` は Secrets に触れられるため、非信頼入力をチェックアウトして実行する設計にしないでください。
+Secrets は、値そのものだけでなく、派生値、ログ断片、base64 / URL encode 後の値、生成した JWT も漏えい対象です。
+マスクは補助であり、漏えい防止を保証しません。
 
-公式情報の確認先（2026-05-23 Asia/Tokyo 時点）:
+運用ルールは次です。
 
-- GitHub Docs: GITHUB_TOKEN
-  <https://docs.github.com/en/actions/concepts/security/github_token>
-- GitHub Docs: Managing environments for deployment
-  <https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments>
-- OpenAI Codex Action
-  <https://github.com/openai/codex-action>
-- セキュリティ＆プライバシー基礎リテラシー
-  <https://itdojp.github.io/security-privacy-literacy-book/>
+- repository secret より environment secret を優先し、required reviewers を設定する
+- production secret は PR event から直接参照しない
+- secret を使う job は `permissions:`、event、checkout ref、artifact 出力を同時に review する
+- secret を変換して使う場合は、派生値も mask / 登録対象として扱う
+- 漏えい疑い時は、ログ削除より先に rotation / revoke / impact assessment を行う
+- cloud provider が OIDC をサポートする場合は、長期 cloud secret ではなく短期 token を優先する
 
-### 供給網（サプライチェーン）: Actions の固定方針
+OIDC は、GitHub Actions job が cloud provider へ短期 token を要求する設計です。
+ただし、OIDC を使うだけで安全になるわけではありません。
+cloud 側の trust policy で repository、branch、environment、workflow、subject claim を絞り、
+`id-token: write` を必要な job だけに付与します。
 
-- 少なくともメジャーバージョン固定（例：`actions/checkout@v6`）
-- 可能なら SHA pin（例：`uses: owner/action@<sha>`）を検討し、更新は PR レビュー対象とする
-- 更新時は「理由/影響/検証/ロールバック」をセットで残す
+## AI / MCP / 外部サービス投入境界
 
-## ログ/監査（証跡の残し方）
+AgentOps では、Issue、PR、diff、CI log、artifact、stack trace、dependency advisory が AI や外部サービスへ渡り得ます。
+Secrets でなくても、顧客名、未公開仕様、脆弱性情報、インシデント詳細は機微情報です。
 
-最低限、次を残します。
+| 投入対象 | 許可条件 | 禁止/要承認 |
+| --- | --- | --- |
+| Issue / PR 本文 | public / internal で共有可能な内容 | 顧客固有情報、未公開障害、credential 断片 |
+| diff / source | provider policy と content exclusion を確認 | secret file、private key、生成済み credential |
+| CI log | redaction 済み、必要範囲のみ | env dump、debug trace、token 断片 |
+| artifact / cache | retention と共有先が明確 | `.env`、credential store、個人情報入り report |
+| MCP read | data boundary と用途を記録 | customer tenant / billing / audit log の無制限 read |
+| MCP write | owner approval、rollback、audit log | production 変更、ticket 一括更新、外部通知の自動実行 |
 
-- 仕様差分（決定事項）：Issue/PR コメント
-- 検証結果：CI の実行ログと Required checks の結果
-- 承認：レビュー（誰が/いつ/何を承認したか）
+Copilot content exclusion は、特定ファイルを Copilot の参照対象から外す設計に使えます。
+ただし、対応範囲や制限は tool により異なるため、content exclusion を唯一の防御にしません。
+機密ファイルは repository に置かない、Secrets に移す、権限で分離する、review で確認する、という基本線を優先します。
 
-## 供給網（サプライチェーン）設計
+## push protection と secret scanning
 
-Actions の固定方針は上記を前提とし、ここでは運用面を補足します。
+push protection は、secret が repository 履歴へ入る前に止めるための frontline control です。
+AgentOps では、人間だけでなく agent や GitHub MCP server 経由の変更も考慮し、次を運用ルールにします。
 
-- 依存更新は Skill/テンプレに沿って「理由/影響/検証/ロールバック」を揃える
-- lockfile を前提に再現性を担保し、不要な差分（フォーマット一括変更等）を避ける
+- push protection を repository / organization の標準にする
+- bypass は「例外」ではなく security event として扱い、理由と承認者を残す
+- `It's used in tests` や false positive でも、実値でないことを reviewer が確認する
+- `I'll fix it later` は open alert として扱い、期限付きで rotation / remediation を追跡する
+- custom secret pattern を organization 固有 token / customer identifier に合わせて検討する
+- 既存履歴の secret scanning alert は、rotation、revoke、影響範囲、通知判断までを runbook 化する
 
-## Policy / control surface（allow / prompt / forbidden）との整合
+push protection は検出可能な pattern に依存するため、万能ではありません。
+PR review、content exclusion、artifact 除外、ログ確認、環境分離と併用します。
 
-セキュリティは章単体では成立しません。第5章の policy / control surface を通じて「承認境界」と一致させます。
+## 供給網 security
 
-- allow：読み取り/検証（lint/test/build 等）
-- prompt：Secrets 利用、依存更新、環境変更、破壊的操作の可能性があるもの
-- forbidden：Secrets の出力/外部送信、監査性を損なう操作
+AgentOps の供給網は、AI が生成するコードだけでなく、workflow、actions、dependencies、build artifact、release asset を含みます。
 
-## 導入チェックリスト（ドラフト）
+| 対象 | control | review 観点 |
+| --- | --- | --- |
+| third-party actions | SHA pin、trusted publisher、CODEOWNERS | action の権限、外部通信、更新理由 |
+| reusable workflows | 呼び出し元/呼び出し先の permissions | secret inheritance、OIDC、artifact 出力 |
+| dependencies | lockfile、Dependabot、security updates | transitive update、license、breaking change |
+| generated artifacts | retention、checksum、attestation | どの workflow / SHA / event で生成されたか |
+| container images | digest pin、SBOM、provenance | base image、registry 権限、scan 結果 |
+| releases | protected tag、attestation verify | 誰が承認し、どの artifact を出したか |
 
-- [ ] Secrets と権限の境界が運用可能な形で定義されている（最小権限、参照範囲、承認境界）
-- [ ] 監査ログ/証跡の保持方針が定義されている（Issue/PR/CI の証跡）
-- [ ] 供給網リスクの扱い（Actions/依存更新の変更管理）が定義されている
-- [ ] AI/外部サービス投入の可否、マスク、保存期間、削除手順が定義されている
+GitHub の secure use reference では、Action を full-length commit SHA に pin することが最も immutable な参照として説明されています。
+一方で、SHA pin は更新運用の負荷を増やすため、重要 workflow から段階導入します。
+更新は Dependabot / Renovate 等で PR 化し、理由、影響、検証、rollback をセットで review します。
 
-## 運用チェックリスト（ドラフト）
+## artifact attestations / SBOM
 
-- [ ] Secrets の棚卸し/ローテーション/漏えい時対応が運用手順になっている
-- [ ] Policy（allow/prompt/forbidden）が実態と乖離していない（例外をルールへ還元できている）
-- [ ] Codex Action / MCP / 外部 API 利用時の `permissions:`、イベント、Secrets 境界を確認している
+release artifact、container image、CLI binary、重要な build output は、artifact attestations で provenance を残します。
+attestation は、どの repository、workflow、commit SHA、event、environment から生成されたかを検証するための証跡です。
+
+導入順序は次です。
+
+1. release 対象 artifact を定義する
+2. build workflow に `id-token: write`、`contents: read`、`attestations: write` を付与する
+3. artifact 生成後に attestation を作成する
+4. release 前または deploy 前に `gh attestation verify` で検証する
+5. SBOM が必要な artifact は SPDX / CycloneDX 等の predicate と合わせて保管する
+6. attestation の retention / lifecycle を運用に入れる
+
+artifact attestations は「脆弱性をなくす」機能ではなく、どこでどのように作られたかを検証可能にする機能です。
+scan、review、approval、rollback と組み合わせて supply chain risk を下げます。
+
+## ログ / artifact / audit の証跡設計
+
+AgentOps の証跡は、後から説明できる単位で残します。
+
+| 証跡 | 残す内容 | 残してはいけない内容 |
+| --- | --- | --- |
+| Issue | scope、受け入れ条件、security boundary | secret 値、顧客固有の生ログ |
+| PR body | 変更理由、権限変更、検証、残リスク | credential、private incident detail |
+| review comment | 採否理由、例外承認、rollback | token 断片、内部監査ログの全文 |
+| workflow log | command、exit code、artifact path | env dump、secret 派生値 |
+| artifact | report、summary、attestation、SBOM | `.env`、credential file、raw customer data |
+| audit log | secret / policy / runner / app 変更 | 外部に再掲できない機密詳細 |
+
+ログ確認は CI が通った後の補助ではなく、security review の一部です。
+特に AI / MCP / external API を使う workflow では、成功時と失敗時のログを確認し、Secrets が出ないことを検証します。
+
+## Policy / control surface との接続
+
+第5章の allow / prompt / forbidden は、セキュリティ境界へ落とし込みます。
+
+| 分類 | 例 | control surface |
+| --- | --- | --- |
+| allow | read-only checkout、lint、unit test、public docs link check | `pull_request`、`permissions: read-all` |
+| prompt | PR comment、dependency update、artifact upload、MCP read | CODEOWNERS、review checklist、budget owner |
+| prompt + approval | deploy、external write、OIDC、package publish | environment required reviewers、workflow_dispatch |
+| forbidden | secret 出力、fork PR で Secrets 使用、untrusted code を `pull_request_target` で実行 | ruleset、branch protection、workflow review |
+
+この表は、AGENTS.md や PR template に転記できる運用ルールとして扱います。
+例外が発生した場合は、例外を個別承認で終わらせず、policy matrix と runbook を更新します。
+
+## 公式情報の確認先
+
+2026-05-24（Asia/Tokyo）時点で、本章の用語整理に使う主な一次情報は次です。
+GitHub Actions の event、permissions、OIDC、attestation、secret scanning、Copilot content exclusion の仕様は変わり得るため、導入時は最新ページを確認してください。
+
+- GitHub Docs: [Secure use reference](https://docs.github.com/en/actions/reference/security/secure-use)
+- GitHub Docs: [Events that trigger workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)
+- GitHub Docs: [Workflow syntax for GitHub Actions](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax)
+- GitHub Docs: [GITHUB_TOKEN](https://docs.github.com/en/actions/concepts/security/github_token)
+- GitHub Docs: [OpenID Connect](https://docs.github.com/en/actions/concepts/security/openid-connect)
+- GitHub Docs: [Using artifact attestations to establish provenance for builds](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations)
+- GitHub Docs: [About push protection](https://docs.github.com/en/code-security/concepts/secret-security/about-push-protection)
+- GitHub Docs: [Content exclusion for GitHub Copilot](https://docs.github.com/en/copilot/concepts/context/content-exclusion)
+
+## 導入チェックリスト
+
+- [ ] `pull_request`、`pull_request_target`、`workflow_dispatch`、environment approval の使い分けが定義されている
+- [ ] `GITHUB_TOKEN` は workflow 既定 read、job 単位で必要最小 write になっている
+- [ ] Secrets を使う job は event、checkout ref、artifact、ログ、外部送信先を同時に review している
+- [ ] OIDC を使う cloud 操作は、cloud 側 trust policy と GitHub 側 `id-token: write` の両方を絞っている
+- [ ] push protection / secret scanning / custom patterns / bypass review の運用がある
+- [ ] Actions / reusable workflows / dependencies の更新が CODEOWNERS と PR review に乗っている
+- [ ] release artifact / container image には必要に応じて attestation / SBOM / verify 手順がある
+- [ ] AI / MCP / 外部サービスへ投入しない情報分類と、content exclusion の適用範囲を確認している
+
+## 運用チェックリスト
+
+- [ ] Secrets の棚卸し、rotation、漏えい時初動、通知判断が runbook 化されている
+- [ ] `pull_request_target` を使う workflow が、PR head code を Secrets 付きで実行していない
+- [ ] workflow 変更、permission 変更、runner / environment / GitHub App 変更が監査ログで追跡できる
+- [ ] AI / MCP / Codex Action のログと artifact に secret / personal data / customer data が混入していない
+- [ ] dependency / action 更新 PR には、理由、影響、検証、rollback が記載されている
+- [ ] supply chain incident 時に、該当 artifact の workflow run、commit SHA、attestation、SBOM を追跡できる
+
+## まとめ
+
+AgentOps の security は、AI 利用を止めることではなく、信頼境界を明確にして安全に委譲することです。
+fork PR、event、token、Secrets、OIDC、artifact、MCP、供給網を分けて設計し、
+どの入力を信頼し、どの credential に到達でき、どの出力を残すかを PR で review 可能にします。
+この境界が明確であれば、継続的 AI や agent PR を導入しても、商用運用に必要な監査性と rollback を維持できます。

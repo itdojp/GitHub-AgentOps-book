@@ -20,7 +20,7 @@
 - Issue が「実行仕様」になっておらず、エージェントの成果が安定しない
 - エージェント生成 PR のレビュー観点 / 責任分界が曖昧で品質事故が起きる
 - MCP / custom agents / Skills / Policy が点在し、統制設計の型がない
-- コスト・予算・利用ガバナンス（premium requests / Actions minutes / analytics）とセキュリティ（Secrets / 権限）を一体で設計できない
+- コスト・予算・利用ガバナンス（premium requests / Actions minutes / analytics）とセキュリティ・供給網（Secrets / 権限 / OIDC / artifact attestations）を一体で設計できない
 
 ## 4. コアスコープ（本書で扱う）
 
@@ -59,7 +59,7 @@
   8. コスト・予算・利用ガバナンス
 - 第4部：CI/CD 統合とガバナンス
   9. 継続的 AI の実装パターン
-  10. セキュリティ設計（Secrets、権限、ログ、供給網）
+  10. セキュリティ・秘密情報・供給網
   11. メトリクス設計（Lead time / Review time / Reopen率 / 差し戻し率）
 - 付録
   - A: テンプレ集（AGENTS.md / Issue / PR / custom agents / Skills / MCP）

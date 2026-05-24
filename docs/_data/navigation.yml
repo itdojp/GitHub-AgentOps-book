@@ -22,7 +22,7 @@ chapters:
     path: "/chapters/chapter08/"
   - title: "第9章：継続的 AI の実装パターン"
     path: "/chapters/chapter09/"
-  - title: "第10章：セキュリティ設計（Secrets / 権限 / ログ / 供給網）"
+  - title: "第10章：セキュリティ・秘密情報・供給網"
     path: "/chapters/chapter10/"
   - title: "第11章：メトリクス設計（Lead time / Review time / 差し戻し率）"
     path: "/chapters/chapter11/"

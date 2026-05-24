@@ -50,7 +50,8 @@ title: "付録C：トラブルシュート（失敗パターンと対処）"
 ### 対処（最小）
 
 - ワークフローの `permissions:` を確認し、最小権限で不足分だけ付与する
-- フォーク PR は Secrets が渡らない前提で設計し、手動実行/ラベル運用へ寄せる
+- フォーク PR は Secrets が渡らない前提で設計し、`pull_request_target` で PR head code を実行しない
+- Secrets/外部操作が必要な場合は手動実行/ラベル運用/environment approval へ寄せる
 
 追加のチェックポイント：
 
@@ -73,7 +74,7 @@ permissions:
 ### 対処（最小）
 
 - 直ちにローテーションし、影響範囲を特定する（値は Issue/PR に貼らない）
-- 再発防止として Policy（forbidden/prompt）と運用手順（レビュー観点）を更新する
+- 再発防止として Policy（forbidden/prompt）、push protection / secret scanning、運用手順（レビュー観点）を更新する
 
 ありがちな混入経路：
 
