@@ -24,7 +24,7 @@ chapters:
     path: "/chapters/chapter09/"
   - title: "第10章：セキュリティ・秘密情報・供給網"
     path: "/chapters/chapter10/"
-  - title: "第11章：メトリクス設計（Lead time / Review time / 差し戻し率）"
+  - title: "第11章：メトリクス・運用レビュー・展開ロードマップ"
     path: "/chapters/chapter11/"
 
 appendices:

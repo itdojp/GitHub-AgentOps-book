@@ -30,7 +30,7 @@ AIエージェント駆動開発のための運用設計
 - Agent-ready repo の最小要件を整理し、導入順序を決められる
 - Copilot instructions / AGENTS.md / Skills / custom agents / hooks / policy controls / CI を役割分担に沿って設計できる
 - Issue → PR → CI → Review → Merge の運用を、監査可能な形で回せる
-- Secrets / 権限 / ログ / 供給網 / コストを考慮した AgentOps の統制設計ができる
+- Secrets / 権限 / ログ / 供給網 / コスト / adoption を考慮した AgentOps の統制設計ができる
 
 ## 所要時間
 
@@ -67,7 +67,7 @@ AIエージェント駆動開発のための運用設計
 - 第4部：CI/CD 統合とガバナンス
   - [第9章：継続的 AI の実装パターン](chapters/chapter09/)
   - [第10章：セキュリティ・秘密情報・供給網](chapters/chapter10/)
-  - [第11章：メトリクス設計（Lead time / Review time / 差し戻し率）](chapters/chapter11/)
+  - [第11章：メトリクス・運用レビュー・展開ロードマップ](chapters/chapter11/)
 - 付録
   - [付録A：テンプレ集（AGENTS.md / Issue / PR / custom agents / Skills / MCP）](appendices/appendix-a/)
   - [付録B：プレイブック集（タスク別運用手順）](appendices/appendix-b/)
