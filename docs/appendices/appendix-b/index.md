@@ -15,7 +15,7 @@ title: "付録B：プレイブック集（タスク別運用手順）"
 
 1. Issue を実行仕様として固定（目的/受入基準/制約/検証）
 2. 小さく作業し、PR に証跡を残す（差分の意図、検証結果、リスク、ロールバック）
-3. Rules（allow/prompt/forbidden）に従い、prompt は承認ログを残す
+3. Policy（allow/prompt/forbidden）に従い、prompt は承認ログを残す
 4. CI を通し、レビュー指摘を反復して収束させる
 
 ## バグ修正

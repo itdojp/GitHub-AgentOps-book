@@ -46,7 +46,7 @@
 - dep-agent: `custom-agents/dep-agent/.agent.md`
 - MCP 公開範囲設計例: `custom-agents/MCP_SCOPE_EXAMPLE.md`
 
-### Rules（実行境界）
+### Policy / control surface（実行境界）
 
 - allow/prompt/forbidden のポリシー雛形: `rules/command-policy.md`
 

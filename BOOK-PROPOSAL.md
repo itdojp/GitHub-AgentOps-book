@@ -29,7 +29,7 @@
 - 例: Codex / GitHub Agents / Copilot coding agent（主要例は Codex）を前提に、「リポジトリにコミットできる統制」を実装可能にする
   - `AGENTS.md`（指示の資産化）
   - Skills（`SKILL.md` を中心とした手順再利用）
-  - Rules（allow / prompt / forbidden 等の実行境界）
+  - Policy / control surface（allow / prompt / forbidden 等の執行境界）
   - Codex GitHub Action（CI 統合）
   - GitHub カスタムエージェント（`.agent.md`）と MCP 公開範囲設計
 
@@ -51,8 +51,8 @@
   2. Agent-ready repo 要件（テンプレ / 品質ゲート / 権限境界）
 - 第2部：指示と再利用
   3. Instruction hierarchy と context 設計
-  4. Skills 設計
-  5. Rules 設計
+  4. 再利用レイヤー（Skills / custom agents / hooks）
+  5. Policy と control surface 設計
 - 第3部：GitHub エージェント運用
   6. GitHub Agents 運用（Issue→PR→反復）
   7. カスタムエージェント（`.agent.md`）と MCP（ツール公開範囲）

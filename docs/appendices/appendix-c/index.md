@@ -73,7 +73,7 @@ permissions:
 ### 対処（最小）
 
 - 直ちにローテーションし、影響範囲を特定する（値は Issue/PR に貼らない）
-- 再発防止として Rules（forbidden/prompt）と運用手順（レビュー観点）を更新する
+- 再発防止として Policy（forbidden/prompt）と運用手順（レビュー観点）を更新する
 
 ありがちな混入経路：
 

@@ -28,7 +28,7 @@ AIエージェント駆動開発のための運用設計
 ## 学習成果
 
 - Agent-ready repo の最小要件を整理し、導入順序を決められる
-- Copilot instructions / AGENTS.md / Skills / Rules / CI を役割分担に沿って設計できる
+- Copilot instructions / AGENTS.md / Skills / custom agents / hooks / policy controls / CI を役割分担に沿って設計できる
 - Issue → PR → CI → Review → Merge の運用を、監査可能な形で回せる
 - Secrets / 権限 / ログ / コストを考慮した AgentOps の統制設計ができる
 
@@ -58,8 +58,8 @@ AIエージェント駆動開発のための運用設計
   - [第2章：Agent-ready repo 要件（テンプレ / 品質ゲート / 権限境界）](chapters/chapter02/)
 - 第2部：指示と再利用
   - [第3章：Instruction hierarchy と context 設計](chapters/chapter03/)
-  - [第4章：Skills 設計](chapters/chapter04/)
-  - [第5章：Rules 設計](chapters/chapter05/)
+  - [第4章：再利用レイヤー（Skills / custom agents / hooks）](chapters/chapter04/)
+  - [第5章：Policy と control surface 設計](chapters/chapter05/)
 - 第3部：GitHub エージェント運用
   - [第6章：GitHub Agents 運用（Issue→PR→反復→マージ）](chapters/chapter06/)
   - [第7章：カスタムエージェント（.agent.md）と MCP（公開範囲）](chapters/chapter07/)

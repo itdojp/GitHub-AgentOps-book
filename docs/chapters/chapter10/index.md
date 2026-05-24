@@ -8,7 +8,7 @@ title: "第10章：セキュリティ設計（Secrets / 権限 / ログ / 供給
 ## この章で扱うこと
 
 - Secrets 管理、権限設計、実行ログ/監査、供給網（サプライチェーン）
-- Rules（第5章）との整合
+- Policy / control surface（第5章）との整合
 
 ## 脅威モデル（最小）
 
@@ -135,9 +135,9 @@ Actions の固定方針は上記を前提とし、ここでは運用面を補足
 - 依存更新は Skill/テンプレに沿って「理由/影響/検証/ロールバック」を揃える
 - lockfile を前提に再現性を担保し、不要な差分（フォーマット一括変更等）を避ける
 
-## Rules（allow / prompt / forbidden）との整合
+## Policy / control surface（allow / prompt / forbidden）との整合
 
-セキュリティは章単体では成立しません。Rules を通じて「承認境界」と一致させます。
+セキュリティは章単体では成立しません。第5章の policy / control surface を通じて「承認境界」と一致させます。
 
 - allow：読み取り/検証（lint/test/build 等）
 - prompt：Secrets 利用、依存更新、環境変更、破壊的操作の可能性があるもの
@@ -153,5 +153,5 @@ Actions の固定方針は上記を前提とし、ここでは運用面を補足
 ## 運用チェックリスト（ドラフト）
 
 - [ ] Secrets の棚卸し/ローテーション/漏えい時対応が運用手順になっている
-- [ ] Rules（allow/prompt/forbidden）が実態と乖離していない（例外をルールへ還元できている）
+- [ ] Policy（allow/prompt/forbidden）が実態と乖離していない（例外をルールへ還元できている）
 - [ ] Codex Action / MCP / 外部 API 利用時の `permissions:`、イベント、Secrets 境界を確認している
