@@ -252,15 +252,20 @@ permissions:
 - link-check / build が落ち、公開が止まる
 - source を直さず生成 docs だけ編集し、次 build で差分が消える
 - Companion のパス移動で本文の固定パスが壊れる
+- 公式 Docs の URL は到達するが、本文の plan、preview 状態、quota、課金、権限名が古くなっている
 
 ### 対処（最小）
 
 - ローカルで品質ゲートを実行し、再現手順を PR に残す
 - source と generated docs の責任を分け、生成物は build で更新する
 - Companion の移動・改名は移行期間を設け、旧パスから案内する
+- `npm run check-external-links` で外部リンクの HTTP 到達性を確認する
+- 料金、preview、quota、API 名称、権限名は到達性とは別に一次情報で鮮度を確認する
+- 一時的な DNS / proxy 制約で除外した host は、PR evidence に除外理由と再確認期限を残す
 - 公開後は代表ページを smoke test し、主要 marker が表示されることを確認する
 
 再発防止：docs PR では `npm test`、公開 site smoke、固定パス確認を PR template に含めます。
+外部仕様に依存する章では、公式情報の確認日と次回棚卸し対象を PR 本文に記録します。
 
 ## 最終確認チェックリスト
 
