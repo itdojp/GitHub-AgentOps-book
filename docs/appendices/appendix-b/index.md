@@ -44,7 +44,7 @@ title: "付録B：プレイブック集（タスク別運用手順）"
 ## テスト追加
 
 - Skill: `skills/add-tests/SKILL.md`
-- カスタムエージェント例: `custom-agents/test-agent/.agent.md`
+- custom agent 例: `custom-agents/test-agent/.agent.md`
 
 推奨手順（最小）：
 
@@ -56,7 +56,7 @@ title: "付録B：プレイブック集（タスク別運用手順）"
 
 - Issue テンプレ: `.github/ISSUE_TEMPLATE/documentation.yml`
 - Skill: `skills/docs-update/SKILL.md`
-- カスタムエージェント例: `custom-agents/doc-agent/.agent.md`
+- custom agent 例: `custom-agents/doc-agent/.agent.md`
 
 推奨手順（最小）：
 

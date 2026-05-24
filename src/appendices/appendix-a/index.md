@@ -1,4 +1,4 @@
-# 付録A：テンプレ集（AGENTS.md / Issue / PR / .agent.md / Skills）
+# 付録A：テンプレ集（AGENTS.md / Issue / PR / custom agents / Skills / MCP）
 
 本文で参照するテンプレート類の一覧と用途を整理します。
 
@@ -39,18 +39,18 @@
 - ドキュメント整備: `skills/docs-update/SKILL.md`
 - 安全なリファクタ: `skills/refactor-safe/SKILL.md`
 
-### カスタムエージェント（役割特化）
+### Custom agents / MCP / tool exposure
 
 - doc-agent: `custom-agents/doc-agent/.agent.md`
 - test-agent: `custom-agents/test-agent/.agent.md`
 - dep-agent: `custom-agents/dep-agent/.agent.md`
-- MCP 公開範囲設計例: `custom-agents/MCP_SCOPE_EXAMPLE.md`
+- MCP / tool exposure 設計例: `custom-agents/MCP_SCOPE_EXAMPLE.md`
 
 ### Policy / control surface（実行境界）
 
 - allow/prompt/forbidden のポリシー雛形: `rules/command-policy.md`
 
-### Codex Action（CI 統合）
+### 継続的 AI / CI 統合
 
 - PR 要約 + リスク抽出コメント: `.github/workflows/codex-pr-review.yml`
 - リリース前チェック（手動実行）: `.github/workflows/codex-release-prep.yml`
