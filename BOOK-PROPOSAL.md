@@ -62,7 +62,7 @@
   10. セキュリティ・秘密情報・供給網
   11. メトリクス・運用レビュー・展開ロードマップ
 - 付録
-  - A: テンプレ集（AGENTS.md / Issue / PR / custom agents / Skills / MCP）
+  - A: テンプレ集（instructions / Issue / PR / agents / Skills / hooks / MCP）
   - B: プレイブック集（タスク別運用手順）
   - C: トラブルシュート（失敗パターンと対処）
 
