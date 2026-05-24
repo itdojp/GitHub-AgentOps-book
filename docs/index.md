@@ -69,7 +69,7 @@ AIエージェント駆動開発のための運用設計
   - [第10章：セキュリティ・秘密情報・供給網](chapters/chapter10/)
   - [第11章：メトリクス・運用レビュー・展開ロードマップ](chapters/chapter11/)
 - 付録
-  - [付録A：テンプレ集（AGENTS.md / Issue / PR / custom agents / Skills / MCP）](appendices/appendix-a/)
+  - [付録A：テンプレ集（instructions / Issue / PR / agents / Skills / hooks / MCP）](appendices/appendix-a/)
   - [付録B：プレイブック集（タスク別運用手順）](appendices/appendix-b/)
   - [付録C：トラブルシュート（失敗パターンと対処）](appendices/appendix-c/)
 

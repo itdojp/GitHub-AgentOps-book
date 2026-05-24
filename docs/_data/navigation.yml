@@ -28,7 +28,7 @@ chapters:
     path: "/chapters/chapter11/"
 
 appendices:
-  - title: "付録A：テンプレ集（AGENTS.md / Issue / PR / custom agents / Skills / MCP）"
+  - title: "付録A：テンプレ集（instructions / Issue / PR / agents / Skills / hooks / MCP）"
     path: "/appendices/appendix-a/"
   - title: "付録B：プレイブック集（タスク別運用手順）"
     path: "/appendices/appendix-b/"
