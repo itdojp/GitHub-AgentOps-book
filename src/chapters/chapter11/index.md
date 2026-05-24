@@ -16,6 +16,8 @@
 
 2026-05-24（Asia/Tokyo）時点の GitHub 公式情報では、Copilot usage metrics は adoption、engagement、
 code generation、pull request lifecycle trends を扱い、API / dashboard / NDJSON export で確認できます。
+Copilot usage dashboard と API / export は同一概念でも含む範囲が異なる項目があるため（例: CLI 指標）、
+運用会議では「どの source の値か」を併記します。
 一方で、データ更新遅延、scope ごとの差異、権限による可視範囲の違いがあります。
 したがって、本章では「単一 dashboard の数値を追う」のではなく、PR / Issue / Actions / security / cost / review log を
 同じ運用会議で解釈する設計にします。
@@ -153,6 +155,7 @@ Copilot-reviewed / authored PR などの値が含まれます。
 | Actions metrics | duration、queue、failure、minutes | Platform / SRE | workflow / job / repo 単位で見る |
 | Copilot usage metrics | adoption、PR lifecycle、suggestion | Copilot admin / DevEx | data freshness と scope 差を記録する |
 | Security Overview | alert、remediation、prevention | AppSec / security manager | 権限と current-state bias に注意する |
+| Pulse | PR / Issue / commit activity の要約確認 | repo owner | repository 単位の要約。トップコントリビューター表示を個人評価に使わない |
 | Budget / billing | premium requests、Actions minutes | budget owner | usage と outcome を結び付ける |
 | Runbook / incident log | exception、rollback、root cause | owner team | 定性情報として残す |
 

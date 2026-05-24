@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- 第11章を「メトリクス・運用レビュー・展開ロードマップ」として再構成し、flow / quality / security / cost / adoption の scorecard、レビュー cadence、maturity matrix を追加
+
 ## [v1.0.0] - 2026-02-23
 
 ### Added
