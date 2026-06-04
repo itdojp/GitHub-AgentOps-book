@@ -47,6 +47,9 @@ jobs:
             echo "dir=." >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Book metadata/navigation consistency
+        run: npm run check:metadata
+
       - name: Unicode check (fail on warnings)
         run: node book-formatter/scripts/check-unicode.js "${{ steps.scan.outputs.dir }}" --allowlist .book-formatter/unicode-allowlist.json --fail-on warn
 

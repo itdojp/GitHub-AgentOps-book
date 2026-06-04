@@ -7,6 +7,7 @@ lang: "ja"
 # GitHub Pages設定
 baseurl: "/GitHub-AgentOps-book"
 url: "https://itdojp.github.io"
+homepage: "https://itdojp.github.io/GitHub-AgentOps-book/"
 
 # Jekyll設定
 markdown: kramdown
@@ -31,6 +32,7 @@ plugins:
 
 # Repository information for edit links
 repository: "itdojp/GitHub-AgentOps-book"
+repository_url: "https://github.com/itdojp/GitHub-AgentOps-book"
 
 permalink: pretty
 

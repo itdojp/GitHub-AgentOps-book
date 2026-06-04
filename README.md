@@ -34,11 +34,13 @@ npm run preview
 ## 品質ゲート（ローカル）
 
 ```bash
+npm run check:metadata
 npm test
 ```
 
 実行内容:
 
+- メタデータ / ナビゲーション整合性検証
 - Markdown lint
 - ビルド（`docs/` 生成）
 - `docs/` に対する内部リンク検証

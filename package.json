@@ -1,12 +1,12 @@
 {
   "name": "github-agentops-book",
   "version": "1.0.0",
-  "description": "GitHub AgentOps 実践ガイド",
+  "description": "Issue→Agent→PR→反復→マージの運用を、Copilot instructions / AGENTS.md / Skills / custom agents / hooks / policy controls / MCP / tool exposure / CI で標準化するための実践ガイド。例: Copilot cloud agent / third-party agents（OpenAI Codex 等）/ Copilot CLI。",
   "author": "ITDO Inc.",
   "license": "CC-BY-NC-SA-4.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/itdojp/GitHub-AgentOps-book.git"
+    "url": "git+https://github.com/itdojp/GitHub-AgentOps-book.git"
   },
   "engines": {
     "node": "20 || >=22"
@@ -17,8 +17,9 @@
     "lint": "markdownlint 'src/**/*.md' 'index.md' 'README.md' 'BOOK-PROPOSAL.md' 'CONTRIBUTING.md' 'AGENTS.md' --ignore node_modules",
     "check-links": "node scripts/check-links.js",
     "build:validate": "npm run build && npm run check-links",
-    "test": "npm run lint && npm run build:validate",
-    "check-external-links": "node scripts/check-external-links.js"
+    "test": "npm run check:metadata && npm run lint && npm run build:validate",
+    "check-external-links": "node scripts/check-external-links.js",
+    "check:metadata": "node scripts/check-metadata-consistency.js"
   },
   "dependencies": {
     "glob": "^10.3.10"
@@ -26,5 +27,9 @@
   "devDependencies": {
     "http-server": "^14.1.1",
     "markdownlint-cli": "^0.47.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/itdojp/GitHub-AgentOps-book/issues"
+  },
+  "homepage": "https://itdojp.github.io/GitHub-AgentOps-book/"
 }

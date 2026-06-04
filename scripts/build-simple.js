@@ -394,6 +394,8 @@ Built with [Book Publishing Template v3.0](https://github.com/itdojp/book-publis
       const baseurl = repoName ? `/${repoName}` : '';
       const url = userName ? `https://${userName}.github.io` : '';
       const githubRepo = (userName && repoName) ? `${userName}/${repoName}` : '';
+      const homepage = (url && baseurl) ? `${url}${baseurl}/` : '';
+      const repositoryUrl = githubRepo ? `https://github.com/${githubRepo}` : '';
 
       const defaultConfig = `title: "${this.config.book?.title || 'My Book'}"
 description: "${this.config.book?.description || 'Book description'}"
@@ -404,6 +406,7 @@ lang: "${this.config.book?.language || 'ja'}"
 # GitHub Pages設定
 baseurl: "${baseurl}"
 url: "${url}"
+homepage: "${homepage}"
 
 # Jekyll設定
 markdown: kramdown
@@ -428,6 +431,7 @@ plugins:
 
 # Repository information for edit links
 repository: "${githubRepo}"
+repository_url: "${repositoryUrl}"
 
 permalink: pretty
 
