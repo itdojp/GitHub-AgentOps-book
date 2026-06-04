@@ -1,6 +1,9 @@
 ---
 layout: book
 title: "GitHub AgentOps 実践ガイド"
+description: "Issue→Agent→PR→反復→マージの運用を、Copilot instructions / AGENTS.md / Skills / custom agents / hooks / policy controls / MCP / tool exposure / CI で標準化するための実践ガイド。例: Copilot cloud agent / third-party agents（OpenAI Codex 等）/ Copilot CLI。"
+author: "ITDO Inc."
+version: "1.0.0"
 ---
 
 # GitHub AgentOps 実践ガイド
