@@ -1,6 +1,6 @@
 # GitHub AgentOps 実践ガイド
 
-AIエージェント駆動開発のための運用設計
+AI エージェント駆動開発のための運用設計
 
 - English Title: GitHub AgentOps Practical Guide
 - English Subtitle: Ops Design for AI Agent-Driven Development
