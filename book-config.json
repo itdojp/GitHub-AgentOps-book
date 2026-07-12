@@ -63,6 +63,19 @@
     "enableSyntaxHighlighting": true,
     "enableAutoNavigation": false
   },
+  "ux": {
+    "profile": "B",
+    "modules": {
+      "quickStart": false,
+      "readingGuide": true,
+      "checklistPack": true,
+      "troubleshootingFlow": true,
+      "conceptMap": false,
+      "figureIndex": false,
+      "legalNotice": true,
+      "glossary": false
+    }
+  },
   "shared": {
     "version": "3.2.2",
     "lastSync": "2026-02-22T13:26:30+09:00"
