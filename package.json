@@ -9,7 +9,7 @@
     "url": "git+https://github.com/itdojp/GitHub-AgentOps-book.git"
   },
   "engines": {
-    "node": "20 || >=22"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "build": "node scripts/build-simple.js",
@@ -22,11 +22,11 @@
     "check:metadata": "node scripts/check-metadata-consistency.js"
   },
   "dependencies": {
-    "glob": "^10.3.10"
+    "glob": "^13.0.6"
   },
   "devDependencies": {
     "http-server": "^14.1.1",
-    "markdownlint-cli": "^0.47.0"
+    "markdownlint-cli": "^0.49.0"
   },
   "bugs": {
     "url": "https://github.com/itdojp/GitHub-AgentOps-book/issues"
