@@ -9,7 +9,7 @@
     "url": "git+https://github.com/itdojp/GitHub-AgentOps-book.git"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "build": "node scripts/build-simple.js",
