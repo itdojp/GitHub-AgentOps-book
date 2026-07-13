@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="740" viewBox="0 0 760 740" role="img" aria-labelledby="iteration-title iteration-desc">
+  <title id="iteration-title">IssueからMergeまでの反復フロー</title>
+  <desc id="iteration-desc">Issueを実行仕様として固定し、researchとplan、PR、reviewとCI、完了ゲート、HumanによるMergeへ進む。レビュー指摘、steering、CI失敗があればresearchとplanへ戻り、最小修正と再検証を繰り返す。</desc>
+  <defs>
+    <marker id="iteration-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#344054"/>
+    </marker>
+    <style>
+      .heading { font: 700 26px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #172033; }
+      .step { font: 700 22px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #172033; }
+      .body { font: 500 17px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #344054; }
+      .number { font: 700 20px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #ffffff; }
+      .loop { font: 700 16px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #7c2d12; }
+      .arrow { fill: none; stroke: #344054; stroke-width: 3; marker-end: url(#iteration-arrow); }
+      .feedback { fill: none; stroke: #b45309; stroke-width: 4; stroke-dasharray: 10 7; marker-end: url(#iteration-arrow); }
+    </style>
+  </defs>
+
+  <rect width="760" height="740" rx="20" fill="#ffffff"/>
+  <text x="380" y="38" class="heading" text-anchor="middle">GitHub上に証跡を残す実行フロー</text>
+
+  <g>
+    <rect x="210" y="60" width="480" height="80" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3"/>
+    <circle cx="238" cy="100" r="20" fill="#1d4ed8"/>
+    <text x="238" y="107" class="number" text-anchor="middle">1</text>
+    <text x="450" y="93" class="step" text-anchor="middle">Issue</text>
+    <text x="450" y="121" class="body" text-anchor="middle">目的・スコープ・受入基準・制約・検証を固定</text>
+  </g>
+
+  <path d="M450 140 V167" class="arrow"/>
+
+  <g>
+    <rect x="210" y="175" width="480" height="80" rx="14" fill="#f5f3ff" stroke="#6d28d9" stroke-width="3"/>
+    <circle cx="238" cy="215" r="20" fill="#6d28d9"/>
+    <text x="238" y="222" class="number" text-anchor="middle">2</text>
+    <text x="450" y="208" class="step" text-anchor="middle">research / plan</text>
+    <text x="450" y="236" class="body" text-anchor="middle">影響範囲・既存設計・分割方針を証跡化</text>
+  </g>
+
+  <path d="M450 255 V282" class="arrow"/>
+
+  <g>
+    <rect x="210" y="290" width="480" height="80" rx="14" fill="#ecfdf5" stroke="#047857" stroke-width="3"/>
+    <circle cx="238" cy="330" r="20" fill="#047857"/>
+    <text x="238" y="337" class="number" text-anchor="middle">3</text>
+    <text x="450" y="323" class="step" text-anchor="middle">PR</text>
+    <text x="450" y="351" class="body" text-anchor="middle">変更意図・検証結果・残リスク・rollbackを記録</text>
+  </g>
+
+  <path d="M450 370 V397" class="arrow"/>
+
+  <g>
+    <rect x="210" y="405" width="480" height="92" rx="14" fill="#fff7ed" stroke="#b45309" stroke-width="3"/>
+    <circle cx="238" cy="451" r="20" fill="#b45309"/>
+    <text x="238" y="458" class="number" text-anchor="middle">4</text>
+    <text x="450" y="442" class="step" text-anchor="middle">review / CI</text>
+    <text x="450" y="473" class="body" text-anchor="middle">本文・inline・suggestion・checksを突き合わせる</text>
+  </g>
+
+  <path d="M450 497 V524" class="arrow"/>
+
+  <g>
+    <rect x="210" y="532" width="480" height="82" rx="14" fill="#fef3f2" stroke="#b42318" stroke-width="3"/>
+    <text x="450" y="562" class="step" text-anchor="middle">完了ゲート</text>
+    <text x="450" y="590" class="body" text-anchor="middle">未解決thread 0・required checks green・Human承認</text>
+  </g>
+
+  <path d="M450 614 V641" class="arrow"/>
+
+  <g>
+    <rect x="210" y="649" width="480" height="70" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="4"/>
+    <circle cx="238" cy="684" r="20" fill="#1d4ed8"/>
+    <text x="238" y="691" class="number" text-anchor="middle">5</text>
+    <text x="450" y="679" class="step" text-anchor="middle">Merge</text>
+    <text x="450" y="704" class="body" text-anchor="middle">Humanが最終責任を持つ</text>
+  </g>
+
+  <path d="M210 573 H80 V215 H200" class="feedback"/>
+  <rect x="24" y="326" width="148" height="164" rx="14" fill="#fff7ed" stroke="#b45309" stroke-width="2"/>
+  <text x="98" y="354" class="loop" text-anchor="middle">反復入力</text>
+  <text x="98" y="382" class="body" text-anchor="middle">review指摘</text>
+  <text x="98" y="408" class="body" text-anchor="middle">steering</text>
+  <text x="98" y="434" class="body" text-anchor="middle">CI failure</text>
+  <text x="98" y="476" class="loop" text-anchor="middle">最小修正 → 再検証</text>
+</svg>

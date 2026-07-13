@@ -69,6 +69,14 @@ Copilot cloud agent を使う運用でも、同じ依頼フローの中で両方
 | policy | 誰が何を使えるか、超過利用を許すか、どの agent を有効化するか | paid usage policy、agent enablement、tool allowlist |
 | analytics | 使用量、上位消費者、機能別内訳、成果との比率 | premium request analytics、metered usage、Actions workflow metrics |
 
+<figure id="figure-governance-feedback-loop" class="concept-figure" tabindex="0">
+  <img
+    src="./governance-feedback-loop.svg"
+    alt="BudgetとPolicyで実行を制御し、Agent・CI・MCPの結果をMetricsで測り、月次レビューの判断を次の設定へ戻すループ。"
+  >
+  <figcaption>図8-1：Budget・Policy・Metricsによるガバナンスのフィードバックループ</figcaption>
+</figure>
+
 GitHub の budgets は、閾値通知だけでなく、設定により budget 到達時に追加利用を止める用途にも使えます。
 一方、重複した budget scope は意図せず機能を止める原因になります。
 特に organization、repository、cost center、SKU をまたぐ budget は、どれが failsafe でどれが運用目標かを明示します。

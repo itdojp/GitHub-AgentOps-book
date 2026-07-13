@@ -382,6 +382,44 @@ a:hover {
     height: auto;
 }
 
+.page-content .concept-figure {
+    margin: 2rem 0;
+}
+
+.page-content .concept-figure img {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.page-content .concept-figure figcaption {
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.page-content .concept-figure:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+    .page-content .concept-figure {
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        padding-bottom: 0.5rem;
+    }
+
+    .page-content .concept-figure img {
+        min-width: 720px;
+        max-width: none;
+    }
+}
+
 .page-content table {
     width: 100%;
     border-collapse: collapse;

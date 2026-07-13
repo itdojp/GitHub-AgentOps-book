@@ -75,6 +75,7 @@ AIエージェント駆動開発のための運用設計
   - [付録A：テンプレ集（instructions / Issue / PR / agents / Skills / hooks / MCP）](appendices/appendix-a/)
   - [付録B：プレイブック集（タスク別運用手順）](appendices/appendix-b/)
   - [付録C：トラブルシュート（失敗パターンと対処）](appendices/appendix-c/)
+  - [図表索引](appendices/figure-index/)
 
 ## 関連書籍
 

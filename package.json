@@ -16,10 +16,11 @@
     "preview": "npm run build && npx http-server docs -p 8080 --silent",
     "lint": "markdownlint 'src/**/*.md' 'index.md' 'README.md' 'BOOK-PROPOSAL.md' 'CONTRIBUTING.md' 'AGENTS.md' --ignore node_modules",
     "check-links": "node scripts/check-links.js",
-    "build:validate": "npm run build && npm run check-links",
+    "build:validate": "npm run build && npm run check-links && npm run check:figures",
     "test": "npm run check:metadata && npm run lint && npm run build:validate",
     "check-external-links": "node scripts/check-external-links.js",
-    "check:metadata": "node scripts/check-metadata-consistency.js"
+    "check:metadata": "node scripts/check-metadata-consistency.js",
+    "check:figures": "node scripts/check-figure-index.js"
   },
   "dependencies": {
     "glob": "^13.0.6"

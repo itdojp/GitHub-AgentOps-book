@@ -71,7 +71,7 @@
       "checklistPack": true,
       "troubleshootingFlow": true,
       "conceptMap": false,
-      "figureIndex": false,
+      "figureIndex": true,
       "legalNotice": true,
       "glossary": false
     }
