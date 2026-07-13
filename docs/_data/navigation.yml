@@ -34,4 +34,6 @@ appendices:
     path: "/appendices/appendix-b/"
   - title: "付録C：トラブルシュート（失敗パターンと対処）"
     path: "/appendices/appendix-c/"
+  - title: "図表索引"
+    path: "/appendices/figure-index/"
 

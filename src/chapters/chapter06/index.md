@@ -28,6 +28,14 @@ GitHub 上の追跡可能な成果物に変換します。
 7. **merge**: 未解決 thread、required checks、承認条件、merge 後確認を満たしてから人間が責任を持つ
 8. **post-merge**: main checks、Pages / deploy、Issue checklist、証跡コメントを確認する
 
+<figure id="figure-issue-to-merge-iteration" class="concept-figure" tabindex="0">
+  <img
+    src="./github-native-iteration-flow.svg"
+    alt="Issue、research / plan、PR、review / CI、Mergeを順に進め、指摘や失敗時は計画へ戻って最小修正と再検証を行う反復フロー。"
+  >
+  <figcaption>図6-1：Issueからresearch / plan、PR、review / CI、Mergeへ進む反復フロー</figcaption>
+</figure>
+
 重要なのは、各段階が GitHub の成果物として残ることです。
 口頭や一時チャットだけで判断すると、後から「なぜその実装になったか」を説明できません。
 

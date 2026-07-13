@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="560" viewBox="0 0 760 560" role="img" aria-labelledby="responsibility-title responsibility-desc">
+  <title id="responsibility-title">Human、Agent、CIの責任境界</title>
+  <desc id="responsibility-desc">HumanがIssueで仕様化し、レビューで承認し、マージと公開の最終責任を持つ。Agentは調査、実装、テスト追加、反復を担い、CIはlint、test、build、policyの品質ゲートと実行ログを担う。承認、マージ、公開は自動化の停止線よりHuman側にある。</desc>
+  <defs>
+    <marker id="responsibility-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#344054"/>
+    </marker>
+    <style>
+      .heading { font: 700 26px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #172033; }
+      .card-title { font: 700 23px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; }
+      .body { font: 500 18px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #172033; }
+      .label { font: 700 16px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #344054; }
+      .boundary { font: 700 17px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #9f1c14; }
+      .arrow { fill: none; stroke: #344054; stroke-width: 3; marker-end: url(#responsibility-arrow); }
+    </style>
+  </defs>
+
+  <rect width="760" height="560" rx="20" fill="#ffffff"/>
+  <text x="380" y="38" class="heading" text-anchor="middle">責任主体と自動化の停止線</text>
+
+  <rect x="60" y="66" width="640" height="118" rx="16" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3"/>
+  <text x="380" y="99" class="card-title" text-anchor="middle" fill="#1e3a8a">Human</text>
+  <text x="380" y="130" class="body" text-anchor="middle">Issueで仕様化　・　Reviewで承認</text>
+  <text x="380" y="159" class="body" text-anchor="middle">Merge・公開の最終責任と説明責任</text>
+
+  <line x1="38" y1="225" x2="722" y2="225" stroke="#b42318" stroke-width="3" stroke-dasharray="10 8"/>
+  <rect x="172" y="204" width="416" height="40" rx="20" fill="#fef3f2" stroke="#b42318" stroke-width="2"/>
+  <text x="380" y="231" class="boundary" text-anchor="middle">自動化の停止線：承認・Merge・公開はHuman</text>
+
+  <rect x="45" y="290" width="310" height="190" rx="16" fill="#ecfdf5" stroke="#047857" stroke-width="3"/>
+  <text x="200" y="327" class="card-title" text-anchor="middle" fill="#065f46">Agent</text>
+  <text x="200" y="363" class="body" text-anchor="middle">調査 / 実装 / テスト追加</text>
+  <text x="200" y="397" class="body" text-anchor="middle">レビュー・CI結果で最小修正</text>
+  <text x="200" y="444" class="label" text-anchor="middle">作業主体（意思決定は代替しない）</text>
+
+  <rect x="405" y="290" width="310" height="190" rx="16" fill="#fff7ed" stroke="#b45309" stroke-width="3"/>
+  <text x="560" y="327" class="card-title" text-anchor="middle" fill="#7c2d12">CI</text>
+  <text x="560" y="363" class="body" text-anchor="middle">lint / test / build / policy</text>
+  <text x="560" y="397" class="body" text-anchor="middle">再現可能な結果と実行ログ</text>
+  <text x="560" y="444" class="label" text-anchor="middle">品質ゲートと監査可能性</text>
+
+  <path d="M246 184 C246 248 200 248 200 280" class="arrow"/>
+  <text x="135" y="265" class="label">Issue / 制約</text>
+
+  <path d="M355 350 H395" class="arrow"/>
+  <text x="375" y="338" class="label" text-anchor="middle">変更</text>
+  <path d="M405 414 H365" class="arrow"/>
+  <text x="385" y="439" class="label" text-anchor="middle">結果</text>
+
+  <path d="M620 290 C620 262 650 262 650 194" class="arrow"/>
+  <text x="626" y="269" class="label" text-anchor="end">品質ゲート・証跡</text>
+
+  <rect x="105" y="510" width="550" height="34" rx="17" fill="#f8fafc" stroke="#98a2b3"/>
+  <text x="380" y="533" class="label" text-anchor="middle">Humanが判断し、Agentが作業し、CIが機械的に検証する</text>
+</svg>

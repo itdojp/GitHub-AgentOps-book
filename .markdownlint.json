@@ -28,7 +28,7 @@
     "style": "ordered"
   },
   "MD033": {
-    "allowed_elements": ["br", "hr", "img", "a", "details", "summary", "code", "pre", "sup", "sub", "kbd"]
+    "allowed_elements": ["br", "hr", "img", "a", "details", "summary", "code", "pre", "sup", "sub", "kbd", "figure", "figcaption"]
   },
   "MD034": false,
   "MD040": false,

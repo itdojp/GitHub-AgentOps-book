@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="740" viewBox="0 0 760 740" role="img" aria-labelledby="governance-title governance-desc">
+  <title id="governance-title">budget、policy、metricsによるガバナンスのフィードバックループ</title>
+  <desc id="governance-desc">Budgetで月次上限、警告閾値、停止条件、scopeを決め、Policyで利用者、利用可能なAgentとtool、超過利用を制御する。Agent、CI、MCPの実行結果をMetricsとanalyticsで使用量、失敗、費用対成果として測り、月次レビューでBudget、Policy、workflowを更新する。</desc>
+  <defs>
+    <marker id="governance-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#344054"/>
+    </marker>
+    <style>
+      .heading { font: 700 25px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #172033; }
+      .card-title { font: 700 22px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #172033; }
+      .body { font: 500 17px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #344054; }
+      .number { font: 700 20px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #ffffff; }
+      .feedback-label { font: 700 16px 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fill: #6d28d9; }
+      .arrow { fill: none; stroke: #344054; stroke-width: 3; marker-end: url(#governance-arrow); }
+      .feedback { fill: none; stroke: #6d28d9; stroke-width: 4; stroke-dasharray: 10 7; marker-end: url(#governance-arrow); }
+    </style>
+  </defs>
+
+  <rect width="760" height="740" rx="20" fill="#ffffff"/>
+  <text x="380" y="38" class="heading" text-anchor="middle">Budget・Policy・Metricsを意思決定へ戻す</text>
+
+  <g>
+    <rect x="220" y="62" width="480" height="92" rx="15" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3"/>
+    <circle cx="248" cy="108" r="20" fill="#1d4ed8"/>
+    <text x="248" y="115" class="number" text-anchor="middle">1</text>
+    <text x="460" y="100" class="card-title" text-anchor="middle">Budget</text>
+    <text x="460" y="130" class="body" text-anchor="middle">月次上限・警告閾値・停止条件・scope</text>
+  </g>
+
+  <path d="M460 154 V180" class="arrow"/>
+
+  <g>
+    <rect x="220" y="188" width="480" height="92" rx="15" fill="#f5f3ff" stroke="#6d28d9" stroke-width="3"/>
+    <circle cx="248" cy="234" r="20" fill="#6d28d9"/>
+    <text x="248" y="241" class="number" text-anchor="middle">2</text>
+    <text x="460" y="226" class="card-title" text-anchor="middle">Policy</text>
+    <text x="460" y="256" class="body" text-anchor="middle">利用者・有効なAgent / tool・超過利用を制御</text>
+  </g>
+
+  <path d="M460 280 V306" class="arrow"/>
+
+  <g>
+    <rect x="220" y="314" width="480" height="92" rx="15" fill="#ecfdf5" stroke="#047857" stroke-width="3"/>
+    <circle cx="248" cy="360" r="20" fill="#047857"/>
+    <text x="248" y="367" class="number" text-anchor="middle">3</text>
+    <text x="460" y="352" class="card-title" text-anchor="middle">Agent / CI / MCP 実行</text>
+    <text x="460" y="382" class="body" text-anchor="middle">変更・検証・tool callとdelivery outcome</text>
+  </g>
+
+  <path d="M460 406 V432" class="arrow"/>
+
+  <g>
+    <rect x="220" y="440" width="480" height="92" rx="15" fill="#fff7ed" stroke="#b45309" stroke-width="3"/>
+    <circle cx="248" cy="486" r="20" fill="#b45309"/>
+    <text x="248" y="493" class="number" text-anchor="middle">4</text>
+    <text x="460" y="478" class="card-title" text-anchor="middle">Metrics / analytics</text>
+    <text x="460" y="508" class="body" text-anchor="middle">使用量・成功率・retry・費用と成果の比率</text>
+  </g>
+
+  <path d="M460 532 V558" class="arrow"/>
+
+  <g>
+    <rect x="220" y="566" width="480" height="112" rx="15" fill="#fef3f2" stroke="#b42318" stroke-width="3"/>
+    <circle cx="248" cy="622" r="20" fill="#b42318"/>
+    <text x="248" y="629" class="number" text-anchor="middle">5</text>
+    <text x="460" y="606" class="card-title" text-anchor="middle">月次review / decision</text>
+    <text x="460" y="636" class="body" text-anchor="middle">例外・異常・成果を解釈して次月の</text>
+    <text x="460" y="661" class="body" text-anchor="middle">Budget・Policy・workflowを更新</text>
+  </g>
+
+  <path d="M220 622 H68 V108 H210" class="feedback"/>
+  <rect x="22" y="300" width="156" height="132" rx="14" fill="#f5f3ff" stroke="#6d28d9" stroke-width="2"/>
+  <text x="100" y="332" class="feedback-label" text-anchor="middle">Feedback</text>
+  <text x="100" y="362" class="body" text-anchor="middle">上限・閾値</text>
+  <text x="100" y="388" class="body" text-anchor="middle">許可範囲</text>
+  <text x="100" y="414" class="body" text-anchor="middle">実行設計を調整</text>
+
+  <text x="460" y="716" class="feedback-label" text-anchor="middle">計測で終わらせず、ownerの判断と改善backlogへ接続する</text>
+</svg>
