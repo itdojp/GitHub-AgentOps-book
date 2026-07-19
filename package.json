@@ -17,12 +17,15 @@
     "lint": "markdownlint 'src/**/*.md' 'index.md' 'README.md' 'BOOK-PROPOSAL.md' 'CONTRIBUTING.md' 'AGENTS.md' --ignore node_modules",
     "check-links": "node scripts/check-links.js",
     "build:validate": "npm run build && npm run check-links && npm run check:figures",
-    "test": "npm run check:metadata && npm run test:pages-template && npm run lint && npm run build:validate",
+    "test": "npm run check:metadata && npm run test:pages-template && npm run test:action-pins && npm run check:workflows && npm run lint && npm run build:validate",
     "check-external-links": "node scripts/check-external-links.js",
     "check:metadata": "node scripts/check-metadata-consistency.js",
     "check:figures": "node scripts/check-figure-index.js",
     "check:pages-template": "node scripts/check-pages-template-permissions.js",
-    "test:pages-template": "node scripts/test-pages-template-permissions.js"
+    "test:pages-template": "node scripts/test-pages-template-permissions.js",
+    "check:action-pins": "node scripts/check-action-pins.js",
+    "test:action-pins": "node scripts/test-action-pins.js",
+    "check:workflows": "bash scripts/check-workflow-yaml.sh"
   },
   "dependencies": {
     "glob": "^13.0.6"

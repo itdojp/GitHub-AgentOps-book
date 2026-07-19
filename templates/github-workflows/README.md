@@ -28,6 +28,12 @@
 `build-actions.yml`のdeploy条件は、`main`へのpushまたは`main`上の手動実行（`workflow_dispatch`）だけを許可します。
 `pull_request`イベントは、fork元にかかわらずbuild jobのbuild確認だけを実行し、Pagesへの書き込みやOIDC tokenの発行を行いません。
 
+両templateのremote Action参照は、監査済みのfull-length commit SHAとexact version commentを組にして管理します。
+copy後もmutableなmajor tagへ戻さず、更新時はupstream release/tag/commit、runtime、入出力、権限、transitive `uses:`を確認してください。
+本リポジトリでは`config/action-pins.json`を監査記録の正本とし、`npm run test:action-pins`でactive workflowとtemplateのdriftを検出します。
+Dependabotがactive workflowのSHAを更新した場合も、template、manifest、version comment、監査証跡を同期するまでmergeしません。
+このv5 templateはGitHub.comのPagesを対象とします。GitHub Enterprise Serverで使う場合は、[`actions/deploy-pages`のcompatibility表](https://github.com/actions/deploy-pages#compatibility)でserver versionに対応するrelease lineを確認してください。
+
 ## セットアップ手順
 
 1. プロジェクトに`.github/workflows/`ディレクトリを作成

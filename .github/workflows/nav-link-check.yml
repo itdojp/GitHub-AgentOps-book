@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Install PyYAML
         run: python3 -m pip install --user pyyaml
@@ -73,17 +73,17 @@ jobs:
           Path('urls.txt').write_text(out, encoding='utf-8')
           print(out)
           PY
-          echo "list=urls.txt" >> $GITHUB_OUTPUT
+          echo "list=urls.txt" >> "$GITHUB_OUTPUT"
 
       - name: Probe URLs
         run: |
           failures=0
           while IFS=$'\t' read -r path url; do
             code=$(curl -s -o /dev/null -w "%{http_code}" -L "$url")
-            echo "$code $url"
+            echo "$code $path $url"
             if [ "$code" != "200" ]; then failures=$((failures+1)); fi
           done < urls.txt
-          if [ $failures -gt 0 ]; then
+          if [ "$failures" -gt 0 ]; then
             echo "Found $failures non-200 URLs" >&2
             exit 1
           fi

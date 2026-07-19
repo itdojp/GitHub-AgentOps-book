@@ -17,17 +17,17 @@ jobs:
 
     steps:
       - name: Checkout book
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Checkout book-formatter (pinned)
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           repository: itdojp/book-formatter
           ref: 69eb5c12f5a750b65614bc9bbbc3d7abd5aa6f6c
           path: book-formatter
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version: '22'
           cache: npm
@@ -50,6 +50,12 @@ jobs:
       - name: Book metadata/navigation consistency
         run: npm run check:metadata
 
+      - name: Audited GitHub Actions SHA pin policy
+        run: npm run test:action-pins
+
+      - name: Workflow and template syntax
+        run: npm run check:workflows
+
       - name: Unicode check (fail on warnings)
         run: node book-formatter/scripts/check-unicode.js "${{ steps.scan.outputs.dir }}" --allowlist .book-formatter/unicode-allowlist.json --fail-on warn
 
@@ -67,7 +73,7 @@ jobs:
 
       - name: Upload markdown structure report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: markdown-structure-report
           path: ${{ runner.temp }}/markdown-structure-report.json
@@ -75,16 +81,16 @@ jobs:
 
       - name: Upload layout risk report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: layout-risk-report
           path: ${{ runner.temp }}/layout-risk-report.json
           if-no-files-found: ignore
       - name: Setup Pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
       - name: Build (Jekyll; GitHub Pages compatible)
-        uses: actions/jekyll-build-pages@v1
+        uses: actions/jekyll-build-pages@44a6e6beabd48582f863aeeb6cb2151cc1716697 # v1.0.13
         with:
           source: ./${{ steps.scan.outputs.dir }}
           destination: ./_site

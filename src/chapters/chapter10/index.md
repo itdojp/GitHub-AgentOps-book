@@ -156,6 +156,21 @@ GitHub の secure use reference では、Action を full-length commit SHA に p
 一方で、SHA pin は更新運用の負荷を増やすため、重要 workflow から段階導入します。
 更新は Dependabot / Renovate 等で PR 化し、理由、影響、検証、rollback をセットで review します。
 
+### Action SHA pin の更新契約
+
+full-length SHA は、version tagをコメントに残しただけでは監査済みになりません。更新PRでは次の順序を守ります。
+
+1. upstreamのofficial releaseとexact version tagを確認し、tagとmajor aliasをcommitまでdereferenceする
+2. candidate commit、署名・verification、`action.yml`、runtime、入力・出力・権限、transitive `uses:`、changelogを確認する
+3. active workflowと配布templateを同じ監査済みSHAへ同期し、human-readableなexact version commentを併記する
+4. `config/action-pins.json`へ確認日、release URL、SHAを記録する
+5. `npm run test:action-pins`、`actionlint`、repository CI、template smokeを実行する
+6. 問題があれば、直前の監査済みSHAへ戻し、失敗条件と再開条件を更新PRへ残す
+
+Dependabotの`github-actions`更新は監査開始の通知であり、自動承認ではありません。
+active workflowだけが自動更新されてtemplateやmanifestと不一致になった場合、pin gateを失敗させ、監査と同期が終わるまでmergeしません。
+mutableなmajor tagへ戻してCIだけを通す運用は、供給網の再現性を失うため禁止します。
+
 ## artifact attestations / SBOM
 
 release artifact、container image、CLI binary、重要な build output は、artifact attestations で provenance を残します。
