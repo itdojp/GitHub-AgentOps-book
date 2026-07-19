@@ -49,11 +49,38 @@ function expectFailure(name, mutate, pattern) {
   throw new Error(`${name}: checker accepted an invalid fixture`);
 }
 
+function expectSuccess(name, mutate) {
+  const target = path.join(fixtureRoot, name);
+  copyFixture(target);
+  mutate(target);
+  try {
+    validateRepository(target);
+  } catch (error) {
+    throw new Error(`${name}: checker rejected a valid fixture: ${error.message}`);
+  }
+}
+
 fs.rmSync(fixtureRoot, { recursive: true, force: true });
 fs.mkdirSync(fixtureRoot, { recursive: true });
 
 try {
   validateRepository(root);
+
+  expectSuccess('empty-planned-assets', (target) => {
+    const plannedPaths = catalog.plannedAssets.map((asset) => asset.path);
+    mutateJson(target, (data) => {
+      data.plannedAssets = [];
+      data.inventory.plannedAssets = 0;
+    });
+    for (const relativePath of catalog.scannedDocuments) {
+      const file = path.join(target, relativePath);
+      const content = plannedPaths.reduce(
+        (updated, plannedPath) => updated.replaceAll(plannedPath, 'retired-planned-asset'),
+        fs.readFileSync(file, 'utf8')
+      );
+      fs.writeFileSync(file, content);
+    }
+  });
 
   expectFailure(
     'unregistered-path',
@@ -360,7 +387,7 @@ try {
     /public generic document must not link/
   );
 
-  console.log('Companion asset fixtures: 1 positive, 26 negative passed');
+  console.log('Companion asset fixtures: 2 positive, 26 negative passed');
 } finally {
   fs.rmSync(fixtureRoot, { recursive: true, force: true });
 }

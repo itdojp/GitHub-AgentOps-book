@@ -156,8 +156,8 @@ function validateRepository(root = process.cwd()) {
   if (!Array.isArray(catalog.shippedAssets) || catalog.shippedAssets.length === 0) {
     errors.push('shippedAssets must be a non-empty array');
   }
-  if (!Array.isArray(catalog.plannedAssets) || catalog.plannedAssets.length === 0) {
-    errors.push('plannedAssets must be a non-empty array');
+  if (!Array.isArray(catalog.plannedAssets)) {
+    errors.push('plannedAssets must be an array');
   }
   if (!Array.isArray(catalog.scannedDocuments) || catalog.scannedDocuments.length === 0) {
     errors.push('scannedDocuments must be a non-empty array');
@@ -375,6 +375,7 @@ async function validateRemote(root = process.cwd()) {
 
   const remote = new Map(tree.tree.map((item) => [item.path, item]));
   const remoteBlobs = new Set(tree.tree.filter((item) => item.type === 'blob').map((item) => item.path));
+  const shippedPaths = new Set(catalog.shippedAssets.map((asset) => asset.path));
   const errors = [];
   for (const asset of catalog.shippedAssets) {
     const item = remote.get(asset.path);
@@ -387,7 +388,7 @@ async function validateRemote(root = process.cwd()) {
     }
   }
   for (const remotePath of remoteBlobs) {
-    if (!catalog.shippedAssets.some((asset) => asset.path === remotePath)) {
+    if (!shippedPaths.has(remotePath)) {
       errors.push(`pinned snapshot blob is missing from shippedAssets: ${remotePath}`);
     }
   }
