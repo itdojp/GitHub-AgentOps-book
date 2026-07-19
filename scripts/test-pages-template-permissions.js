@@ -18,6 +18,9 @@ const workflowPath = path.join(
   'build-actions.yml',
 );
 const source = fs.readFileSync(workflowPath, 'utf8');
+const workflowNameMatch = source.match(/^name:\s*(.+)$/m);
+assert(workflowNameMatch, 'template must declare a workflow name');
+const workflowName = workflowNameMatch[1].trim();
 
 function replaceOccurrence(input, search, replacement, occurrence) {
   let from = 0;
@@ -66,10 +69,10 @@ function concurrencyPolicy(scenario) {
     ? `pr-${scenario.prNumber}`
     : `run-${scenario.runId}`;
   return {
-    buildGroup: `Build and Deploy (GitHub Actions)-build-${buildSuffix}`,
+    buildGroup: `${workflowName}-build-${buildSuffix}`,
     cancelBuildInProgress: scenario.eventName === 'pull_request',
     deployGroup: mayPublish(scenario)
-      ? 'Build and Deploy (GitHub Actions)-pages-deploy'
+      ? `${workflowName}-pages-deploy`
       : null,
     cancelDeployInProgress: false,
   };
