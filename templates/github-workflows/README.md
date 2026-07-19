@@ -26,7 +26,7 @@
   - より高度な制御が可能
 
 `build-actions.yml`のdeploy条件は、`main`へのpushまたは`main`上の手動実行（`workflow_dispatch`）だけを許可します。
-`pull_request`イベントは、fork元にかかわらずbuild jobのlint/build確認だけを実行し、Pagesへの書き込みやOIDC tokenの発行を行いません。
+`pull_request`イベントは、fork元にかかわらずbuild jobのbuild確認だけを実行し、Pagesへの書き込みやOIDC tokenの発行を行いません。
 
 ## セットアップ手順
 
