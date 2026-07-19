@@ -20,7 +20,13 @@
 - **特徴**:
   - 新しい方式
   - artifact uploadとdeploy jobを分離
+  - workflow既定とbuild jobは`contents: read`のみ
+  - `pages: write`と`id-token: write`はdeploy jobだけに付与
+  - internal PRとfork PRはいずれもread-onlyのbuild jobだけを実行し、artifact uploadとdeploy jobはスキップ
   - より高度な制御が可能
+
+`build-actions.yml`のdeploy条件は、`main`へのpushまたは`main`上の手動実行（`workflow_dispatch`）だけを許可します。
+`pull_request`イベントは、fork元にかかわらずbuild jobのlint/build確認だけを実行し、Pagesへの書き込みやOIDC tokenの発行を行いません。
 
 ## セットアップ手順
 
