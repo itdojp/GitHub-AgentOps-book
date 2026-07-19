@@ -22,8 +22,9 @@ const defaultWorkflowPath = path.join(
 const trustedDeployCondition =
   "github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')";
 const buildConcurrencyGroup =
-  "${{ github.workflow }}-build-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('run-{0}', github.run_id) }}";
-const buildCancelInProgress = "${{ github.event_name == 'pull_request' }}";
+  "${{ github.workflow }}-build-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || (github.ref == 'refs/heads/main' && 'pages' || format('run-{0}', github.run_id)) }}";
+const buildCancelInProgress =
+  "${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}";
 const deployConcurrencyGroup = '${{ github.workflow }}-pages-deploy';
 
 function fail(message) {

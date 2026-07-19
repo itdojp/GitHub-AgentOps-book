@@ -60,17 +60,20 @@ const eventMatrix = [
   { name: 'same pull request update', eventName: 'pull_request', ref: 'refs/pull/101/merge', prNumber: 101, runId: 1002, publish: false },
   { name: 'internal pull request', eventName: 'pull_request', ref: 'refs/pull/102/merge', prNumber: 102, runId: 1003, publish: false },
   { name: 'main push', eventName: 'push', ref: 'refs/heads/main', runId: 2001, publish: true },
-  { name: 'main manual dispatch', eventName: 'workflow_dispatch', ref: 'refs/heads/main', runId: 2002, publish: true },
-  { name: 'feature manual dispatch', eventName: 'workflow_dispatch', ref: 'refs/heads/feature', runId: 2003, publish: false },
+  { name: 'newer main push', eventName: 'push', ref: 'refs/heads/main', runId: 2002, publish: true },
+  { name: 'main manual dispatch', eventName: 'workflow_dispatch', ref: 'refs/heads/main', runId: 2003, publish: true },
+  { name: 'feature manual dispatch', eventName: 'workflow_dispatch', ref: 'refs/heads/feature', runId: 2004, publish: false },
 ];
 
 function concurrencyPolicy(scenario) {
-  const buildSuffix = scenario.eventName === 'pull_request'
-    ? `pr-${scenario.prNumber}`
-    : `run-${scenario.runId}`;
+  let buildSuffix;
+  if (scenario.eventName === 'pull_request') buildSuffix = `pr-${scenario.prNumber}`;
+  else if (scenario.ref === 'refs/heads/main') buildSuffix = 'pages';
+  else buildSuffix = `run-${scenario.runId}`;
   return {
     buildGroup: `${workflowName}-build-${buildSuffix}`,
-    cancelBuildInProgress: scenario.eventName === 'pull_request',
+    cancelBuildInProgress:
+      scenario.eventName === 'pull_request' || scenario.ref === 'refs/heads/main',
     deployGroup: mayPublish(scenario)
       ? `${workflowName}-pages-deploy`
       : null,
@@ -86,11 +89,17 @@ assert.strictEqual(policies[0].buildGroup, policies[1].buildGroup, 'same PR must
 assert(policies[0].cancelBuildInProgress, 'same PR update must cancel the older build');
 assert.notStrictEqual(policies[0].buildGroup, policies[2].buildGroup, 'different PRs must not cancel each other');
 assert.notStrictEqual(policies[0].buildGroup, policies[3].deployGroup, 'PR build must not share the deploy group');
-assert.strictEqual(policies[3].deployGroup, policies[4].deployGroup, 'main push/manual deploys must serialize');
+assert.strictEqual(policies[3].buildGroup, policies[4].buildGroup, 'main pushes must share the trusted build group');
+assert(policies[3].cancelBuildInProgress, 'a newer main push must cancel an older main build');
+assert(policies[4].cancelBuildInProgress, 'a newer main push must cancel an older main build');
+assert.strictEqual(policies[3].buildGroup, policies[5].buildGroup, 'main push/manual builds must share the trusted build group');
+assert(policies[5].cancelBuildInProgress, 'a main manual build must supersede an older trusted build');
+assert.strictEqual(policies[3].deployGroup, policies[5].deployGroup, 'main push/manual deploys must serialize');
 assert(!policies[3].cancelDeployInProgress, 'a main push must not cancel an active deploy');
-assert(!policies[4].cancelDeployInProgress, 'a manual deploy must not cancel an active deploy');
-assert.notStrictEqual(policies[3].buildGroup, policies[4].buildGroup, 'non-PR builds must use unique run groups');
-assert.strictEqual(policies[5].deployGroup, null, 'feature manual run must not join the deploy group');
+assert(!policies[5].cancelDeployInProgress, 'a manual deploy must not cancel an active deploy');
+assert.notStrictEqual(policies[3].buildGroup, policies[6].buildGroup, 'non-main manual build must use a unique run group');
+assert(!policies[6].cancelBuildInProgress, 'non-main manual build must not cancel another run');
+assert.strictEqual(policies[6].deployGroup, null, 'feature manual run must not join the deploy group');
 
 const negativeFixtures = [
   {
@@ -180,7 +189,7 @@ const negativeFixtures = [
     message: /build concurrency mismatch/,
   },
   {
-    name: 'PR group without non-PR fallback',
+    name: 'PR group without trusted-main and non-main fallback',
     source: source.replace(
       `      group: ${buildConcurrencyGroup}\n`,
       "      group: ${{ github.workflow }}-build-pr-${{ github.event.pull_request.number }}\n",

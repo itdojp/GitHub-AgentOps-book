@@ -14,10 +14,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # 同一PRの古いbuildだけをcancelする。非PR runはrun_idで分離する。
+    # 同一PRまたはtrusted mainの古いbuildをcancelし、stale artifactの後追いdeployを防ぐ。
+    # deployしない非main manual runだけはrun_idで分離する。
     concurrency:
-      group: ${{ github.workflow }}-build-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('run-{0}', github.run_id) }}
-      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+      group: ${{ github.workflow }}-build-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || (github.ref == 'refs/heads/main' && 'pages' || format('run-{0}', github.run_id)) }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
 
     # pull_request（forkを含む）は、このread-only jobだけを実行する。
     permissions:
