@@ -35,15 +35,21 @@ npm run preview
 
 ```bash
 npm run check:metadata
+npm run check:action-pins
+npm run check:workflows
 npm test
 ```
 
 実行内容:
 
 - メタデータ / ナビゲーション整合性検証
+- active workflow / templateの監査済みAction SHA pin検証
+- checksum固定したactionlintによるworkflow / template構文検証
 - Markdown lint
 - ビルド（`docs/` 生成）
 - `docs/` に対する内部リンク検証
+
+actionlint gateはLinux/macOSのx86_64/arm64に対応し、OS/CPU別の公式release assetをSHA-256検証して実行します。
 
 ## オンライン版
 
