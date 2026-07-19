@@ -10,13 +10,14 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    # 同一PRの古いbuildだけをcancelする。非PR runはrun_idで分離する。
+    concurrency:
+      group: ${{ github.workflow }}-build-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('run-{0}', github.run_id) }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
     # pull_request（forkを含む）は、このread-only jobだけを実行する。
     permissions:
@@ -54,6 +55,12 @@ jobs:
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     needs: build
     runs-on: ubuntu-latest
+
+    # main push / main manual deployを直列化し、進行中deployはcancelしない。
+    # GitHubの既定single-pending契約により、待機中は最新1件を保持する。
+    concurrency:
+      group: ${{ github.workflow }}-pages-deploy
+      cancel-in-progress: false
 
     permissions:
       pages: write

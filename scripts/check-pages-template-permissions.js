@@ -21,6 +21,10 @@ const defaultWorkflowPath = path.join(
 
 const trustedDeployCondition =
   "github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')";
+const buildConcurrencyGroup =
+  "${{ github.workflow }}-build-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('run-{0}', github.run_id) }}";
+const buildCancelInProgress = "${{ github.event_name == 'pull_request' }}";
+const deployConcurrencyGroup = '${{ github.workflow }}-pages-deploy';
 
 function fail(message) {
   throw new Error(message);
@@ -33,6 +37,20 @@ function linesOf(source) {
 function indentation(line) {
   const match = line.match(/^ */);
   return match ? match[0].length : 0;
+}
+
+function isNamedMappingKey(line, expectedKey) {
+  const trimmed = line.trim();
+  const colon = trimmed.indexOf(':');
+  if (colon < 0) return false;
+  const rawKey = trimmed.slice(0, colon).trim();
+  if (rawKey === expectedKey || rawKey === `'${expectedKey}'`) return true;
+  if (!rawKey.startsWith('"') || !rawKey.endsWith('"')) return false;
+  try {
+    return JSON.parse(rawKey) === expectedKey;
+  } catch {
+    return false;
+  }
 }
 
 function findBlock(lines, key, indent, start = 0, end = lines.length) {
@@ -95,12 +113,16 @@ function readDirectKeys(block, childIndent) {
   return keys;
 }
 
-function assertExactPermissions(actual, expected, label) {
+function assertExactScalarMap(actual, expected, label) {
   const actualEntries = [...actual.entries()].sort(([a], [b]) => a.localeCompare(b));
   const expectedEntries = Object.entries(expected).sort(([a], [b]) => a.localeCompare(b));
   if (JSON.stringify(actualEntries) !== JSON.stringify(expectedEntries)) {
-    fail(`${label} permissions mismatch: expected ${JSON.stringify(expectedEntries)}, got ${JSON.stringify(actualEntries)}`);
+    fail(`${label} mismatch: expected ${JSON.stringify(expectedEntries)}, got ${JSON.stringify(actualEntries)}`);
   }
+}
+
+function assertExactPermissions(actual, expected, label) {
+  assertExactScalarMap(actual, expected, `${label} permissions`);
 }
 
 function findStep(job, name) {
@@ -146,6 +168,9 @@ function readJobScalar(job, key) {
 function validateWorkflow(source) {
   const lines = linesOf(source);
   if (lines.some((line) => /\t/.test(line))) fail('tabs are not allowed in the workflow template');
+  if (lines.some((line) => indentation(line) === 0 && isNamedMappingKey(line, 'concurrency'))) {
+    fail('workflow-level concurrency must not mix PR builds with Pages deploys');
+  }
 
   const eventBlock = findBlock(lines, 'on', 0);
   for (const event of ['push', 'pull_request', 'workflow_dispatch']) {
@@ -166,6 +191,20 @@ function validateWorkflow(source) {
   }
   const build = findBlock(lines, 'build', 2, jobs.start + 1, jobs.end);
   const deploy = findBlock(lines, 'deploy', 2, jobs.start + 1, jobs.end);
+
+  const buildConcurrency = findBlock(build.lines, 'concurrency', 4);
+  assertExactScalarMap(
+    readScalarMap(buildConcurrency, 6),
+    { group: buildConcurrencyGroup, 'cancel-in-progress': buildCancelInProgress },
+    'build concurrency',
+  );
+
+  const deployConcurrency = findBlock(deploy.lines, 'concurrency', 4);
+  assertExactScalarMap(
+    readScalarMap(deployConcurrency, 6),
+    { group: deployConcurrencyGroup, 'cancel-in-progress': 'false' },
+    'deploy concurrency',
+  );
 
   const buildPermissions = findBlock(build.lines, 'permissions', 4);
   assertExactPermissions(
@@ -208,6 +247,8 @@ function validateWorkflow(source) {
     workflowPermissions: Object.fromEntries(readScalarMap(workflowPermissions, 2)),
     buildPermissions: Object.fromEntries(readScalarMap(buildPermissions, 6)),
     deployPermissions: Object.fromEntries(readScalarMap(deployPermissions, 6)),
+    buildConcurrency: Object.fromEntries(readScalarMap(buildConcurrency, 6)),
+    deployConcurrency: Object.fromEntries(readScalarMap(deployConcurrency, 6)),
   };
 }
 
@@ -232,4 +273,10 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { trustedDeployCondition, validateWorkflow };
+module.exports = {
+  buildCancelInProgress,
+  buildConcurrencyGroup,
+  deployConcurrencyGroup,
+  trustedDeployCondition,
+  validateWorkflow,
+};
