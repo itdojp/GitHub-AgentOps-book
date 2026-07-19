@@ -49,6 +49,8 @@ npm test
 - ビルド（`docs/` 生成）
 - `docs/` に対する内部リンク検証
 
+actionlint gateはLinux/macOSのx86_64/arm64に対応し、OS/CPU別の公式release assetをSHA-256検証して実行します。
+
 ## オンライン版
 
 - GitHub Pages: https://itdojp.github.io/GitHub-AgentOps-book/
