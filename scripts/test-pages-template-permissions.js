@@ -4,7 +4,13 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const { validateWorkflow } = require('./check-pages-template-permissions');
+const {
+  buildCancelInProgress,
+  buildConcurrencyGroup,
+  decodeYamlDoubleQuotedScalar,
+  deployConcurrencyGroup,
+  validateWorkflow,
+} = require('./check-pages-template-permissions');
 
 const workflowPath = path.join(
   process.cwd(),
@@ -13,6 +19,25 @@ const workflowPath = path.join(
   'build-actions.yml',
 );
 const source = fs.readFileSync(workflowPath, 'utf8');
+const workflowNameMatch = source.match(/^name:\s*(.+)$/m);
+assert(workflowNameMatch, 'template must declare a workflow name');
+
+function parseWorkflowName(rawValue) {
+  const value = rawValue.trim();
+  if (value.startsWith('"') && value.endsWith('"')) {
+    const decoded = decodeYamlDoubleQuotedScalar(value);
+    assert.notStrictEqual(decoded, null, 'double-quoted workflow name must be valid');
+    return decoded;
+  }
+  if (value.startsWith("'") && value.endsWith("'")) {
+    return value.slice(1, -1).replace(/''/g, "'");
+  }
+  return value;
+}
+
+const workflowName = parseWorkflowName(workflowNameMatch[1]);
+assert.strictEqual(parseWorkflowName('"Build and Deploy (GitHub Actions)"'), 'Build and Deploy (GitHub Actions)');
+assert.strictEqual(parseWorkflowName("'Build and Deploy (GitHub Actions)'"), 'Build and Deploy (GitHub Actions)');
 
 function replaceOccurrence(input, search, replacement, occurrence) {
   let from = 0;
@@ -32,6 +57,14 @@ assert.deepStrictEqual(expectedResult.deployPermissions, {
   pages: 'write',
   'id-token': 'write',
 });
+assert.deepStrictEqual(expectedResult.buildConcurrency, {
+  group: buildConcurrencyGroup,
+  'cancel-in-progress': buildCancelInProgress,
+});
+assert.deepStrictEqual(expectedResult.deployConcurrency, {
+  group: deployConcurrencyGroup,
+  'cancel-in-progress': 'false',
+});
 assert(expectedResult.events.includes('pull_request'));
 
 function mayPublish({ eventName, ref }) {
@@ -40,15 +73,50 @@ function mayPublish({ eventName, ref }) {
 }
 
 const eventMatrix = [
-  { name: 'fork pull request', eventName: 'pull_request', ref: 'refs/pull/101/merge', publish: false },
-  { name: 'internal pull request', eventName: 'pull_request', ref: 'refs/pull/102/merge', publish: false },
-  { name: 'main push', eventName: 'push', ref: 'refs/heads/main', publish: true },
-  { name: 'main manual dispatch', eventName: 'workflow_dispatch', ref: 'refs/heads/main', publish: true },
-  { name: 'feature manual dispatch', eventName: 'workflow_dispatch', ref: 'refs/heads/feature', publish: false },
+  { name: 'fork pull request', eventName: 'pull_request', ref: 'refs/pull/101/merge', prNumber: 101, runId: 1001, publish: false },
+  { name: 'same pull request update', eventName: 'pull_request', ref: 'refs/pull/101/merge', prNumber: 101, runId: 1002, publish: false },
+  { name: 'internal pull request', eventName: 'pull_request', ref: 'refs/pull/102/merge', prNumber: 102, runId: 1003, publish: false },
+  { name: 'main push', eventName: 'push', ref: 'refs/heads/main', runId: 2001, publish: true },
+  { name: 'newer main push', eventName: 'push', ref: 'refs/heads/main', runId: 2002, publish: true },
+  { name: 'main manual dispatch', eventName: 'workflow_dispatch', ref: 'refs/heads/main', runId: 2003, publish: true },
+  { name: 'feature manual dispatch', eventName: 'workflow_dispatch', ref: 'refs/heads/feature', runId: 2004, publish: false },
 ];
+
+function concurrencyPolicy(scenario) {
+  let buildSuffix;
+  if (scenario.eventName === 'pull_request') buildSuffix = `pr-${scenario.prNumber}`;
+  else if (scenario.ref === 'refs/heads/main') buildSuffix = 'pages';
+  else buildSuffix = `run-${scenario.runId}`;
+  return {
+    buildGroup: `${workflowName}-build-${buildSuffix}`,
+    cancelBuildInProgress:
+      scenario.eventName === 'pull_request' || scenario.ref === 'refs/heads/main',
+    deployGroup: mayPublish(scenario)
+      ? `${workflowName}-pages-deploy`
+      : null,
+    cancelDeployInProgress: false,
+  };
+}
+
 for (const scenario of eventMatrix) {
   assert.strictEqual(mayPublish(scenario), scenario.publish, scenario.name);
 }
+const policies = eventMatrix.map(concurrencyPolicy);
+assert.strictEqual(policies[0].buildGroup, policies[1].buildGroup, 'same PR must share its build group');
+assert(policies[0].cancelBuildInProgress, 'same PR update must cancel the older build');
+assert.notStrictEqual(policies[0].buildGroup, policies[2].buildGroup, 'different PRs must not cancel each other');
+assert.notStrictEqual(policies[0].buildGroup, policies[3].deployGroup, 'PR build must not share the deploy group');
+assert.strictEqual(policies[3].buildGroup, policies[4].buildGroup, 'main pushes must share the trusted build group');
+assert(policies[3].cancelBuildInProgress, 'a newer main push must cancel an older main build');
+assert(policies[4].cancelBuildInProgress, 'a newer main push must cancel an older main build');
+assert.strictEqual(policies[3].buildGroup, policies[5].buildGroup, 'main push/manual builds must share the trusted build group');
+assert(policies[5].cancelBuildInProgress, 'a main manual build must supersede an older trusted build');
+assert.strictEqual(policies[3].deployGroup, policies[5].deployGroup, 'main push/manual deploys must serialize');
+assert(!policies[3].cancelDeployInProgress, 'a main push must not cancel an active deploy');
+assert(!policies[5].cancelDeployInProgress, 'a manual deploy must not cancel an active deploy');
+assert.notStrictEqual(policies[3].buildGroup, policies[6].buildGroup, 'non-main manual build must use a unique run group');
+assert(!policies[6].cancelBuildInProgress, 'non-main manual build must not cancel another run');
+assert.strictEqual(policies[6].deployGroup, null, 'feature manual run must not join the deploy group');
 
 const negativeFixtures = [
   {
@@ -107,6 +175,88 @@ const negativeFixtures = [
     name: 'missing pull_request event',
     source: source.replace('  pull_request:\n    branches: [ main ]\n', ''),
     message: /required block is missing: pull_request/,
+  },
+  {
+    name: 'workflow-level shared concurrency',
+    source: source.replace(
+      'permissions:\n  contents: read\n\njobs:',
+      'permissions:\n  contents: read\n\nconcurrency:\n  group: pages\n  cancel-in-progress: true\n\njobs:',
+    ),
+    message: /workflow-level concurrency must not mix/,
+  },
+  {
+    name: 'quoted workflow-level shared concurrency',
+    source: source.replace(
+      'permissions:\n  contents: read\n\njobs:',
+      'permissions:\n  contents: read\n\n"concurrency":\n  group: pages\n  cancel-in-progress: true\n\njobs:',
+    ),
+    message: /workflow-level concurrency must not mix/,
+  },
+  {
+    name: 'single-quoted workflow-level shared concurrency',
+    source: source.replace(
+      'permissions:\n  contents: read\n\njobs:',
+      "permissions:\n  contents: read\n\n'concurrency':\n  group: pages\n  cancel-in-progress: true\n\njobs:",
+    ),
+    message: /workflow-level concurrency must not mix/,
+  },
+  {
+    name: 'hex-escaped workflow-level shared concurrency',
+    source: source.replace(
+      'permissions:\n  contents: read\n\njobs:',
+      'permissions:\n  contents: read\n\n"\\x63oncurrency":\n  group: pages\n  cancel-in-progress: true\n\njobs:',
+    ),
+    message: /workflow-level concurrency must not mix/,
+  },
+  {
+    name: 'unicode-escaped workflow-level shared concurrency',
+    source: source.replace(
+      'permissions:\n  contents: read\n\njobs:',
+      'permissions:\n  contents: read\n\n"\\u0063oncurrency":\n  group: pages\n  cancel-in-progress: true\n\njobs:',
+    ),
+    message: /workflow-level concurrency must not mix/,
+  },
+  {
+    name: 'long-unicode-escaped workflow-level shared concurrency',
+    source: source.replace(
+      'permissions:\n  contents: read\n\njobs:',
+      'permissions:\n  contents: read\n\n"\\U00000063oncurrency":\n  group: pages\n  cancel-in-progress: true\n\njobs:',
+    ),
+    message: /workflow-level concurrency must not mix/,
+  },
+  {
+    name: 'static PR build group',
+    source: source.replace(`      group: ${buildConcurrencyGroup}\n`, '      group: pages\n'),
+    message: /build concurrency mismatch/,
+  },
+  {
+    name: 'PR group without trusted-main and non-main fallback',
+    source: source.replace(
+      `      group: ${buildConcurrencyGroup}\n`,
+      "      group: ${{ github.workflow }}-build-pr-${{ github.event.pull_request.number }}\n",
+    ),
+    message: /build concurrency mismatch/,
+  },
+  {
+    name: 'all builds cancel in progress',
+    source: source.replace(
+      `      cancel-in-progress: ${buildCancelInProgress}\n`,
+      '      cancel-in-progress: true\n',
+    ),
+    message: /build concurrency mismatch/,
+  },
+  {
+    name: 'deploy shares static pages group',
+    source: source.replace(`      group: ${deployConcurrencyGroup}\n`, '      group: pages\n'),
+    message: /deploy concurrency mismatch/,
+  },
+  {
+    name: 'deploy can be canceled',
+    source: source.replace(
+      `      group: ${deployConcurrencyGroup}\n      cancel-in-progress: false\n`,
+      `      group: ${deployConcurrencyGroup}\n      cancel-in-progress: true\n`,
+    ),
+    message: /deploy concurrency mismatch/,
   },
 ];
 

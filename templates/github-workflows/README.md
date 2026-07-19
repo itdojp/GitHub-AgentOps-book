@@ -28,6 +28,16 @@
 `build-actions.yml`のdeploy条件は、`main`へのpushまたは`main`上の手動実行（`workflow_dispatch`）だけを許可します。
 `pull_request`イベントは、fork元にかかわらずbuild jobのbuild確認だけを実行し、Pagesへの書き込みやOIDC tokenの発行を行いません。
 
+concurrencyはjobの責務ごとに分離します。
+build jobはPR番号をgroupに含め、同一PRの古いbuildだけを新しい更新でcancelします。
+deploy対象となるmain pushとmain上の手動実行は共通のtrusted build groupに入れ、新しいrunが古いbuildをcancelすることで、遅い旧artifactが新しいcommitの後からdeployされるrollbackを防ぎます。
+deployしない非main手動buildだけは`github.run_id`で分離します。
+
+deploy jobはworkflow名を含む専用`pages-deploy` groupでmain pushとmain上の手動deployを直列化し、`cancel-in-progress: false`で進行中deployを保護します。
+GitHubの既定`single` pending契約を採用するため、deploy待機中に追加runが到着した場合は最新1件が古いpendingを置き換えます。
+PR buildとdeployはgroupを共有せず、fork PRからmain deployをcancelできません。
+詳細は[GitHub Actionsのconcurrency公式仕様](https://docs.github.com/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency)を参照してください。
+
 両templateのremote Action参照は、監査済みのfull-length commit SHAとexact version commentを組にして管理します。
 copy後もmutableなmajor tagへ戻さず、更新時はupstream release/tag/commit、runtime、入出力、権限、transitive `uses:`を確認してください。
 本リポジトリでは`config/action-pins.json`を監査記録の正本とし、`npm run test:action-pins`でactive workflowとtemplateのdriftを検出します。
