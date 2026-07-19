@@ -40,18 +40,66 @@ function indentation(line) {
   return match ? match[0].length : 0;
 }
 
+function decodeYamlDoubleQuotedScalar(raw) {
+  if (!raw.startsWith('"') || !raw.endsWith('"')) return null;
+
+  const simpleEscapes = new Map([
+    ['0', '\0'],
+    ['a', '\x07'],
+    ['b', '\b'],
+    ['t', '\t'],
+    ['n', '\n'],
+    ['v', '\v'],
+    ['f', '\f'],
+    ['r', '\r'],
+    ['e', '\x1b'],
+    [' ', ' '],
+    ['"', '"'],
+    ['/', '/'],
+    ['\\', '\\'],
+    ['N', '\x85'],
+    ['_', '\xa0'],
+    ['L', '\u2028'],
+    ['P', '\u2029'],
+  ]);
+  const hexWidths = new Map([['x', 2], ['u', 4], ['U', 8]]);
+  let decoded = '';
+
+  for (let index = 1; index < raw.length - 1; index += 1) {
+    const character = raw[index];
+    if (character !== '\\') {
+      decoded += character;
+      continue;
+    }
+
+    index += 1;
+    if (index >= raw.length - 1) return null;
+    const escape = raw[index];
+    if (simpleEscapes.has(escape)) {
+      decoded += simpleEscapes.get(escape);
+      continue;
+    }
+
+    const width = hexWidths.get(escape);
+    if (!width) return null;
+    const digits = raw.slice(index + 1, index + 1 + width);
+    if (digits.length !== width || !/^[0-9A-Fa-f]+$/.test(digits)) return null;
+    const codePoint = Number.parseInt(digits, 16);
+    if (codePoint > 0x10ffff || (codePoint >= 0xd800 && codePoint <= 0xdfff)) return null;
+    decoded += String.fromCodePoint(codePoint);
+    index += width;
+  }
+
+  return decoded;
+}
+
 function isNamedMappingKey(line, expectedKey) {
   const trimmed = line.trim();
   const colon = trimmed.indexOf(':');
   if (colon < 0) return false;
   const rawKey = trimmed.slice(0, colon).trim();
   if (rawKey === expectedKey || rawKey === `'${expectedKey}'`) return true;
-  if (!rawKey.startsWith('"') || !rawKey.endsWith('"')) return false;
-  try {
-    return JSON.parse(rawKey) === expectedKey;
-  } catch {
-    return false;
-  }
+  return decodeYamlDoubleQuotedScalar(rawKey) === expectedKey;
 }
 
 function findBlock(lines, key, indent, start = 0, end = lines.length) {
@@ -277,6 +325,7 @@ if (require.main === module) main();
 module.exports = {
   buildCancelInProgress,
   buildConcurrencyGroup,
+  decodeYamlDoubleQuotedScalar,
   deployConcurrencyGroup,
   trustedDeployCondition,
   validateWorkflow,

@@ -7,6 +7,7 @@ const path = require('path');
 const {
   buildCancelInProgress,
   buildConcurrencyGroup,
+  decodeYamlDoubleQuotedScalar,
   deployConcurrencyGroup,
   validateWorkflow,
 } = require('./check-pages-template-permissions');
@@ -20,7 +21,23 @@ const workflowPath = path.join(
 const source = fs.readFileSync(workflowPath, 'utf8');
 const workflowNameMatch = source.match(/^name:\s*(.+)$/m);
 assert(workflowNameMatch, 'template must declare a workflow name');
-const workflowName = workflowNameMatch[1].trim();
+
+function parseWorkflowName(rawValue) {
+  const value = rawValue.trim();
+  if (value.startsWith('"') && value.endsWith('"')) {
+    const decoded = decodeYamlDoubleQuotedScalar(value);
+    assert.notStrictEqual(decoded, null, 'double-quoted workflow name must be valid');
+    return decoded;
+  }
+  if (value.startsWith("'") && value.endsWith("'")) {
+    return value.slice(1, -1).replace(/''/g, "'");
+  }
+  return value;
+}
+
+const workflowName = parseWorkflowName(workflowNameMatch[1]);
+assert.strictEqual(parseWorkflowName('"Build and Deploy (GitHub Actions)"'), 'Build and Deploy (GitHub Actions)');
+assert.strictEqual(parseWorkflowName("'Build and Deploy (GitHub Actions)'"), 'Build and Deploy (GitHub Actions)');
 
 function replaceOccurrence(input, search, replacement, occurrence) {
   let from = 0;
@@ -180,6 +197,30 @@ const negativeFixtures = [
     source: source.replace(
       'permissions:\n  contents: read\n\njobs:',
       "permissions:\n  contents: read\n\n'concurrency':\n  group: pages\n  cancel-in-progress: true\n\njobs:",
+    ),
+    message: /workflow-level concurrency must not mix/,
+  },
+  {
+    name: 'hex-escaped workflow-level shared concurrency',
+    source: source.replace(
+      'permissions:\n  contents: read\n\njobs:',
+      'permissions:\n  contents: read\n\n"\\x63oncurrency":\n  group: pages\n  cancel-in-progress: true\n\njobs:',
+    ),
+    message: /workflow-level concurrency must not mix/,
+  },
+  {
+    name: 'unicode-escaped workflow-level shared concurrency',
+    source: source.replace(
+      'permissions:\n  contents: read\n\njobs:',
+      'permissions:\n  contents: read\n\n"\\u0063oncurrency":\n  group: pages\n  cancel-in-progress: true\n\njobs:',
+    ),
+    message: /workflow-level concurrency must not mix/,
+  },
+  {
+    name: 'long-unicode-escaped workflow-level shared concurrency',
+    source: source.replace(
+      'permissions:\n  contents: read\n\njobs:',
+      'permissions:\n  contents: read\n\n"\\U00000063oncurrency":\n  group: pages\n  cancel-in-progress: true\n\njobs:',
     ),
     message: /workflow-level concurrency must not mix/,
   },
