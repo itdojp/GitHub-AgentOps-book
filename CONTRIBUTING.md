@@ -14,10 +14,11 @@
 
 ## 破壊的変更（章番号/リンク互換性）
 
-本書は Companion repo の固定パス参照を前提にしています。運用上はリンク互換性を優先します。
+本書は Companion repo の検証済み固定パス参照を前提にしています。運用上はリンク互換性と再現性を優先します。
 
 - 章/付録のパス（`src/chapters/chapterXX/` 等）を安易に移動/改名しない
-- Companion 側の参照先（テンプレ/Skill/Rules/Workflow）は固定パスを維持する
+- Companion参照は `config/companion-assets.json` のimmutable commitと `shipped` assetを正本にする
+- `planned / not yet shipped` のassetは、実装・検証・catalog更新が終わるまで実行導線へ載せない
 - 破壊的変更が必要な場合は、移行期間を設け、CHANGELOG に記録する
 
 ## 章/付録の配置
@@ -31,7 +32,11 @@
 ```bash
 npm install
 npm test
+npm run check:companion-assets:remote
 ```
+
+remote検査はGitHub Trees APIを使用します。通常の `npm test` はnetwork非依存のcatalog/本文fixture検査だけを実行し、
+remote検査は週次/手動workflowとrelease前確認で実行します。
 
 ## 画像/アセット
 

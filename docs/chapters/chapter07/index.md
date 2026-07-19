@@ -5,6 +5,8 @@ title: "第7章：MCP と tool exposure 設計"
 
 # 第7章：MCP と tool exposure 設計
 
+<!-- companion-path-scope: generic -->
+
 ## この章で扱うこと
 
 この章では、MCP と tool exposure を「便利な拡張」ではなく、

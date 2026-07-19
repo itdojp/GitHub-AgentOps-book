@@ -5,6 +5,8 @@ title: "第5章：Policy と control surface 設計"
 
 # 第5章：Policy と control surface 設計
 
+<!-- companion-path-scope: generic -->
+
 ## この章で扱うこと
 
 この章では、allow / prompt / forbidden を抽象的なルールで終わらせず、

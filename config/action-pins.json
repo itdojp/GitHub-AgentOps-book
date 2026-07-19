@@ -62,6 +62,7 @@
     { "file": ".github/workflows/build.yml", "action": "actions/setup-node", "count": 1 },
     { "file": ".github/workflows/docs-forbidden-check.yml", "action": "actions/checkout", "count": 1 },
     { "file": ".github/workflows/nav-link-check.yml", "action": "actions/checkout", "count": 1 },
+    { "file": ".github/workflows/nav-link-check.yml", "action": "actions/setup-node", "count": 1 },
     { "file": "templates/github-workflows/build-actions.yml", "action": "actions/checkout", "count": 1 },
     { "file": "templates/github-workflows/build-actions.yml", "action": "actions/deploy-pages", "count": 1 },
     { "file": "templates/github-workflows/build-actions.yml", "action": "actions/setup-node", "count": 1 },

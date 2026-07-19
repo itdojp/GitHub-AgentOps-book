@@ -75,6 +75,9 @@ Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/Git
 - 実行仕様 Issue（エージェント作業依頼）: `.github/ISSUE_TEMPLATE/agent-task.yml`
 - PR テンプレ: `.github/PULL_REQUEST_TEMPLATE.md`
 
+いずれも付録Aに記録したCompanion commitで実在を確認した `shipped` 資産です。
+導入前に[Companion資産カタログ](../../appendices/appendix-a/)のversion/commit対応を確認します。
+
 ## 章末チェックリスト（ドラフト）
 
 注記: 本チェックリストは最小構成です。組織の運用ポリシー（権限、監査、リリース手順）に合わせて拡張してください。

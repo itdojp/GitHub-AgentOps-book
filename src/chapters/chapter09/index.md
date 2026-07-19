@@ -96,7 +96,11 @@ Companion repo: [itdojp/GitHub-AgentOps-companion](https://github.com/itdojp/Git
 
 - PR 作成/更新時の要約 + リスク抽出コメント: `.github/workflows/codex-pr-review.yml`
 - リリース前の変更点サマリ/影響範囲/チェックリスト生成: `.github/workflows/codex-release-prep.yml`
-- Codex Action 用プロンプト雛形: `.github/codex/prompts/`
+- PR review用プロンプト: `.github/codex/prompts/pr-review.md`
+- release準備用プロンプト: `.github/codex/prompts/release-prep.md`
+
+上記4件は付録Aに記録したCompanion commitで実在を確認した `shipped` 資産です。
+workflowをコピーする前に、権限、Action SHA、secret、利用productの現行仕様を導入先で再監査します。
 
 この pattern では、同じコメントを毎回追加するのではなく、bot comment を upsert して review noise を抑えます。
 

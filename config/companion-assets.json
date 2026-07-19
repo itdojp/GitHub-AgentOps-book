@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 1,
+  "bookVersion": "1.0.0",
+  "verifiedAt": "2026-07-19",
+  "companion": {
+    "repository": "itdojp/GitHub-AgentOps-companion",
+    "commit": "7acb7958153e9e2b3d080f4940fbb95b883a429e",
+    "webUrl": "https://github.com/itdojp/GitHub-AgentOps-companion",
+    "treeApiUrl": "https://api.github.com/repos/itdojp/GitHub-AgentOps-companion/git/trees/7acb7958153e9e2b3d080f4940fbb95b883a429e?recursive=1",
+    "snapshotPolicy": "all-blobs-at-pinned-commit"
+  },
+  "inventory": {
+    "shippedAssets": 27,
+    "plannedAssets": 23,
+    "scannedDocuments": 16
+  },
+  "scannedDocuments": [
+    "index.md",
+    "docs/index.md",
+    "src/chapters/chapter01/index.md",
+    "src/chapters/chapter02/index.md",
+    "src/chapters/chapter09/index.md",
+    "src/appendices/appendix-a/index.md",
+    "src/appendices/appendix-b/index.md",
+    "src/appendices/appendix-c/index.md",
+    "docs/chapters/chapter01/index.md",
+    "docs/chapters/chapter02/index.md",
+    "docs/chapters/chapter09/index.md",
+    "docs/appendices/appendix-a/index.md",
+    "docs/appendices/appendix-b/index.md",
+    "docs/appendices/appendix-c/index.md",
+    "CHECKLIST.md",
+    "CONTRIBUTING.md"
+  ],
+  "shippedAssets": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/agent-task.yml",
+      "type": "blob",
+      "objectSha": "337623cf66da52760211d54b493a01b98913adc2",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug-report.yml",
+      "type": "blob",
+      "objectSha": "ceb1953e9543b64c9d82b29b89bcaef73c896d65",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/dependency-update.yml",
+      "type": "blob",
+      "objectSha": "4a9d5ba54097ae958fdbb3d2d2d490293e5c54c1",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/documentation.yml",
+      "type": "blob",
+      "objectSha": "b468e6a3966637ce6322dce903f5d049f04550e8",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/improvement.yml",
+      "type": "blob",
+      "objectSha": "c6ad9b31e0bd8ac42100671c2abf9fed982fb396",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "type": "blob",
+      "objectSha": "a9e39390c5e8506b9d7b75eccce526331d82e927",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/codex/prompts/pr-review.md",
+      "type": "blob",
+      "objectSha": "f9a6a72c6a85713caaa1aa382f9df337422e30cd",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/codex/prompts/release-prep.md",
+      "type": "blob",
+      "objectSha": "30657a03afe3206996112ba8613943d813ad4e4a",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/workflows/codex-pr-review.yml",
+      "type": "blob",
+      "objectSha": "3aeab19bfb3a1ce9c110678c285678a2b474fae0",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/workflows/codex-release-prep.yml",
+      "type": "blob",
+      "objectSha": "5338e9340640587ad8af8e3465eaa7ceace795e9",
+      "mode": "100644"
+    },
+    {
+      "path": ".gitignore",
+      "type": "blob",
+      "objectSha": "edb5d87e1c113bc7b6267989a6fea0381188bc9c",
+      "mode": "100644"
+    },
+    {
+      "path": "AGENTS.md",
+      "type": "blob",
+      "objectSha": "7f6dba4dc208ae23b7d6c7896c5f05649b34e0c3",
+      "mode": "100644"
+    },
+    {
+      "path": "CODEOWNERS_GUIDE.md",
+      "type": "blob",
+      "objectSha": "4ab1951a6bac7df58e7d3ebca998f15c2ed49038",
+      "mode": "100644"
+    },
+    {
+      "path": "LICENSE",
+      "type": "blob",
+      "objectSha": "f2867eec4e7553a604ca20ffb00e0cec54e79b0c",
+      "mode": "100644"
+    },
+    {
+      "path": "README.md",
+      "type": "blob",
+      "objectSha": "5eacc16beba21d4a25af1b3f1d8e8865face0b68",
+      "mode": "100644"
+    },
+    {
+      "path": "custom-agents/MCP_SCOPE_EXAMPLE.md",
+      "type": "blob",
+      "objectSha": "859a62a88bc37649f6a66339696c3151ea307530",
+      "mode": "100644"
+    },
+    {
+      "path": "custom-agents/README.md",
+      "type": "blob",
+      "objectSha": "42182f09053ec565f4316e7fbc46999544d8b6e1",
+      "mode": "100644"
+    },
+    {
+      "path": "custom-agents/dep-agent/.agent.md",
+      "type": "blob",
+      "objectSha": "b09520d18486de64f072b843b5d210e08684ca50",
+      "mode": "100644"
+    },
+    {
+      "path": "custom-agents/doc-agent/.agent.md",
+      "type": "blob",
+      "objectSha": "5e60cea1004320f598b5b375915f1faad945f261",
+      "mode": "100644"
+    },
+    {
+      "path": "custom-agents/test-agent/.agent.md",
+      "type": "blob",
+      "objectSha": "56a300dd8440cc9a036508c7514d6ea2249f8dd5",
+      "mode": "100644"
+    },
+    {
+      "path": "rules/README.md",
+      "type": "blob",
+      "objectSha": "da6d81ba791be4db69fb3fc9dcc3a8445330ab95",
+      "mode": "100644"
+    },
+    {
+      "path": "rules/command-policy.md",
+      "type": "blob",
+      "objectSha": "ff6dfb524264238a7b2c92a6b147028e7973cc09",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/README.md",
+      "type": "blob",
+      "objectSha": "3d2c1a91d8455b9c464c388be7cddadf2c17a8fb",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/add-tests/SKILL.md",
+      "type": "blob",
+      "objectSha": "ca339877691cd78b1598e3cac0257ef2c923c73c",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/dependency-update/SKILL.md",
+      "type": "blob",
+      "objectSha": "0658ff3280c87e4a8c07096cbd4fb83623cb52f3",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/docs-update/SKILL.md",
+      "type": "blob",
+      "objectSha": "d8026259125088a493eb1848315167751f3b128f",
+      "mode": "100644"
+    },
+    {
+      "path": "skills/refactor-safe/SKILL.md",
+      "type": "blob",
+      "objectSha": "c90ea228d923380a009d82409b7d8bfd5568ba07",
+      "mode": "100644"
+    }
+  ],
+  "plannedAssets": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/mcp-tool-exposure.yml",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/rollout-review.yml",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/security-review.yml",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/agents/docs-reviewer.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/agents/security-reviewer.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/agents/test-reviewer.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/copilot-instructions.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/hooks/pre-tool-use.json",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/hooks/session-end.json",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/instructions/docs.instructions.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/mcp/tool-exposure-review.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/review-templates/copilot-review.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/review-templates/risk-review.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/workflows/agentops-scorecard.yml",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": ".github/workflows/docs-qa.yml",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": "ops/agentops-scorecard.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": "ops/context-refresh-log.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": "ops/risk-log.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": "rules/actions-permissions.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": "rules/branch-protection.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": "rules/environment-gates.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": "skills/release-prep/SKILL.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    },
+    {
+      "path": "skills/security-review/SKILL.md",
+      "status": "planned",
+      "availability": "not-yet-shipped"
+    }
+  ]
+}

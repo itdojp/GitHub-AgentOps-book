@@ -1,5 +1,7 @@
 # 第4章：再利用レイヤー（Skills / custom agents / hooks）
 
+<!-- companion-path-scope: generic -->
+
 ## この章で扱うこと
 
 この章では、第3章で分けた instruction hierarchy の上に、

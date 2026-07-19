@@ -13,7 +13,8 @@ title: "付録C：トラブルシュート（失敗パターンと対処）"
 1. 仕様の問題か
    - Issue の目的、非目標、受入基準、検証、ロールバックが揃っているか
 2. 指示の問題か
-   - `.github/copilot-instructions.md`、path-specific instructions、`AGENTS.md`、custom agent 指示が競合していないか
+   - 導入先のrepo-wide/path-specific instructions、`AGENTS.md`、custom agent 指示が競合していないか
+   - `.github/copilot-instructions.md` はCompanionでは未提供（planned / not yet shipped）のため、存在を前提にしていないか
 3. 実行境界の問題か
    - policy、hook、MCP tool、Actions permissions、ruleset、CODEOWNERS が意図どおり効いているか
 4. 検証の問題か
@@ -41,7 +42,8 @@ title: "付録C：トラブルシュート（失敗パターンと対処）"
 
 ### 症状
 
-- `.github/copilot-instructions.md` と `AGENTS.md` で言語、検証、禁止事項が違う
+- 導入先のrepo-wide instructionsと `AGENTS.md` で言語、検証、禁止事項が違う
+- `.github/copilot-instructions.md` はCompanionでは未提供（planned / not yet shipped）なのに、コピー済みと誤認している
 - path-specific instructions が強すぎて、repo-wide の方針と矛盾する
 - Copilot code review の指摘が古い base branch の instruction に基づいている
 - agent が存在しないファイルや古い companion path を前提に動く
@@ -179,7 +181,8 @@ permissions:
 - 既定を deny に戻し、必要な tool だけ allow する
 - secret を rotate し、対象 scope と audit log を確認する
 - mutating tool は prompt / approval / environment gate を必須にする
-- 失効条件と棚卸し日を `.github/mcp/tool-exposure-review.md` に記録する
+- 失効条件と棚卸し日を `.github/ISSUE_TEMPLATE/agent-task.yml` で作成したIssueへ記録する
+- `custom-agents/MCP_SCOPE_EXAMPLE.md` をscope整理の出発点にする。専用review noteは未提供であることを維持する
 
 再発防止：MCP 追加は Issue 化し、tool scope、secret boundary、cost owner、audit owner を必須項目にします。
 
@@ -198,7 +201,8 @@ permissions:
 - 実装 agent と reviewer agent を分け、同じ agent に自己承認させない
 - 逸脱が起きた PR は revert ではなく、差分を読んで必要箇所だけ残す
 
-再発防止：`.github/agents/<agent>.md` の変更には、owner と review checklist を付けます。
+再発防止：`custom-agents/doc-agent/.agent.md` や `custom-agents/test-agent/.agent.md` を導入先へ変換するときは、
+owner、対象path、禁止変更、review checklistを付けます。
 
 ## Secrets 事故（ログ / コメント / artifact への混入）
 
@@ -258,7 +262,8 @@ permissions:
 
 - ローカルで品質ゲートを実行し、再現手順を PR に残す
 - source と generated docs の責任を分け、生成物は build で更新する
-- Companion の移動・改名は移行期間を設け、旧パスから案内する
+- Companionの移動・改名は、`config/companion-assets.json`のimmutable commit対応を更新し、移行期間を記録する
+- `planned / not yet shipped` を実行導線へ入れず、週次/手動remote tree検査で `shipped` のidentityを確認する
 - `npm run check-external-links` で外部リンクの HTTP 到達性を確認する
 - 料金、preview、quota、API 名称、権限名は到達性とは別に一次情報で鮮度を確認する
 - 一時的な DNS / proxy 制約で除外した host は、PR evidence に除外理由と再確認期限を残す
