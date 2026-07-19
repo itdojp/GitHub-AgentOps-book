@@ -28,7 +28,7 @@ chapters:
     path: "/chapters/chapter11/"
 
 appendices:
-  - title: "付録A：テンプレ集（instructions / Issue / PR / agents / Skills / hooks / MCP）"
+  - title: "付録A：Companion 資産カタログ（shipped / planned）"
     path: "/appendices/appendix-a/"
   - title: "付録B：プレイブック集（タスク別運用手順）"
     path: "/appendices/appendix-b/"

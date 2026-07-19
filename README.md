@@ -36,6 +36,7 @@ npm run preview
 ```bash
 npm run check:metadata
 npm run check:action-pins
+npm run check:companion-assets
 npm run check:workflows
 npm test
 ```
@@ -44,12 +45,15 @@ npm test
 
 - メタデータ / ナビゲーション整合性検証
 - active workflow / templateの監査済みAction SHA pin検証
+- pinned Companion commitに対するshipped/planned catalogと本文参照の整合性検証
 - checksum固定したactionlintによるworkflow / template構文検証
 - Markdown lint
 - ビルド（`docs/` 生成）
 - `docs/` に対する内部リンク検証
 
 actionlint gateはLinux/macOSのx86_64/arm64に対応し、OS/CPU別の公式release assetをSHA-256検証して実行します。
+Companionのremote実在検査は `npm run check:companion-assets:remote` でGitHub Trees APIを1回取得します。
+一時的なnetwork障害を通常のlocal gateと分離するため、remote検査は週次/手動workflowとrelease前確認で実行します。
 
 ## オンライン版
 
@@ -60,7 +64,7 @@ actionlint gateはLinux/macOSのx86_64/arm64に対応し、OS/CPU別の公式rel
 
 - 変更履歴: `CHANGELOG.md`
 - 検証記録: `CHECKLIST.md`
-- 最終整合性では `npm test`、`npm run check-external-links`、GitHub Pages smoke を確認します。
+- 最終整合性では `npm test`、Companion remote検査、`npm run check-external-links`、GitHub Pages smoke を確認します。
 
 ## 更新ポリシー（四半期棚卸し）
 

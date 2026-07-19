@@ -5,6 +5,8 @@ title: "第3章：Instruction hierarchy と context 設計"
 
 # 第3章：Instruction hierarchy と context 設計
 
+<!-- companion-path-scope: generic -->
+
 ## この章で扱うこと
 
 この章では、AI エージェントに渡す指示を 1 つの巨大な `AGENTS.md` に集約せず、

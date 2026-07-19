@@ -11,13 +11,16 @@
   - 本文/生成 docs の検証起点: PR #47 merge 後の `main`（`56cdb61c25fd1b43604ba25a223a7cff98fbc8ca`）
   - 本最終整合性 PR では、この CHECKLIST、README、CHANGELOG、検証スクリプトを更新し、同じ品質ゲートを再実行する
 - Companion: `itdojp/GitHub-AgentOps-companion`
-  - Book からは固定パス候補として参照する
+  - Book version `1.0.0` の対応commit: `7acb7958153e9e2b3d080f4940fbb95b883a429e`
+  - 機械可読な正本: `config/companion-assets.json`
+  - 実在確認済みを `shipped`、未提供候補を `planned / not yet shipped` として分離する
   - Companion 側の実ファイル追加・移行は、Book 本文変更とは別 Issue / PR で扱う
 
 ## 検証環境
 
-- 日付: 2026-05-24（Asia/Tokyo）
-- Node.js: `20 || >=22`（`package.json` の `engines` 前提）
+- 基礎改稿の検証日: 2026-05-24（Asia/Tokyo）
+- Companion固定path再監査日: 2026-07-19（Asia/Tokyo）
+- Node.js: v24.18.0（`package.json` の `>=22.12.0` 前提）
 - npm: ローカル環境の npm
 - GitHub Pages: `main` / `/docs`
 
@@ -36,7 +39,7 @@ npm test
 - [x] Markdown lint が通る
 - [x] `docs/` 生成が通る
 - [x] 内部リンク検証が通る
-- [x] 本最終整合性 PR で 99 internal links valid を確認済み
+- [x] Companion固定path再監査で 111 internal links valid を確認済み
 
 ### 2) 外部リンク検証
 
@@ -55,7 +58,7 @@ EXTERNAL_LINK_CHECK_SKIP_HOSTS=example.com,example.org npm run check-external-li
 結果：
 
 - [x] 2026-05-24 時点で、本文・README・企画書・検証記録の外部リンクを検査できる
-- [x] 本最終整合性 PR で 65 unique external URLs が HTTP 200 または正常リダイレクトで到達可能であることを確認済み
+- [x] 2026-07-19の再監査で 66 unique external URLs が HTTP 200 または正常リダイレクトで到達可能であることを確認済み
 - [x] `localhost` などローカルプレビュー用 URL は外部リンク検証から除外する
 
 ### 3) 本文構成の整合性
@@ -98,6 +101,8 @@ EXTERNAL_LINK_CHECK_SKIP_HOSTS=example.com,example.org npm run check-external-li
 ### 5) 残課題の扱い
 
 - [x] Companion 側テンプレートや workflow の実ファイル追加・移行は、Book の本文変更とは別 Issue / PR に分離する
+- [x] Companionの固定pathをimmutable commitへ対応付け、`shipped`と`planned / not yet shipped`を分離する
+- [x] local fixture検査を `npm test`、remote tree検査を週次/手動workflowへ分離する
 - [x] モデル名、料金、preview 機能などの時点依存情報は、四半期棚卸しで再確認する
 - [x] 最終整合性 PR の本文に、旧構成→新構成、主な更新理由、未解決点を明記する
 

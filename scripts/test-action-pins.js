@@ -12,7 +12,7 @@ const files = collectYamlFiles();
 const manifest = readManifest();
 const positive = validateInventory(files, manifest);
 assert.strictEqual(positive.actionCount, 7);
-assert.strictEqual(positive.referenceCount, 17);
+assert.strictEqual(positive.referenceCount, 18);
 assert.strictEqual(positive.fileCount, 6);
 
 function cloneFiles() {
