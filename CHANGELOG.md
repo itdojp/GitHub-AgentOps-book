@@ -6,6 +6,7 @@
 
 ### Changed
 
+- `actions/checkout` v7.0.0と`actions/setup-node` v7.0.0を監査し、active workflow・配布template・manifestをverified commit SHAへ同期した
 - GitHub Actions Pages templateのconcurrencyをPR buildとtrusted deployへ分離し、同一PRの旧buildだけをcancelしながら進行中deployを保護する契約と回帰テストを追加した
 - Companion固定pathをcommit-pinned catalogへ統合し、実在する `shipped` 資産と未提供の `planned / not yet shipped` 候補を分離した。local fixture検査と週次/手動remote tree検査を追加した
 - 最終整合性検証として README / CHECKLIST / 外部リンク検証スクリプトを更新し、Issue #37 の残受入基準を確認可能にした
