@@ -20,7 +20,7 @@
 
 - 基礎改稿の検証日: 2026-05-24（Asia/Tokyo）
 - Companion固定path再監査日: 2026-07-19（Asia/Tokyo）
-- Node.js: v24.18.0（`package.json` の `>=22.12.0` 前提）
+- Node.js: v24.18.0（`package.json` の `^22.22.2 || ^24.15.0 || >=26.0.0` 前提）
 - npm: ローカル環境の npm
 - GitHub Pages: `main` / `/docs`
 
