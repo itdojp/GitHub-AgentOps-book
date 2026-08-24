@@ -32,7 +32,7 @@ function workflowSources() {
     if (!name.endsWith('.yml') && !name.endsWith('.yaml')) continue;
     const relativePath = path.posix.join('.github/workflows', name);
     const source = readText(relativePath);
-    if (/^\s*uses\s*:\s*actions\/setup-node@/m.test(source)) {
+    if (/^\s*(?:-\s+)?uses\s*:\s*actions\/setup-node@/m.test(source)) {
       sources.set(relativePath, source);
     }
   }
@@ -42,11 +42,85 @@ function workflowSources() {
   return sources;
 }
 
-function parseNodeVersions(source, relativePath) {
+function indentation(line) {
+  const match = line.match(/^ */);
+  return match ? match[0].length : 0;
+}
+
+function parseNodeVersionLine(line, relativePath) {
+  const match = line.match(/^\s*node-version\s*:\s*(['"]?)([^'"\s#]+)\1\s*(?:#.*)?$/);
+  assert(match, `${relativePath}: unsupported node-version scalar`);
+  return match[2];
+}
+
+function parseSetupNodeVersions(source, relativePath) {
+  const lines = source.replace(/\r\n/g, '\n').split('\n');
+  const setupNodeLines = lines
+    .map((line, index) => ({ line, index }))
+    .filter(({ line }) => /^\s*(?:-\s+)?uses\s*:\s*actions\/setup-node@/.test(line));
+  const allNodeVersionLines = lines.filter((line) => /^\s*node-version\s*:/.test(line));
+
+  assert(setupNodeLines.length > 0, `${relativePath}: actions/setup-node step is required`);
   const versions = [];
-  const pattern = /^\s*node-version\s*:\s*(['"]?)([^'"\s#]+)\1\s*(?:#.*)?$/gm;
-  for (const match of source.matchAll(pattern)) versions.push(match[2]);
-  assert(versions.length > 0, `${relativePath}: node-version is required`);
+
+  for (const setupNode of setupNodeLines) {
+    const usesIndent = indentation(setupNode.line)
+      + (/^\s*-\s+uses\s*:/.test(setupNode.line) ? 2 : 0);
+    let stepEnd = lines.length;
+    for (let index = setupNode.index + 1; index < lines.length; index += 1) {
+      const line = lines[index];
+      if (!line.trim() || line.trimStart().startsWith('#')) continue;
+      if (indentation(line) < usesIndent) {
+        stepEnd = index;
+        break;
+      }
+    }
+
+    const withLines = [];
+    for (let index = setupNode.index + 1; index < stepEnd; index += 1) {
+      if (indentation(lines[index]) === usesIndent && /^\s*with\s*:\s*(?:#.*)?$/.test(lines[index])) {
+        withLines.push(index);
+      }
+    }
+    assert.strictEqual(
+      withLines.length,
+      1,
+      `${relativePath}: setup-node step must contain exactly one with mapping`,
+    );
+
+    const withLine = withLines[0];
+    let withEnd = stepEnd;
+    for (let index = withLine + 1; index < stepEnd; index += 1) {
+      const line = lines[index];
+      if (!line.trim() || line.trimStart().startsWith('#')) continue;
+      if (indentation(line) <= usesIndent) {
+        withEnd = index;
+        break;
+      }
+    }
+
+    const nodeVersionLines = [];
+    for (let index = withLine + 1; index < withEnd; index += 1) {
+      if (
+        indentation(lines[index]) === usesIndent + 2
+        && /^\s*node-version\s*:/.test(lines[index])
+      ) {
+        nodeVersionLines.push(lines[index]);
+      }
+    }
+    assert.strictEqual(
+      nodeVersionLines.length,
+      1,
+      `${relativePath}: setup-node with.node-version must occur exactly once`,
+    );
+    versions.push(parseNodeVersionLine(nodeVersionLines[0], relativePath));
+  }
+
+  assert.strictEqual(
+    allNodeVersionLines.length,
+    versions.length,
+    `${relativePath}: node-version must not occur outside a setup-node with mapping`,
+  );
   return versions;
 }
 
@@ -69,7 +143,7 @@ function validateRuntimeContract({ engine, npmrc, sources }) {
 
   let referenceCount = 0;
   for (const [relativePath, source] of [...sources.entries()].sort()) {
-    for (const version of parseNodeVersions(source, relativePath)) {
+    for (const version of parseSetupNodeVersions(source, relativePath)) {
       referenceCount += 1;
       assert.strictEqual(
         version,
@@ -105,6 +179,10 @@ function removeNodeVersion(source) {
   return replaced;
 }
 
+function moveNodeVersionToDecoy(source) {
+  return `env:\n  node-version: '${EXPECTED_WORKFLOW_NODE_VERSION}'\n\n${removeNodeVersion(source)}`;
+}
+
 const negativeFixtures = [
   {
     name: 'package engine drift',
@@ -138,6 +216,17 @@ const negativeFixtures = [
         [...sources.entries()].map(([name, source]) => [
           name,
           name === relativePath ? removeNodeVersion(source) : source,
+        ]),
+      ),
+    },
+    {
+      name: `${relativePath} runtime decoy`,
+      engine: EXPECTED_ENGINE,
+      npmrc,
+      sources: new Map(
+        [...sources.entries()].map(([name, source]) => [
+          name,
+          name === relativePath ? moveNodeVersionToDecoy(source) : source,
         ]),
       ),
     },
