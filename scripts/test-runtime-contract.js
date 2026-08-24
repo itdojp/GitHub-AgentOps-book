@@ -7,6 +7,11 @@ const path = require('path');
 
 const EXPECTED_ENGINE = '^22.22.2 || ^24.15.0 || >=26.0.0';
 const EXPECTED_WORKFLOW_NODE_VERSION = '22';
+const REQUIRED_ACTIVE_WORKFLOW_PATHS = [
+  '.github/workflows/book-qa.yml',
+  '.github/workflows/build.yml',
+  '.github/workflows/nav-link-check.yml',
+];
 const REQUIRED_TEMPLATE_PATHS = [
   'templates/github-workflows/build-actions.yml',
   'templates/github-workflows/build-legacy.yml',
@@ -18,12 +23,18 @@ function readText(relativePath) {
 
 function workflowSources() {
   const sources = new Map();
+  for (const relativePath of REQUIRED_ACTIVE_WORKFLOW_PATHS) {
+    sources.set(relativePath, readText(relativePath));
+  }
+
   const workflowDir = path.join(process.cwd(), '.github', 'workflows');
   for (const name of fs.readdirSync(workflowDir).sort()) {
     if (!name.endsWith('.yml') && !name.endsWith('.yaml')) continue;
     const relativePath = path.posix.join('.github/workflows', name);
     const source = readText(relativePath);
-    if (/^\s*node-version\s*:/m.test(source)) sources.set(relativePath, source);
+    if (/^\s*uses\s*:\s*actions\/setup-node@/m.test(source)) {
+      sources.set(relativePath, source);
+    }
   }
   for (const relativePath of REQUIRED_TEMPLATE_PATHS) {
     sources.set(relativePath, readText(relativePath));
@@ -49,8 +60,11 @@ function validateRuntimeContract({ engine, npmrc, sources }) {
     .filter((line) => line.startsWith('engine-strict='));
   assert.deepStrictEqual(engineStrict, ['engine-strict=true'], '.npmrc must enable engine-strict exactly once');
 
-  for (const relativePath of REQUIRED_TEMPLATE_PATHS) {
-    assert(sources.has(relativePath), `${relativePath}: required runtime template is missing`);
+  for (const relativePath of [
+    ...REQUIRED_ACTIVE_WORKFLOW_PATHS,
+    ...REQUIRED_TEMPLATE_PATHS,
+  ]) {
+    assert(sources.has(relativePath), `${relativePath}: required runtime workflow/template is missing`);
   }
 
   let referenceCount = 0;
@@ -85,6 +99,12 @@ function replaceNodeVersion(source, version) {
   return replaced;
 }
 
+function removeNodeVersion(source) {
+  const replaced = source.replace(/^\s*node-version\s*:.*(?:\r?\n|$)/m, '');
+  assert.notStrictEqual(replaced, source, 'negative fixture must remove node-version');
+  return replaced;
+}
+
 const negativeFixtures = [
   {
     name: 'package engine drift',
@@ -98,17 +118,30 @@ const negativeFixtures = [
     npmrc: npmrc.replace('engine-strict=true', 'engine-strict=false'),
     sources,
   },
-  ...[...sources.keys()].sort().map((relativePath) => ({
-    name: `${relativePath} runtime drift`,
-    engine: EXPECTED_ENGINE,
-    npmrc,
-    sources: new Map(
-      [...sources.entries()].map(([name, source]) => [
-        name,
-        name === relativePath ? replaceNodeVersion(source, '18') : source,
-      ]),
-    ),
-  })),
+  ...[...sources.keys()].sort().flatMap((relativePath) => [
+    {
+      name: `${relativePath} runtime drift`,
+      engine: EXPECTED_ENGINE,
+      npmrc,
+      sources: new Map(
+        [...sources.entries()].map(([name, source]) => [
+          name,
+          name === relativePath ? replaceNodeVersion(source, '18') : source,
+        ]),
+      ),
+    },
+    {
+      name: `${relativePath} runtime omission`,
+      engine: EXPECTED_ENGINE,
+      npmrc,
+      sources: new Map(
+        [...sources.entries()].map(([name, source]) => [
+          name,
+          name === relativePath ? removeNodeVersion(source) : source,
+        ]),
+      ),
+    },
+  ]),
 ];
 
 for (const fixture of negativeFixtures) {
