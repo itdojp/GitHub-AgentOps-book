@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const EXPECTED_ENGINE = '^22.22.2 || ^24.15.0 || >=26.0.0';
-const EXPECTED_WORKFLOW_NODE_VERSION = '22';
+const EXPECTED_WORKFLOW_NODE_VERSION = '22.22.2';
 const REQUIRED_ACTIVE_WORKFLOW_PATHS = [
   '.github/workflows/book-qa.yml',
   '.github/workflows/build.yml',
