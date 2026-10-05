@@ -40,5 +40,10 @@
   "bugs": {
     "url": "https://github.com/itdojp/GitHub-AgentOps-book/issues"
   },
-  "homepage": "https://itdojp.github.io/GitHub-AgentOps-book/"
+  "homepage": "https://itdojp.github.io/GitHub-AgentOps-book/",
+  "overrides": {
+    "markdownlint-cli": {
+      "js-yaml": "5.4.2"
+    }
+  }
 }
