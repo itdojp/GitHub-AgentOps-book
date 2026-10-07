@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: itdojp/book-formatter
-          ref: cff9fcf8bae31140f07b358d314fc64173cb7013
+          ref: d29b4f2b50a1f15f3c2262b7c73ede90a8c54edd
           path: book-formatter
 
       - name: Setup Node.js
